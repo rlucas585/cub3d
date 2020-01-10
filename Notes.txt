@@ -1,0 +1,23 @@
+'strerror' and 'perror' are functions I've never seen before, allowed for this
+project. They are in the library <stdio.h>
+
+char	*strerror(int errnum);
+'strerror' function takes an error number argument 'errnum' and returns a
+pointer to the corresponding message string.
+'perr'
+
+void	perror(const char *s);
+'perror' finds the error message that corresponds to current value of global
+variable 'errno', and writes it, followed by a newline, to the standard error
+file description (2). If argument 's' is non-NULL and doesn't point to null,
+this string is prepended to the message string and separated from it by a colon
+and space (``: ''), otherwise only the error message string is printed.
+
+
+'exit' is also a new function, defined in the library <stdlib.h>.
+ 
+ void	exit(int status);
+ exit() performs several functions: calls all functions registered with the
+ atexit() function, in reverse order of registration; flushes all open output
+ streams; closes all open streams; unlinks all files created with tmpfile()
+ function.
