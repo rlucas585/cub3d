@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/28 15:16:43 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/11/05 11:38:29 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/15 12:36:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,27 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
+# endif
+
+# define MALLOC_FAIL -1
+# define INVALID_FD_OR_MALLOC_FAIL -1
+# define END_OF_FILE 0
+# define SUCCESSFUL_READ 1
+
 typedef struct		s_list
 {
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
+typedef struct		s_gnlopts
+{
+	int				ret;
+	int				more;
+	char			*buf;
+}					t_gnlopts;
 
 size_t				ft_strlen(const char *string);
 int					ft_isupper(int c);
@@ -69,5 +85,9 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 		void (*del)(void *));
+int					ft_printf(char *str, ...);
+int					get_next_line(int fd, char **line);
+size_t				ft_strclen(const char *string, int c);
+int					get_next_line(int fd, char **line);
 
 #endif

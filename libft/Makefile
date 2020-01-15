@@ -6,11 +6,15 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/10/28 15:06:46 by rlucas        #+#    #+#                  #
-#    Updated: 2019/12/01 11:43:18 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/15 12:49:04 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
+PRINTFDIR = ft_printf/
+
+GNLDIR = get_next_line/
 
 SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   ft_memcpy.c ft_memccpy.c ft_memmove.c ft_memchr.c \
@@ -21,76 +25,55 @@ SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c \
 	   ft_split.c ft_itoa.c ft_strmapi.c ft_putchar_fd.c \
 	   ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
-	   ft_strclen.c # all following files were added after libft completion 
-	   
-
-BSRC = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
+	   ft_strclen.c \
+	   ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
 	   ft_lstlast_bonus.c ft_lstadd_back_bonus.c \
 	   ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c \
-	   ft_lstmap_bonus.c
+	   ft_lstmap_bonus.c \
+	   $(PRINTFDIR)ft_printf.c \
+	   $(PRINTFDIR)ft_ltoa.c \
+	   $(PRINTFDIR)ft_ptrtohex.c \
+	   $(PRINTFDIR)make_string.c \
+	   $(PRINTFDIR)parsing.c \
+	   $(PRINTFDIR)utils1.c \
+	   $(PRINTFDIR)utils2.c \
+	   $(PRINTFDIR)processing.c \
+	   $(PRINTFDIR)int_strings.c \
+	   $(PRINTFDIR)char_strings.c \
+	   $(PRINTFDIR)output.c \
+	   $(PRINTFDIR)lltoa.c \
+	   $(PRINTFDIR)ulltoa.c \
+	   $(PRINTFDIR)ulltox.c \
+	   $(PRINTFDIR)crazy_strings.c \
+	   $(PRINTFDIR)hexprocessing.c \
+	   $(PRINTFDIR)processing2.c \
+	   $(PRINTFDIR)ft_putnbr_fd_and_count.c \
+	   $(GNLDIR)get_next_line.c
 
-OBJ = $(SRCS:.c=.o)
+OBJ = $(notdir $(SRCS:.c=.o))
 
-BOBJ = $(BSRC:.c=.o)
-
-PRINTFDIR = ft_printf/
-
-PRINTFOBJ = $(PRINTFDIR)ft_printf.o \
-			$(PRINTFDIR)ft_ltoa.o \
-			$(PRINTFDIR)ft_ptrtohex.o \
-			$(PRINTFDIR)make_string.o \
-			$(PRINTFDIR)parsing.o \
-			$(PRINTFDIR)utils1.o \
-			$(PRINTFDIR)utils2.o \
-			$(PRINTFDIR)processing.o \
-			$(PRINTFDIR)int_strings.o \
-			$(PRINTFDIR)char_strings.o \
-			$(PRINTFDIR)output.o \
-			$(PRINTFDIR)lltoa.o \
-			$(PRINTFDIR)ulltoa.o \
-			$(PRINTFDIR)ulltox.o \
-			$(PRINTFDIR)crazy_strings.o \
-			$(PRINTFDIR)hexprocessing.o \
-			$(PRINTFDIR)processing2.o \
-			$(PRINTFDIR)ft_putnbr_fd_and_count.o
-
-GNLDIR = get_next_line/
-
-GNLSRC = $(GNLDIR)get_next_line.c
-
-GNLOBJ = get_next_line.o
-
-ifdef WITH_BONUS
-	OBJ_FILES = $(OBJ) $(BOBJ) $(PRINTFOBJ) $(GNLOBJ)
-	SRC_FILES = $(SRCS) $(BSRC) $(GNLSRC)
-else
-	OBJ_FILES = $(OBJ)
-	SRC_FILES = $(SRCS)
-endif
+INCLUDES= -Iincludes/
 
 FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJ_FILES)
-	ar -rc $(NAME) $(OBJ_FILES)
+$(NAME): $(OBJ)
+	@echo "Compiling libft.a..."
+	@ar -rc $(NAME) $(OBJ)
 
-$(OBJ_FILES):
-	gcc -c $(FLAGS) -I. $(SRC_FILES)
-
-printf:
-	@$(MAKE) -C $(PRINTFDIR)
-
-bonus: printf
-	@$(MAKE) WITH_BONUS=1 all
+$(OBJ):
+	@echo "Compiling objects..."
+	@gcc -c $(FLAGS) $(INCLUDES) $(SRCS)
 
 clean:
-	rm -f $(OBJ) $(BOBJ) $(GNLOBJ)
+	@echo "Removing objects..."
+	@rm -f $(OBJ)
 
 fclean: clean
-	@$(MAKE) -C $(PRINTFDIR) clean
-	rm -f $(NAME)
+	@echo "Removing libft.a..."
+	@rm -f $(NAME)
 
 re: fclean all
 
-.PHONY = all clean fclean re bonus
+.PHONY: all clean fclean re

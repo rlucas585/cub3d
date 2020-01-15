@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/24 17:21:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/12/01 11:41:29 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/15 12:36:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int			get_next_line(int fd, char **line)
 {
 	static char		*store[1000];
 	char			*out;
-	t_opts			opts;
+	t_gnlopts		opts;
 
 	opts.more = 1;
 	opts.ret = 1;
