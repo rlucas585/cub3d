@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/10/28 15:06:46 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/15 12:49:04 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/15 16:35:18 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   $(PRINTFDIR)hexprocessing.c \
 	   $(PRINTFDIR)processing2.c \
 	   $(PRINTFDIR)ft_putnbr_fd_and_count.c \
-	   $(GNLDIR)get_next_line.c
+	   $(GNLDIR)get_next_line.c \
+	   ft_hex.c
 
 OBJ = $(notdir $(SRCS:.c=.o))
 

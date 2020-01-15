@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/15 13:59:27 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/15 18:36:50 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,6 @@ NAME = cub3D
 LIBFTDIR = libft/
 
 MLXDIR = minilibx_mms_20191207_beta/
-
-LIBRARYDIRS = -L$(LIBFTDIR) -L$(MLXDIR)
-
-LIBRARIES = -lft -lmlx
 
 SRCS = main.c
 
@@ -33,13 +29,14 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@echo  "Compiling Program..."
 	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
-		-Llibft/ -Wl,-rpath,$(MLXDIR) -lft $(OBJ)
+		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft $(OBJ)
 
 makelibraries:
 	@echo "Compiling libft.a..."
 	@$(MAKE) -C $(LIBFTDIR)
 	@echo "Compiling libmlx.dylib..."
 	@$(MAKE) -C $(MLXDIR)
+	@cp $(MLXDIR)libmlx.dylib .
 
 $(OBJ): makelibraries
 	@echo "Compiling object files..."
@@ -55,6 +52,7 @@ fclean: clean
 	@echo "Removing program and libraries in all directories..."
 	@$(MAKE) -C $(LIBFTDIR) fclean
 	@$(MAKE) -C $(MLXDIR) clean
+	@rm -f libmlx.dylib
 	@rm -f $(NAME)
 
 re: fclean all
