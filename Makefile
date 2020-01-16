@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/15 18:36:50 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/16 17:48:41 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFTDIR = libft/
 
 MLXDIR = minilibx_mms_20191207_beta/
 
-SRCS = main.c
+SRCS = main2.c color.c get_info.c
 
 OBJ = $(SRCS:.c=.o)
 

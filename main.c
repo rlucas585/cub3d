@@ -6,27 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/10 18:37:32 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/15 16:59:47 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/16 17:46:55 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
 #include <mlx.h>
-
-static int	rgb(int red, int green, int blue)
-{
-	int		result;
-
-	result = 0;
-	if (red > 255 || red < 0 || green > 255 || green < 0 || blue > 255 ||
-			blue < 0)
-		return (-1);
-	red = red << 16;
-	green = green << 8;
-	result = red | green | blue;
-	return (result);
-}
 
 int			main(void)
 {
@@ -50,8 +36,7 @@ int			main(void)
 	{
 		while (y < 300)
 		{
-			mlx_pixel_put(connection, window, x, y,
-					rgb(255, 255, 255));
+			mlx_pixel_put(connection, window, x, y, ft_hex("9d0006"));
 			y++;
 		}
 		y = 100;
