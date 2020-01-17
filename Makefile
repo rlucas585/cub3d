@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/16 17:48:41 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/17 16:47:13 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,14 @@ LIBFTDIR = libft/
 
 MLXDIR = minilibx_mms_20191207_beta/
 
-SRCS = main2.c color.c get_info.c
+SRCS = main2.c \
+	   color.c \
+	   get_info.c \
+	   utils.c \
+	   errors.c \
+	   open_file.c \
+	   parse_cub.c \
+	   validation.c
 
 OBJ = $(SRCS:.c=.o)
 
@@ -26,7 +33,7 @@ FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): makeobjects
 	@echo  "Compiling Program..."
 	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft $(OBJ)
@@ -38,9 +45,8 @@ makelibraries:
 	@$(MAKE) -C $(MLXDIR)
 	@cp $(MLXDIR)libmlx.dylib .
 
-$(OBJ): makelibraries
+makeobjects: makelibraries
 	@echo "Compiling object files..."
-	@echo "${CFLAGS}"
 	@gcc -c $(FLAGS) $(INCLUDES) $(SRCS)
 
 clean:
@@ -58,4 +64,4 @@ fclean: clean
 re: fclean all
 
 
-.PHONY: clean fclean all re
+.PHONY: clean fclean all re makelibraries makeobjects

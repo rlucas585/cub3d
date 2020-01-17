@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/28 15:16:43 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/15 16:32:48 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/17 11:42:36 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,7 @@ int					get_next_line(int fd, char **line);
 size_t				ft_strclen(const char *string, int c);
 int					get_next_line(int fd, char **line);
 int					ft_hex(const char *str);
+long				ft_power(long n, int pow);
+int					ft_printf_fd(int fd, const char *str, ...);
 
 #endif

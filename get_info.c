@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/16 18:12:50 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/17 14:49:27 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include <mlx.h>
 #include <fcntl.h>
 
-int		get_resolution(char *line, t_map *mapinfo)
+/* Get resolution from .cub file and place in 2-length integer array for x and y
+ * values. */
+int			get_resolution(char *line, t_map *mapinfo)
 {
 	int		i;
 
@@ -23,6 +25,7 @@ int		get_resolution(char *line, t_map *mapinfo)
 	if (line[i] == 0)
 		return (ERROR);
 	mapinfo->res[0] = ft_atoi(line + i);
+	i++;
 	while (line[i] && line[i] != ' ')
 		i++;
 	if (line[i] == 0)
@@ -33,10 +36,10 @@ int		get_resolution(char *line, t_map *mapinfo)
 	return (ERROR);
 }
 
-int		textures(int c)
+/* Jumptable to assign path to texture path to correct location in array. */
+static int	textures(int c)
 {
-	int			ret;
-	static int	compass[5] = {
+	static int	compass[128] = {
 		['N'] = NORTH,
 		['E'] = EAST,
 		['X'] = SOUTH,
@@ -47,7 +50,8 @@ int		textures(int c)
 	return (compass[(int)c]);
 }
 
-int		get_texture(char *line, t_map *mapinfo)
+/* Get texture paths from .cub file. */
+int			get_texture(char *line, t_map *mapinfo)
 {
 	char	*texpath;
 	int		i;
@@ -59,6 +63,9 @@ int		get_texture(char *line, t_map *mapinfo)
 		i++;
 	if (line[i] == 0)
 		return (ERROR);
+	if (line[i + 1] == 0)
+		return (ERROR);
+	i++;
 	texpath = ft_strdup(line + i);
 	if (!texpath)
 		return (ERROR);
@@ -66,7 +73,9 @@ int		get_texture(char *line, t_map *mapinfo)
 	return (1);
 }
 
-int		get_color(char *line, t_map *mapinfo)
+/* Get color information for floor and ceiling from .cub file, store as single
+*  integers with correct format for mlx_pixel_put(). */
+int			get_color(char *line, t_map *mapinfo)
 {
 	int		red;
 	int		green;

@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strncmp.c                                       :+:    :+:            */
+/*   ft_power.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/10/30 08:57:35 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/17 14:45:00 by rlucas        ########   odam.nl         */
+/*   Created: 2020/01/17 11:25:03 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/01/17 11:26:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+/* Originally created for miniprintf project, Very basic and has undefined
+ * behaviour for negative powers - which could be amended */
 
-int			ft_strncmp(const char *s1, const char *s2, size_t n)
+long		ft_power(long n, int pow)
 {
-	int			i;
-
-	i = 0;
-	if (n == 0)
-		return (0);
-	while (s1[i] != '\0' && n > 0)
-	{
-		if (s1[i] != s2[i])
-			break ;
-		n--;
-		if (n == 0)
-			break ;
-		i++;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	if (pow == 0)
+		return (1);
+	if (pow == 1)
+		return (n);
+	return (n * ft_power(n, pow - 1));
 }

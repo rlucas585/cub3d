@@ -6,13 +6,15 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/10/28 15:06:46 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/15 16:35:18 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/17 11:50:42 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
 PRINTFDIR = ft_printf/
+
+MINIPRINTFDIR = ft_miniprintf/
 
 GNLDIR = get_next_line/
 
@@ -49,7 +51,12 @@ SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   $(PRINTFDIR)processing2.c \
 	   $(PRINTFDIR)ft_putnbr_fd_and_count.c \
 	   $(GNLDIR)get_next_line.c \
-	   ft_hex.c
+	   ft_hex.c \
+	   ft_power.c \
+	   $(MINIPRINTFDIR)miniparsing.c \
+	   $(MINIPRINTFDIR)str_utils.c \
+	   $(MINIPRINTFDIR)miniprintf.c \
+	   $(MINIPRINTFDIR)miniprocessing.c
 
 OBJ = $(notdir $(SRCS:.c=.o))
 

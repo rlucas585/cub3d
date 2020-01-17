@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 17:48:05 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/16 17:48:15 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/17 15:20:11 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,3 @@ int		rgb(int red, int green, int blue)
 	result = red | green | blue;
 	return (result);
 }
-
