@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/10/28 15:06:46 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/17 11:50:42 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/20 17:17:16 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,9 @@ SRCS = ft_isalpha.c ft_memset.c ft_bzero.c \
 	   $(MINIPRINTFDIR)miniparsing.c \
 	   $(MINIPRINTFDIR)str_utils.c \
 	   $(MINIPRINTFDIR)miniprintf.c \
-	   $(MINIPRINTFDIR)miniprocessing.c
+	   $(MINIPRINTFDIR)miniprocessing.c \
+	   ft_abs.c \
+	   ft_abs_d.c
 
 OBJ = $(notdir $(SRCS:.c=.o))
 

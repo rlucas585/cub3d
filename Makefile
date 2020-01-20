@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/17 16:47:13 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/20 20:01:29 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ SRCS = main2.c \
 	   errors.c \
 	   open_file.c \
 	   parse_cub.c \
-	   validation.c
+	   validation.c \
+	   exit.c \
+	   raycasting.c
 
 OBJ = $(SRCS:.c=.o)
 
@@ -53,6 +55,11 @@ clean:
 	@echo "Removing objects in all directories..."
 	@$(MAKE) -C $(LIBFTDIR) clean
 	@rm -f $(OBJ)
+
+debug: makeobjects
+	@echo "Compiling Program for debugging"
+	@gcc $(FLAGS) -g -o $(NAME) $(INCLUDES) \
+		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft $(OBJ)
 
 fclean: clean
 	@echo "Removing program and libraries in all directories..."

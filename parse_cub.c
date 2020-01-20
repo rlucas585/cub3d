@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/17 16:44:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/20 15:47:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,31 +40,28 @@ t_parsef	route_parsing(char c)
 ** map into an array of strings, with each string containing a row of the map
 */
 
-char		**parse_map(int fd, char *line, int linenum)
+void		parse_map(int fd, char *line, int linenum, t_map *map)
 {
-	char		**map;
 	int			gnlret;
 	size_t		linewidth;
 
-	map = NULL;
+	map->coords = NULL;
 	gnlret = 1;
 	linewidth = ft_strlen(line);
 	while (gnlret)
 	{
-		map = row_ptrs(make_row(line), map);
+		map->coords = row_ptrs(make_row(line), *map);
 		if (!map)
-			exit(ft_error(MEM_FAIL, 0));
-			/* change to this: exit(ft_error(delete_all(MEM_FAIL, map))); */
+			exit(ft_error(delete_info(MEM_FAIL, *map), 0));
 		free(line);
 		line = NULL;
 		gnlret = get_next_line(fd, &line);
 		linenum++;
 		if (!line)
-			exit(ft_error(MEM_FAIL, 0));
+			exit(ft_error(delete_info(MEM_FAIL, *map), 0));
 		if (gnlret == 1 && !validate_map(line, linewidth))
-			exit(ft_error(BAD_FORMAT, linenum));
+			exit(ft_error(delete_info(BAD_FORMAT, *map), 0));
 	}
-	return (map);
 }
 
 /*
@@ -85,11 +82,11 @@ int			parse_line(int fd, char *line, t_map *mapinfo, int linenum)
 		exit(ft_error(BAD_FORMAT, linenum));
 	if (line[0] == '1')
 	{
-		mapinfo->coords = parse_map(fd, line, linenum);
+		parse_map(fd, line, linenum, mapinfo);
 		return (1);
 	}
 	else if (funct(line, mapinfo) == -1)
-		exit(ft_error(BAD_FORMAT, linenum));
+		exit(ft_error(delete_info(BAD_FORMAT, *mapinfo), linenum));
 	return (0);
 }
 

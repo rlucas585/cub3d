@@ -6,14 +6,15 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/17 18:05:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/20 16:23:26 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-
-/* delete this later */
 #include <cub3d.h>
+
+#include <stdio.h>
+/* delete this later */
 
 /*
 ** Utility functions for the cub3d project
@@ -70,30 +71,29 @@ char		*make_row(char *line)
 ** array and then adds one new one at the end.
 */
 
-char		**row_ptrs(char *newrow, char **oldarray)
+char		**row_ptrs(char *newrow, t_map map)
 {
 	int			i;
 	char		**ptr_array;
 
 	i = 0;
 	if (!newrow)
-		exit(ft_error(MEM_FAIL, 0));
-	/* change to this: exit(ft_error(delete_all(MEM_FAIL, map))); */
-	while (oldarray != NULL && oldarray[i] != NULL)
+		exit(ft_error(delete_info(MEM_FAIL, map), 0));
+	while (map.coords != NULL && map.coords[i] != NULL)
 		i++;
 	ptr_array = (char **)malloc(sizeof(char *) * (i + 2));
 	if (!ptr_array)
 		return (NULL);
 	i = 0;
-	while (oldarray != NULL && oldarray[i] != NULL)
+	while (map.coords != NULL && map.coords[i] != NULL)
 	{
-		ptr_array[i] = oldarray[i];
+		ptr_array[i] = map.coords[i];
 		i++;
 	}
 	ptr_array[i] = newrow;
 	ptr_array[i + 1] = NULL;
-	if (oldarray)
-		free(oldarray);
+	if (map.coords)
+		free(map.coords);
 	return (ptr_array);
 }
 
@@ -123,8 +123,9 @@ void		print_mapinfo(t_map mapinfo)
 
 void		print_playerinfo(t_player player)
 {
-	ft_printf("Player coordinates: X = %d Y = %d dir = %d\n",
-			(int)player.location[X], (int)player.location[Y], player.dir);
+	printf("Player coordinates: X = %d Y = %d dirX = %f dirY = %f\n",
+			(int)player.location[X], (int)player.location[Y], player.dir[X],
+			player.dir[Y]);
 }
 
 void		print_gameinfo(t_game game)

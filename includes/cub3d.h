@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/17 18:08:57 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/20 19:38:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct		s_map
 typedef struct		s_player
 {
 	double			location[2];
-	int				dir;
+	double			dir[2];
 }					t_player;
 
 typedef struct		s_game
@@ -35,6 +35,13 @@ typedef struct		s_game
 	t_map			map;
 	t_player		player;
 }					t_game;
+
+typedef struct		s_display
+{
+	void			*dpy;
+	void			*w;
+	void			*img;
+}					t_display;
 
 typedef int		(*t_parsef)(char *line, t_map *mapinfo);
 
@@ -65,42 +72,83 @@ typedef enum		e_errors
 	MORE_ARG = 7,
 	MEM_FAIL = 12,
 	INVALID_ARGUMENT = 22,
-	BAD_FILETYPE = 79
+	BAD_FILETYPE = 79,
+	CONNECTION_FAIL = 111
 }					t_errors;
 
-/* Opening file functions, and checking argument errors. In open_file.c. */
+/*
+** Opening file functions, and checking argument errors. In open_file.c.
+*/
+
 int			check_file(const char *str);
 int			open_file(int argc, char **argv);
 
-/* Color function, converts from 8-bit integers into a single 32-bit integer
- * containing the information from three 8-bit integers. In color.c. */
+/*
+** Color function, converts from 8-bit integers into a single 32-bit integer
+** containing the information from three 8-bit integers. In color.c.
+*/
+
 int			rgb(int red, int green, int blue);
 
-/* Error messaging, in errors.c. */
+/*
+** Error messaging, in errors.c.
+*/
+
 int			ft_error(int err, int linenum);
+
+/*
+** Check that the map is valid, both during creation and after completion.
+*/
 
 int			validate_map(char *line, size_t width);
 void		validate_n_s_walls(t_map mapinfo);
 
-/* Functions to read info from a line into relevant mapinfo, in get_info.c. */
+/* 
+** Functions to read info from a line into relevant mapinfo, in get_info.c.
+*/
+
 int			get_resolution(char *line, t_map *mapinfo);
 int			get_texture(char *line, t_map *mapinfo);
 int			get_color(char *line, t_map *mapinfo);
 
-/* Utility functions in utils.c */
+/*
+** Utility functions in utils.c
+*/
+
 char		*make_row(char *line);
-char		**row_ptrs(char *newrow, char **oldarray);
+char		**row_ptrs(char *newrow, t_map map);
 size_t		ft_arrlen(char **array);
 
-/* Functions to direct parsing of .cub file, in parse_cub.c. */
+/*
+** Functions to direct parsing of .cub file, in parse_cub.c.
+*/
+
 t_parsef	route_parsing(char c);
-char		**parse_map(int fd, char *firstline, int linenum);
+void		parse_map(int fd, char *line, int linenum, t_map *map);
 int			parse_line(int fd, char *line, t_map *mapinfo, int linenum);
 t_map		cub_parser(int fd);
 
-/* Troubleshooting functions that should be deleted, in utils.c. */
+/*
+** Troubleshooting functions that should be deleted, in utils.c.
+*/
+
 void		print_mapinfo(t_map mapinfo);
 void		print_playerinfo(t_player player);
 void		print_gameinfo(t_game game);
+
+/*
+** Functions to delete malloced data when exiting the program.
+*/
+
+void		delete_map(char **map);
+void		delete_tex(char *textures[5]);
+int			delete_info(int err, t_map map);
+
+/*
+**
+*/
+
+/* Testing */
+void		ray(t_game info, t_display link);
 
 #endif

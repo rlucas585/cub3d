@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/12 10:10:10 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/11/19 14:50:17 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/20 19:25:46 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	ft_getlength(long long n)
 	return (len);
 }
 
-static int	ft_abs(int n)
+static int	ft_abs2(int n)
 {
 	if (n < 0)
 		return (-n);
@@ -49,7 +49,7 @@ static char	*create_string(int len, int sign, long long n)
 		if (len == 0 && sign == 1)
 			result[len] = '-';
 		else
-			result[len] = ft_abs((n % 10)) + 48;
+			result[len] = ft_abs2((n % 10)) + 48;
 		n /= 10;
 		len--;
 	}

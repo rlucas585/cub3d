@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:49:52 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/17 18:12:24 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/20 19:26:12 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int			ft_error(int err, int linenum)
 		[MEM_FAIL] = "Out of memory\n",
 		[INVALID_ARGUMENT] = "Not enough arguments\n",
 		[BAD_FILETYPE] = "Inappropriate file type or format\n",
+		[CONNECTION_FAIL] = "Connection failed\n",
 	};
 
 	ft_putstr_fd("Error\n", 2);
