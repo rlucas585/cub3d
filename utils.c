@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/20 16:23:26 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/21 12:26:51 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
+#include <math.h>
 
 #include <stdio.h>
 /* delete this later */
@@ -123,13 +124,23 @@ void		print_mapinfo(t_map mapinfo)
 
 void		print_playerinfo(t_player player)
 {
-	printf("Player coordinates: X = %d Y = %d dirX = %f dirY = %f\n",
-			(int)player.location[X], (int)player.location[Y], player.dir[X],
-			player.dir[Y]);
+	printf("Player coordinates: X = %d Y = %d dirX = %f dirY = %f angle=%f\n",
+			(int)player.location[X], (int)player.location[Y], sin(to_radians(player.dir)),
+			-cos(to_radians(player.dir)), player.dir);
 }
 
 void		print_gameinfo(t_game game)
 {
 	print_mapinfo(game.map);
 	print_playerinfo(game.player);
+}
+
+double		to_degrees(double radians)
+{
+	return ((180 / M_PI) * radians);
+}
+
+double		to_radians(double degrees)
+{
+	return ((degrees * M_PI) / 180);
 }

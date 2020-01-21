@@ -6,24 +6,26 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/20 20:00:13 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/21 15:43:36 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <mlx.h>
 #include <libft.h>
 #include <cub3d.h>
+#include <math.h>
 
 #include <stdio.h>
 
-void		verLine(int x, int start, int end, int color, t_display xsrv)
+void		verLine(int x, int start, int end, int color, t_display xsrv,
+		t_game info)
 {
 	int			y;
 	int			ceiling;
 	int			floor;
 
-	ceiling = ft_hex("282828");
-	floor = ft_hex("928374");
+	ceiling = 2631720;
+	floor = 9601908;
 	y = 0;
 	while (y < start)
 	{
@@ -35,52 +37,66 @@ void		verLine(int x, int start, int end, int color, t_display xsrv)
 		mlx_pixel_put(xsrv.dpy, xsrv.w, x, y, color);
 		y++;
 	}
-	while (y <= 1080)
+	while (y <= info.map.res[1])
 	{
 		mlx_pixel_put(xsrv.dpy, xsrv.w, x, y, floor);
 		y++;
 	}
 }
 
-void		ray(t_game info, t_display link)
+void		ray(t_game info, t_display xsrv)
 {
 	double	planeX;
 	double	planeY;
+	double	cameraX;
+	double	rayDirX;
+	double	rayDirY;
 	int		x;
+	int		mapX;
+	int		mapY;
+	double	sideDistX;
+	double	sideDistY;
+	double	deltaDistX;
+	double	deltaDistY;
+	double	perpWallDist;
+	// What direction to step in x or y-direction (either +1 or -1)
+	int		stepX;
+	int		stepY;
+	int		hit; // was a wall hit?
+	int		side; // was a NS or a EW wall hit?
+	int		lineHeight;
+	int		drawStart;
+	int		drawEnd;
+	int		colorchosen;
+	int		color;
 
-	planeX = 0; // 2d raycaster version of camera plane
-	planeY = 0.66;
+
+	info.player.dir = 150;
+	planeX = 0.66 * cos(to_radians(info.player.dir)); // camera plane calcs
+	planeY = 0.66 * sin(to_radians(info.player.dir));
 	x = 0;
+	colorchosen = ft_hex("abcdef");
 
 	while (x < info.map.res[0])
 	{
+		color = colorchosen;
+		hit = 0;
+
 		// Calculating ray position and direction
-		double	cameraX = 2 * (double)x / (double)(info.map.res[0]) - 1; // x-coord in camera space
-		double	rayDirX = info.player.dir[X] + planeX * cameraX;
-		double	rayDirY = info.player.dir[Y] + planeY * cameraX;
+		cameraX = 2 * (double)x / (double)(info.map.res[0]) - 1; // x-coord in camera space
+		rayDirX = sin(to_radians(info.player.dir)) + planeX * cameraX;
+		rayDirY = -cos(to_radians(info.player.dir)) + planeY * cameraX;
+		/* rayDirX = tan(to_radians(33)) * rayDirY; */
+		/* rayDirY = tan(to_radians(33)) * rayDirX; */
 
-		printf("cameraX = %f\n", cameraX);
-		ft_printf("info.map.res[0] - 1 = %d\n", info.map.res[0] - 1);
+		/* ft_printf("info.map.res[0] - 1 = %d\n", info.map.res[0] - 1); */
 		// The box of the map we're in
-		int		mapX = (int)info.player.location[X];
-		int		mapY = (int)info.player.location[Y];
-
-		// Length of ray from current position to next x or y-side
-		double	sideDistX;
-		double	sideDistY;
+		mapX = (int)info.player.location[X];
+		mapY = (int)info.player.location[Y];
 
 		// Length of ray from one x or y-side to next x or y-side
-		double	deltaDistX = ft_abs_d(1 / rayDirX);
-		double	deltaDistY = ft_abs_d(1 / rayDirY);
-		double	perpWallDist;
-
-		ft_printf("RayDirX = %d\n", rayDirX);
-		// What direction to step in x or y-direction (either +1 or -1)
-		int		stepX;
-		int		stepY;
-
-		int		hit = 0; // was a wall hit?
-		int		side; // was a NS or a EW wall hit?
+		deltaDistX = ft_abs_d(1 / rayDirX);
+		deltaDistY = ft_abs_d(1 / rayDirY);
 
 		if (rayDirX < 0)
 		{
@@ -120,7 +136,7 @@ void		ray(t_game info, t_display link)
 				side = 1;
 			}
 			// Check if ray has hit a wall or not
-			if (info.map.coords[mapY][mapX] > 0)
+			if (info.map.coords[mapY][mapX] == '1')
 				hit = 1;
 		}
 		if (side == 0)
@@ -131,39 +147,24 @@ void		ray(t_game info, t_display link)
 				rayDirY;
 
 		// Calculate height of line to draw on screen
-		int		lineHeight = (int)(info.map.res[1] / perpWallDist);
+		lineHeight = (int)(info.map.res[1] / perpWallDist);
 
 		// Calculate lowest and highest pixel to fill in current stripe
-		int		drawStart = -lineHeight / 2 + info.map.res[1] / 2;
+		drawStart = -lineHeight / 2 + info.map.res[1] / 2;
 		if (drawStart < 0)
 			drawStart = 0;
-		int		drawEnd = lineHeight / 2 + info.map.res[1] / 2;
+		drawEnd = lineHeight / 2 + info.map.res[1] / 2;
 		if (drawEnd >= info.map.res[1])
 			drawEnd = info.map.res[1] - 1;
 
 		// Choose wall color
-		int		color;
-		switch(info.map.coords[mapY][mapX])
-		{
-			case 1:	color = ft_hex("fb4934"); // red
-					break ;
-			case 2:	color = ft_hex("b8bb26"); // green
-					break ;
-			case 3:	color = ft_hex("83a598"); // blue
-					break ;
-			case 4:	color = ft_hex("fbf1c7"); // white
-					break ;
-			case 5:	color = ft_hex("fabd2f"); // yellow
-					break ;
-		}
 
 		// give x and y sides different brightness
 		if (side == 1)
 			color = color / 2;
 
-		ft_printf("x = %d, drawStart = %d, drawEnd = %d\n", x, drawStart, drawEnd);
 		// draw the pixels of the stripe as a vertical line
-		verLine(x, drawStart, drawEnd, color, link);
+		verLine(x, drawStart, drawEnd, color, xsrv, info);
 		x++;
 	}
 }

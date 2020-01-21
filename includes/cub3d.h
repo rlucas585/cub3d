@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/20 19:38:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/21 16:03:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct		s_map
 typedef struct		s_player
 {
 	double			location[2];
-	double			dir[2];
+	double			dir;
 }					t_player;
 
 typedef struct		s_game
@@ -36,11 +36,19 @@ typedef struct		s_game
 	t_player		player;
 }					t_game;
 
+typedef struct		s_img
+{
+	int				bpp;
+	int				size_line;
+	int				endian;
+}					t_img;
+
 typedef struct		s_display
 {
 	void			*dpy;
 	void			*w;
-	void			*img;
+	t_img			*img;
+	char			*imga;
 }					t_display;
 
 typedef int		(*t_parsef)(char *line, t_map *mapinfo);
@@ -149,6 +157,10 @@ int			delete_info(int err, t_map map);
 */
 
 /* Testing */
-void		ray(t_game info, t_display link);
+void		ray(t_game info, t_display xsrv);
+void		verLine(int x, int start, int end, int color, t_display xsrv, t_game info);
+
+double		to_degrees(double radians);
+double		to_radians(double degrees);
 
 #endif
