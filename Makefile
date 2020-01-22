@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/22 12:31:51 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/22 16:56:12 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,10 @@ SRCS = main2.c \
 	   parse_cub.c \
 	   validation.c \
 	   exit.c \
-	   raycasting.c
+	   raycasting.c \
+	   find_player.c \
+	   connect.c \
+	   actions1.c
 
 OBJ = $(SRCS:.c=.o)
 

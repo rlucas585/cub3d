@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 14:32:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 17:37:00 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,14 @@ typedef struct		s_display
 	char			*imga;
 }					t_display;
 
+typedef struct		s_all
+{
+	t_display		*xsrv;
+	t_game			*info;
+}					t_all;
+
 typedef int			(*t_parsef)(char *line, t_map *mapinfo);
+typedef void		(*t_act)(t_game *info, t_display *xsrv);
 
 typedef enum		e_coords
 {
@@ -85,6 +92,17 @@ typedef enum		e_errors
 	CONNECTION_FAIL = 111
 }					t_errors;
 
+typedef enum		e_keys
+{
+	KEY_A = 0,
+	KEY_S,
+	KEY_D,
+	KEY_W = 13,
+	KEY_ESC = 53,
+	KEY_LEFT = 123,
+	KEY_RIGHT,
+}					t_keys;
+
 /*
 ** Opening file functions, and checking argument errors. In open_file.c.
 */
@@ -107,10 +125,17 @@ int			ft_error(int err, int linenum);
 
 /*
 ** Check that the map is valid, both during creation and after completion.
+** Located in validation.c.
 */
 
 int			validate_map(char *line, size_t width);
 void		validate_n_s_walls(t_map mapinfo);
+
+/*
+** Function to find and create the player on the map. In find_player.c.
+*/
+
+t_player	find_player(t_game game);
 
 /* 
 ** Functions to read info from a line into relevant mapinfo, in get_info.c.
@@ -146,7 +171,7 @@ int			parse_line(int fd, char *line, t_map *mapinfo, int linenum);
 t_map		cub_parser(int fd);
 
 /*
-** Functions to delete malloced data when exiting the program.
+** Functions to delete malloced data when exiting the program. In exit.c.
 */
 
 void		delete_map(char **map);
@@ -163,11 +188,30 @@ void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color);
 void		create_image(t_display xsrv, t_game info);
 
 /*
+** Function to establish connection with Xserver, initialize a window and
+** image. In connect.c.
+*/
+
+t_display	establish_connection(t_game info);
+
+/*
 ** Small math functions, not super necessary.
 */
 
 double		to_degrees(double radians);
 double		to_radians(double degrees);
+
+/*
+** Movement functions, in actions1.c
+*/
+
+void		move_left(t_game *info, t_display *xsrv);
+void		move_right(t_game *info, t_display *xsrv);
+void		move_forward(t_game *info, t_display *xsrv);
+void		move_back(t_game *info, t_display *xsrv);
+void		turn_left(t_game *info, t_display *xsrv);
+void		turn_right(t_game *info, t_display *xsrv);
+void		escape(t_game *info, t_display *xsrv);
 
 /*
 **

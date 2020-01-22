@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 14:34:40 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 16:03:30 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color)
 
 void		create_image(t_display xsrv, t_game info)
 {
+	xsrv.img = mlx_new_image(xsrv.dpy, info.map.res[0], info.map.res[1]);
+	if (!xsrv.img)
+		exit(ft_error(delete_info(CONNECTION_FAIL, info.map), 0));
+	xsrv.imga = mlx_get_data_addr(xsrv.img, &xsrv.imginf->bpp,
+			&xsrv.imginf->size_line, &xsrv.imginf->endian);
 	ray(info, xsrv);
 	mlx_put_image_to_window(xsrv.dpy, xsrv.w, xsrv.img, 0, 0);
 	mlx_destroy_image(xsrv.dpy, xsrv.img);

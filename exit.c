@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/20 15:44:57 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 16:49:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void		delete_tex(char *textures[5])
 	}
 }
 
-int		delete_info(int err, t_map map)
+int			delete_info(int err, t_map map)
 {
 	delete_map(map.coords);
 	delete_tex(map.textures);
