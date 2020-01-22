@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/20 15:37:21 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 14:25:11 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,6 @@ int				validate_map(char *line, size_t width)
 	if (line[0] != '1' || line[width - 1] != '1')
 		return (0);
 	return (1);
-}
-
-size_t			ft_arrlen(char **array)
-{
-	size_t		i;
-
-	i = 0;
-	while (array[i] != NULL)
-		i++;
-	return (i);
 }
 
 void			validate_n_s_walls(t_map mapinfo)

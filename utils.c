@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/21 12:26:51 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 14:23:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,21 @@ char		**row_ptrs(char *newrow, t_map map)
 		free(map.coords);
 	return (ptr_array);
 }
+
+/*
+** Get the length of a 2d array of strings.
+*/
+
+size_t			ft_arrlen(char **array)
+{
+	size_t		i;
+
+	i = 0;
+	while (array[i] != NULL)
+		i++;
+	return (i);
+}
+
 
 /*
 ** Print the mapinfo information. Should be removed from directory prior to

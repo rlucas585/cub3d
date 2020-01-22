@@ -6,17 +6,18 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/29 11:24:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2019/10/31 11:11:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 10:51:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 void		*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	unsigned char		*ptr1;
 	const unsigned char	*ptr2;
-	int					i;
+	size_t				i;
 
 	i = 0;
 	if (dest == NULL && src == NULL)

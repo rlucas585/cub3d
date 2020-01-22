@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/21 16:03:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 14:32:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,23 @@ typedef struct		s_game
 	t_player		player;
 }					t_game;
 
-typedef struct		s_img
+typedef struct		s_imginf
 {
 	int				bpp;
 	int				size_line;
 	int				endian;
-}					t_img;
+}					t_imginf;
 
 typedef struct		s_display
 {
 	void			*dpy;
 	void			*w;
-	t_img			*img;
+	void			*img;
+	t_imginf		*imginf;
 	char			*imga;
 }					t_display;
 
-typedef int		(*t_parsef)(char *line, t_map *mapinfo);
+typedef int			(*t_parsef)(char *line, t_map *mapinfo);
 
 typedef enum		e_coords
 {
@@ -128,6 +129,14 @@ char		**row_ptrs(char *newrow, t_map map);
 size_t		ft_arrlen(char **array);
 
 /*
+** Troubleshooting functions that should be deleted, in utils.c.
+*/
+
+void		print_mapinfo(t_map mapinfo);
+void		print_playerinfo(t_player player);
+void		print_gameinfo(t_game game);
+
+/*
 ** Functions to direct parsing of .cub file, in parse_cub.c.
 */
 
@@ -135,14 +144,6 @@ t_parsef	route_parsing(char c);
 void		parse_map(int fd, char *line, int linenum, t_map *map);
 int			parse_line(int fd, char *line, t_map *mapinfo, int linenum);
 t_map		cub_parser(int fd);
-
-/*
-** Troubleshooting functions that should be deleted, in utils.c.
-*/
-
-void		print_mapinfo(t_map mapinfo);
-void		print_playerinfo(t_player player);
-void		print_gameinfo(t_game game);
 
 /*
 ** Functions to delete malloced data when exiting the program.
@@ -153,14 +154,23 @@ void		delete_tex(char *textures[5]);
 int			delete_info(int err, t_map map);
 
 /*
-**
+** Raycasting algorithm and writing, in raycasting.c
 */
 
-/* Testing */
-void		ray(t_game info, t_display xsrv);
+void		ray(t_game info, t_display xsrv); // Waaaay too long
 void		verLine(int x, int start, int end, int color, t_display xsrv, t_game info);
+void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color);
+void		create_image(t_display xsrv, t_game info);
+
+/*
+** Small math functions, not super necessary.
+*/
 
 double		to_degrees(double radians);
 double		to_radians(double degrees);
+
+/*
+**
+*/
 
 #endif

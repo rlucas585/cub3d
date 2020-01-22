@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/21 15:43:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/22 14:34:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,32 @@
 #include <math.h>
 
 #include <stdio.h>
+
+/*
+** Function to place a single pixel in an image at an x & y coordinate.
+*/
+
+void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color)
+{
+	if (x < 0 && y < 0)
+		return ;
+	*(unsigned int *)&xsrv.imga[4 * x + xsrv.imginf->size_line * y] = color;
+}
+
+/*
+** Create a raycasted image, put it to the window, then destroy it.
+*/
+
+void		create_image(t_display xsrv, t_game info)
+{
+	ray(info, xsrv);
+	mlx_put_image_to_window(xsrv.dpy, xsrv.w, xsrv.img, 0, 0);
+	mlx_destroy_image(xsrv.dpy, xsrv.img);
+}
+
+/*
+** Write a vertical line into an image, used in ray().
+*/
 
 void		verLine(int x, int start, int end, int color, t_display xsrv,
 		t_game info)
@@ -29,17 +55,17 @@ void		verLine(int x, int start, int end, int color, t_display xsrv,
 	y = 0;
 	while (y < start)
 	{
-		mlx_pixel_put(xsrv.dpy, xsrv.w, x, y, ceiling);
+		img_put_pixel(xsrv, x, y, ceiling);
 		y++;
 	}
 	while (y <= end)
 	{
-		mlx_pixel_put(xsrv.dpy, xsrv.w, x, y, color);
+		img_put_pixel(xsrv, x, y, color);
 		y++;
 	}
-	while (y <= info.map.res[1])
+	while (y < info.map.res[1])
 	{
-		mlx_pixel_put(xsrv.dpy, xsrv.w, x, y, floor);
+		img_put_pixel(xsrv, x, y, floor);
 		y++;
 	}
 }
@@ -71,7 +97,6 @@ void		ray(t_game info, t_display xsrv)
 	int		color;
 
 
-	info.player.dir = 150;
 	planeX = 0.66 * cos(to_radians(info.player.dir)); // camera plane calcs
 	planeY = 0.66 * sin(to_radians(info.player.dir));
 	x = 0;
@@ -163,7 +188,7 @@ void		ray(t_game info, t_display xsrv)
 		if (side == 1)
 			color = color / 2;
 
-		// draw the pixels of the stripe as a vertical line
+		// draw the pixels of the stripe as a vertical line into an image.
 		verLine(x, drawStart, drawEnd, color, xsrv, info);
 		x++;
 	}
