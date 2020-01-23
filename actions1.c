@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 16:07:54 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 17:39:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/23 12:29:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,6 @@ void		turn_right(t_game *info, t_display *xsrv)
 void		escape(t_game *info, t_display *xsrv)
 {
 	delete_info(0, info->map);
+	mlx_destroy_window(xsrv->dpy, xsrv->w);
 	(void)xsrv;
 }

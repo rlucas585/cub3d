@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 16:03:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/23 12:10:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,6 @@ void		ray(t_game info, t_display xsrv)
 		cameraX = 2 * (double)x / (double)(info.map.res[0]) - 1; // x-coord in camera space
 		rayDirX = sin(to_radians(info.player.dir)) + planeX * cameraX;
 		rayDirY = -cos(to_radians(info.player.dir)) + planeY * cameraX;
-		/* rayDirX = tan(to_radians(33)) * rayDirY; */
-		/* rayDirY = tan(to_radians(33)) * rayDirX; */
 
 		/* ft_printf("info.map.res[0] - 1 = %d\n", info.map.res[0] - 1); */
 		// The box of the map we're in
@@ -157,19 +155,19 @@ void		ray(t_game info, t_display xsrv)
 			{
 				sideDistX += deltaDistX;
 				mapX += stepX;
-				side = 0;
+				side = (rayDirX > 0) ? EAST : WEST;
 			}
 			else
 			{
 				sideDistY += deltaDistY;
 				mapY += stepY;
-				side = 1;
+				side = (rayDirY > 0) ? SOUTH : NORTH;
 			}
 			// Check if ray has hit a wall or not
 			if (info.map.coords[mapY][mapX] == '1')
 				hit = 1;
 		}
-		if (side == 0)
+		if (side == EAST || side == WEST)
 			perpWallDist = (mapX - info.player.location[X] + (1 - stepX) / 2) /
 				rayDirX;
 		else
@@ -188,10 +186,18 @@ void		ray(t_game info, t_display xsrv)
 			drawEnd = info.map.res[1] - 1;
 
 		// Choose wall color
+		if (side == EAST)
+			color = GREEN;
+		if (side == NORTH)
+			color = RED;
+		if (side == SOUTH)
+			color = PURPLE;
+		if (side == WEST)
+			color = BLUE;
 
 		// give x and y sides different brightness
-		if (side == 1)
-			color = color / 2;
+		/* if (side == 1) */
+		/* 	color = color / 2; */
 
 		// draw the pixels of the stripe as a vertical line into an image.
 		verLine(x, drawStart, drawEnd, color, xsrv, info);

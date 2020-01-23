@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 17:41:42 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/23 12:29:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ int			action(int key, t_all *all)
 	return (1);
 }
 
+int			crosspress(t_all *all)
+{
+	escape(all->info, all->xsrv);
+	exit(0);
+}
+
 int			main(int argc, char **argv)
 {
 	t_game		game;
@@ -49,8 +55,8 @@ int			main(int argc, char **argv)
 	all.xsrv = &xsrv;
 	all.info = &game;
 	mlx_hook(all.xsrv->w, 2, 0, &action, &all);
+	mlx_hook(all.xsrv->w, 17, 0, &crosspress, &all);
 	create_image(xsrv, game);
 	mlx_loop(xsrv.dpy);
-	mlx_destroy_window(xsrv.dpy, xsrv.w);
 	return (0);
 }

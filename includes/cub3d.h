@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 17:37:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/23 12:05:49 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CUB3D_H
 
 # define VALID_MAP_CHARS "012NESW "
+
+# include <stdlib.h>
 
 typedef struct		s_map
 {
@@ -75,6 +77,14 @@ typedef enum		e_textures
 	WEST = 3,
 	SPRITE = 4
 }					t_textures;
+
+typedef enum		e_colors
+{
+	RED = 16468276,
+	GREEN = 12106534,
+	BLUE = 8627608,
+	PURPLE = 13862555
+}					t_colors;
 
 typedef enum		e_errors
 {
