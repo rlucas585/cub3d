@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/23 12:10:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/23 19:29:49 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,14 @@ void		ray(t_game info, t_display xsrv)
 	int		lineHeight;
 	int		drawStart;
 	int		drawEnd;
-	int		colorchosen;
-	int		color;
-
+	unsigned int		color;
 
 	planeX = 0.66 * cos(to_radians(info.player.dir)); // camera plane calcs
 	planeY = 0.66 * sin(to_radians(info.player.dir));
 	x = 0;
-	colorchosen = ft_hex("abcdef");
 
 	while (x < info.map.res[0])
 	{
-		color = colorchosen;
 		hit = 0;
 
 		// Calculating ray position and direction
@@ -200,7 +196,50 @@ void		ray(t_game info, t_display xsrv)
 		/* 	color = color / 2; */
 
 		// draw the pixels of the stripe as a vertical line into an image.
-		verLine(x, drawStart, drawEnd, color, xsrv, info);
+		/* verLine(x, drawStart, drawEnd, color, xsrv, info); */
+
+		// Textures
+		// Value of wallX, the x-coordinate for where the wall was hit
+		double wallX; //where the wall was hit
+		if (side == EAST || side == WEST)
+			wallX = info.player.location[Y] + perpWallDist * rayDirY;
+		else
+			wallX = info.player.location[X] + perpWallDist * rayDirX;
+		wallX -= floor((wallX));
+
+		// corresponding x-coordinate on the texture
+		int texX = (int)(wallX * (double)(128));
+		if ((side == EAST || side == WEST) && rayDirX > 0)
+			texX = 128 - texX - 1;
+		if ((side == NORTH || side == SOUTH) && rayDirY < 0)
+			texX = 128 - texX - 1;
+
+		// find y-coordinate of texture
+		double step = 1.0 * 128 / lineHeight;
+
+		// Starting texture coordinate
+		double texPos = (drawStart - info.map.res[1] / 2 + lineHeight / 2) * step;
+		int		y;
+		y = 0;
+		while (y < drawStart)
+		{
+			img_put_pixel(xsrv, x, y, CEILING);
+			y++;
+		}
+		while (y < drawEnd)
+		{
+			int	texY = (int)texPos;
+			texPos += step;
+			ft_memcpy(&color, info.tex[side] + 4 * texX + info.texinf->size_line * texY, 4);
+			/* printf("color = %d\n", color); */
+			img_put_pixel(xsrv, x, y, color);
+			y++;
+		}
+		while (y < info.map.res[1])
+		{
+			img_put_pixel(xsrv, x, y, FLOOR);
+			y++;
+		}
 		x++;
 	}
 }

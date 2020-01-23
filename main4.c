@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/23 11:06:36 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/23 11:58:10 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/23 19:57:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ static char	*g_str;
 void	show_x(int *x)
 {
 	printf("x = %d\n", *x);
+}
+
+/*
+** The below is not norm-compliant. Use header file for prototypes.
+*/
+
+__attribute__((constructor)) void	setup2(void)
+{
+	printf("djksghsdfj\n");
 }
 
 void	setup(void)

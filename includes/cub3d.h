@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/23 12:05:49 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/23 17:29:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,20 @@ typedef struct		s_player
 	double			dir;
 }					t_player;
 
-typedef struct		s_game
-{
-	t_map			map;
-	t_player		player;
-}					t_game;
-
 typedef struct		s_imginf
 {
 	int				bpp;
 	int				size_line;
 	int				endian;
 }					t_imginf;
+
+typedef struct		s_game
+{
+	t_map			map;
+	t_player		player;
+	char			**tex;
+	t_imginf		*texinf;
+}					t_game;
 
 typedef struct		s_display
 {
@@ -83,7 +85,9 @@ typedef enum		e_colors
 	RED = 16468276,
 	GREEN = 12106534,
 	BLUE = 8627608,
-	PURPLE = 13862555
+	PURPLE = 13862555,
+	CEILING = 2631720,
+	FLOOR = 9601908
 }					t_colors;
 
 typedef enum		e_errors

@@ -1,0 +1,17 @@
+R 1000 800
+
+NO ./textures/wall1.png
+SO ./textures/madeline2.png
+
+WE ./textures/dog2.png
+EA ./textures/taylor2.png
+
+S ./path_to_the_sprite_texture
+
+F 220,100,0
+
+C 225,30,0
+
+1 1 1 1 1 1 1
+1 S 0 0 0 0 1
+1 1 1 1 1 1 1
