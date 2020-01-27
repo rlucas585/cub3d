@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:39:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 17:20:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/27 17:27:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ static t_player		make_player(int x, int y, int c)
 {
 	t_player	player;
 
-	player.location[X] = x;
-	player.location[Y] = y;
+	player.location[X] = (double)x + 0.5;
+	player.location[Y] = (double)y + 0.5;
 	player.dir = dir_table(c);
 	return (player);
 }
@@ -54,21 +54,19 @@ t_player			find_player(t_game game)
 	int			x;
 	int			y;
 	t_player	player;
-	char		**map;
 
 	x = 1;
 	y = 1;
-	map = game.map.coords;
 	player.location[X] = 0;
-	while (x < (int)ft_strlen(map[0]) - 1)
+	while (x < (int)ft_strlen(game.map.coords[0]) - 1)
 	{
-		while (y < (int)ft_arrlen(map) - 1)
+		while (y < (int)ft_arrlen(game.map.coords) - 1)
 		{
-			if (ft_strchr("NESW", map[y][x]))
+			if (ft_strchr("NESW", game.map.coords[y][x]))
 			{
 				if (player.location[Y] != 0)
 					exit(ft_error(delete_info(DUP_PLAYERS, game.map), 0));
-				player = make_player(x, y, map[y][x]);
+				player = make_player(x, y, game.map.coords[y][x]);
 				game.map.coords[y][x] = '0';
 			}
 			y++;

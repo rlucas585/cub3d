@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/24 17:21:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/15 12:36:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/27 13:01:51 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static int	ret_value(int ret, char *buf, char **line, char **store)
 	if (ret < 0)
 	{
 		free(*line);
+		*line = NULL;
 		free(*store);
 		return (INVALID_FD_OR_MALLOC_FAIL);
 	}

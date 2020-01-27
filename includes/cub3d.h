@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/23 17:29:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/27 17:19:57 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct		s_game
 {
 	t_map			map;
 	t_player		player;
-	char			**tex;
+	char			*texstrs[5];
+	void			*imgs[5];
 	t_imginf		*texinf;
 }					t_game;
 
@@ -101,6 +102,8 @@ typedef enum		e_errors
 	DUP_PLAYERS = 6,
 	MORE_ARG = 7,
 	MEM_FAIL = 12,
+	NO_PLAYER = 13,
+	MISSING_TEX = 14,
 	INVALID_ARGUMENT = 22,
 	BAD_FILETYPE = 79,
 	CONNECTION_FAIL = 111
@@ -190,7 +193,9 @@ t_map		cub_parser(int fd);
 
 void		delete_map(char **map);
 void		delete_tex(char *textures[5]);
+void		delete_imgs(void *imgs[5]);
 int			delete_info(int err, t_map map);
+int			delete_all(int err, t_all all);
 
 /*
 ** Raycasting algorithm and writing, in raycasting.c

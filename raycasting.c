@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/23 19:29:49 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/27 17:07:49 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ void		ray(t_game info, t_display xsrv)
 		if ((side == NORTH || side == SOUTH) && rayDirY < 0)
 			texX = 128 - texX - 1;
 
+		texX = 128 / 2 - (texX - 128 / 2);
 		// find y-coordinate of texture
 		double step = 1.0 * 128 / lineHeight;
 
@@ -223,21 +224,21 @@ void		ray(t_game info, t_display xsrv)
 		y = 0;
 		while (y < drawStart)
 		{
-			img_put_pixel(xsrv, x, y, CEILING);
+			img_put_pixel(xsrv, x, y, BLUE);
 			y++;
 		}
 		while (y < drawEnd)
 		{
 			int	texY = (int)texPos;
 			texPos += step;
-			ft_memcpy(&color, info.tex[side] + 4 * texX + info.texinf->size_line * texY, 4);
+			ft_memcpy(&color, info.texstrs[side] + 4 * texX + info.texinf->size_line * texY, 4);
 			/* printf("color = %d\n", color); */
 			img_put_pixel(xsrv, x, y, color);
 			y++;
 		}
 		while (y < info.map.res[1])
 		{
-			img_put_pixel(xsrv, x, y, FLOOR);
+			img_put_pixel(xsrv, x, y, PURPLE);
 			y++;
 		}
 		x++;

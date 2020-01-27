@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/23 19:59:15 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/27 16:33:08 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,7 @@ clean:
 test: makeobjects
 	@echo "Compiling test program"
 	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
-		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft main4.c
+		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft main5.c
 
 fclean: clean
 	@echo "Removing program and libraries in all directories..."

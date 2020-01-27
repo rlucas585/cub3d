@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:48:46 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 16:06:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/27 16:42:09 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ t_display	establish_connection(t_game info)
 	xsrv.dpy = mlx_init();
 	if (xsrv.dpy == NULL)
 		exit(ft_error(delete_info(CONNECTION_FAIL, info.map), 0));
-	xsrv.w = mlx_new_window(xsrv.dpy, info.map.res[0], info.map.res[1], "cub3d");
+	xsrv.w = mlx_new_window(xsrv.dpy,
+			info.map.res[0], info.map.res[1], "Ryan's cub3d");
 	if (xsrv.w == NULL)
 		exit(ft_error(delete_info(CONNECTION_FAIL, info.map), 0));
 	xsrv.imginf = (t_imginf *)malloc(sizeof(t_imginf));
