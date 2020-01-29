@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 17:40:51 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/29 19:49:59 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <mlx.h>
 #include <stdio.h>
 
-int			action(int key, t_all *all)
+int			keypress(int key, t_all *all)
 {
 	t_act					funct;
 	static const t_act		actiontable[128] = {
@@ -30,15 +30,21 @@ int			action(int key, t_all *all)
 
 	funct = actiontable[key];
 	if (funct)
-		funct(all->info, all->xsrv);
+		funct(all);
 	if (key == KEY_ESC)
 		exit(0);
 	return (1);
 }
 
+int			keyrelease(t_all *all)
+{
+	all->keytest = 1;
+	return (1);
+}
+
 int			crosspress(t_all *all)
 {
-	escape(all->info, all->xsrv);
+	escape(all);
 	exit(0);
 }
 
@@ -96,7 +102,9 @@ int			main(int argc, char **argv)
 	all.xsrv = &xsrv;
 	all.info = &game;
 	init_tex(&all);
-	mlx_hook(all.xsrv->w, 2, 0, &action, &all);
+	all.keytest = 0;
+	mlx_hook(all.xsrv->w, 2, 0, &keypress, &all);
+	mlx_hook(all.xsrv->w, 3, 0, &keyrelease, &all);
 	mlx_hook(all.xsrv->w, 17, 0, &crosspress, &all);
 	create_image(xsrv, game);
 	mlx_loop(xsrv.dpy);

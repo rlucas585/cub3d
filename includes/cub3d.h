@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 17:56:41 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/29 19:46:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct		s_all
 {
 	t_display		*xsrv;
 	t_game			*info;
+	int				keytest;
 }					t_all;
 
 typedef struct		s_dda
@@ -105,7 +106,7 @@ typedef struct		s_ray
 }					t_ray;
 
 typedef int			(*t_parsef)(char *line, t_map *mapinfo);
-typedef void		(*t_act)(t_game *info, t_display *xsrv);
+typedef void		(*t_act)(t_all *all);
 
 typedef enum		e_coords
 {
@@ -283,13 +284,13 @@ double		to_radians(double degrees);
 ** Movement functions, in actions1.c
 */
 
-void		move_left(t_game *info, t_display *xsrv);
-void		move_right(t_game *info, t_display *xsrv);
-void		move_forward(t_game *info, t_display *xsrv);
-void		move_back(t_game *info, t_display *xsrv);
-void		turn_left(t_game *info, t_display *xsrv);
-void		turn_right(t_game *info, t_display *xsrv);
-void		escape(t_game *info, t_display *xsrv);
+void		move_left(t_all *all);
+void		move_right(t_all *all);
+void		move_forward(t_all *all);
+void		move_back(t_all *all);
+void		turn_left(t_all *all);
+void		turn_right(t_all *all);
+void		escape(t_all *all);
 
 /*
 **
