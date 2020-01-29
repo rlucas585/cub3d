@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/29 16:53:15 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 17:38:56 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/29 17:56:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #include <cub3d.h>
 #include <math.h>
 
-void		noray_dda(t_dda *dda, t_game info)
+void		noray_dda(t_dda *dda, t_game info, int dir)
 {
 	dda->hit = 0;
 	dda->perpWallDist = 0;
-	dda->rayDirX = sin(to_radians(info.player.dir));
-	dda->rayDirY = -cos(to_radians(info.player.dir));
+	dda->rayDirX = sin(to_radians(dir));
+	dda->rayDirY = -cos(to_radians(dir));
 	dda->mapX = (int)info.player.location[X];
 	dda->mapY = (int)info.player.location[Y];
 	dda->deltaDistX = ft_abs_d(1 / dda->rayDirX);
@@ -82,9 +82,9 @@ void		dda(t_dda *dda, t_game info)
 				(1 - dda->stepY) / 2) / dda->rayDirY;
 }
 
-void		dda_movement(t_dda *dda, t_game info)
+void		dda_movement(t_dda *dda, t_game info, double dist)
 {
-	while (dda->hit == 0 && dda->perpWallDist < 0.5)
+	while (dda->hit == 0 && dda->perpWallDist < dist)
 	{
 		if (dda->sideDistX < dda->sideDistY)
 		{

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 17:40:56 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/29 17:56:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,10 +242,10 @@ int			delete_all(int err, t_all all);
 ** DDA functions, in dda.c
 */
 
-void		noray_dda(t_dda *dda, t_game info);
+void		noray_dda(t_dda *dda, t_game info, int dir);
 void		dda_setup(t_dda *dda, t_game info);
 void		dda(t_dda *dda, t_game info);
-void		dda_movement(t_dda *dda, t_game info);
+void		dda_movement(t_dda *dda, t_game info, double dist);
 
 /*
 ** Separate components of the raycasting algorithm, in ray_setup.c.

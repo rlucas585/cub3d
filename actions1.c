@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 16:07:54 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 17:40:38 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/29 19:10:47 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,47 +45,40 @@ void		bump(double *x, double *y, char **map)
 	}
 }
 
-void		move(t_dda dda, t_game *info)
+void		move(t_dda dda, t_game *info, double dist, int dir)
 {
-	if (dda.hit)
-	{
-		if (dda.perpWallDist > 0.5)
-		{
-			info->player.location[X] += 0.5 * sin(to_radians(info->player.dir));
-			info->player.location[Y] += 0.5 *
-				-cos(to_radians(info->player.dir));
-		}
-		else
-		{
-			info->player.location[X] += (dda.perpWallDist - 0.1) *
-				sin(to_radians(info->player.dir));
-			info->player.location[Y] += (dda.perpWallDist - 0.1) *
-				-cos(to_radians(info->player.dir));
-		}
-	}
-	else
-	{
-		info->player.location[X] += 0.5 * sin(to_radians(info->player.dir));
-		info->player.location[Y] += 0.5 * -cos(to_radians(info->player.dir));
-	}
+	(void)dda;
+	/* if (dda.hit && dda.perpWallDist <= dist) */
+	/* { */
+	/* 		info->player.location[X] += (dda.perpWallDist - 0.1) * */
+	/* 			sin(to_radians(dir)); */
+	/* 		info->player.location[Y] += (dda.perpWallDist - 0.1) * */
+	/* 			-cos(to_radians(dir)); */
+	/* } */
+	/* else */
+	/* { */
+	/* 	info->player.location[X] += dist * sin(to_radians(dir)); */
+	/* 	info->player.location[Y] += dist * -cos(to_radians(dir)); */
+	/* } */
+	if (info->map.coords[(int)(info->player.location[Y])][(int)(info->player.location[X] +
+			dist * sin(to_radians(dir)))] != '1')
+		info->player.location[X] += dist * sin(to_radians(dir));
+	if (info->map.coords[(int)(info->player.location[Y] + dist *
+			-cos(to_radians(dir)))][(int)(info->player.location[X])] != '1')
+		info->player.location[Y] += dist * -cos(to_radians(dir));
 }
 
 void		move_left(t_game *info, t_display *xsrv)
 {
-	double		x;
-	double		y;
-	int			ldir;
+	t_dda		dda;
+	int			left;
 
-	ldir = info->player.dir - 90;
-	ldir = (ldir < 0) ? ldir + 360 : ldir;
-	x = 0.4 * sin(to_radians(ldir));
-	y = 0.4 * -cos(to_radians(ldir));
-	if (info->map.coords[(int)(info->player.location[Y] + y)]
-			[(int)(info->player.location[X] + x)] != '1')
-	{
-		info->player.location[X] += x;
-		info->player.location[Y] += y;
-	}
+	left = info->player.dir - 90;
+	left = (left < 0) ? left + 360 : left;
+	noray_dda(&dda, *info, left);
+	dda_setup(&dda, *info);
+	dda_movement(&dda, *info, 0.4);
+	move(dda, info, 0.4, left);
 	bump(&info->player.location[X],
 			&info->player.location[Y], info->map.coords);
 	create_image(*xsrv, *info);
@@ -93,20 +86,15 @@ void		move_left(t_game *info, t_display *xsrv)
 
 void		move_right(t_game *info, t_display *xsrv)
 {
-	double		x;
-	double		y;
-	int			rdir;
+	t_dda		dda;
+	int			right;
 
-	rdir = info->player.dir + 90;
-	rdir = (rdir >= 0) ? rdir - 360 : rdir;
-	x = 0.4 * sin(to_radians(rdir));
-	y = 0.4 * -cos(to_radians(rdir));
-	if (info->map.coords[(int)(info->player.location[Y] + y)]
-			[(int)(info->player.location[X] + x)] != '1')
-	{
-		info->player.location[X] += x;
-		info->player.location[Y] += y;
-	}
+	right = info->player.dir + 90;
+	right = (right > 360) ? right - 360 : right;
+	noray_dda(&dda, *info, right);
+	dda_setup(&dda, *info);
+	dda_movement(&dda, *info, 0.4);
+	move(dda, info, 0.4, right);
 	bump(&info->player.location[X],
 			&info->player.location[Y], info->map.coords);
 	create_image(*xsrv, *info);
@@ -116,26 +104,26 @@ void		move_forward(t_game *info, t_display *xsrv)
 {
 	t_dda		dda;
 
-	noray_dda(&dda, *info);
+	noray_dda(&dda, *info, info->player.dir);
 	dda_setup(&dda, *info);
-	dda_movement(&dda, *info);
-	move(dda, info);
+	dda_movement(&dda, *info, 0.5);
+	move(dda, info, 0.5, info->player.dir);
+	bump(&info->player.location[X],
+			&info->player.location[Y], info->map.coords);
 	create_image(*xsrv, *info);
 }
 
 void		move_back(t_game *info, t_display *xsrv)
 {
-	double		x;
-	double		y;
+	t_dda		dda;
+	int			reverse;
 
-	x = 0.5 * -sin(to_radians(info->player.dir));
-	y = 0.5 * cos(to_radians(info->player.dir));
-	if (info->map.coords[(int)(info->player.location[Y] + y)]
-			[(int)(info->player.location[X] + x)] != '1')
-	{
-		info->player.location[X] += x;
-		info->player.location[Y] += y;
-	}
+	reverse = info->player.dir - 180;
+	reverse = (reverse < 0) ? reverse + 360 : reverse;
+	noray_dda(&dda, *info, reverse);
+	dda_setup(&dda, *info);
+	dda_movement(&dda, *info, 0.4);
+	move(dda, info, 0.4, reverse);
 	bump(&info->player.location[X],
 			&info->player.location[Y], info->map.coords);
 	create_image(*xsrv, *info);
