@@ -1,4 +1,4 @@
-R 1920 1080
+R 600 400
 
 NO ./textures/wall1.png
 SO ./textures/wall2.png

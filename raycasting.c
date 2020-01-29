@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 17:07:49 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/29 16:59:12 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,208 +39,51 @@ void		create_image(t_display xsrv, t_game info)
 		exit(ft_error(delete_info(CONNECTION_FAIL, info.map), 0));
 	xsrv.imga = mlx_get_data_addr(xsrv.img, &xsrv.imginf->bpp,
 			&xsrv.imginf->size_line, &xsrv.imginf->endian);
+	if (!xsrv.imga)
+		exit(ft_error(delete_info(CONNECTION_FAIL, info.map), 0));
 	ray(info, xsrv);
 	mlx_put_image_to_window(xsrv.dpy, xsrv.w, xsrv.img, 0, 0);
 	mlx_destroy_image(xsrv.dpy, xsrv.img);
 }
 
-/*
-** Write a vertical line into an image, used in ray().
-*/
-
-void		verLine(int x, int start, int end, int color, t_display xsrv,
-		t_game info)
+void		draw_image(t_ray *ray, t_game info, t_display *xsrv)
 {
-	int			y;
-	int			ceiling;
-	int			floor;
-
-	ceiling = 2631720;
-	floor = 9601908;
-	y = 0;
-	while (y < start)
+	ray->y = 0;
+	while (ray->y < ray->drawStart)
 	{
-		img_put_pixel(xsrv, x, y, ceiling);
-		y++;
+		img_put_pixel(*xsrv, ray->x, ray->y, BLUE);
+		ray->y++;
 	}
-	while (y <= end)
+	while (ray->y < ray->drawEnd)
 	{
-		img_put_pixel(xsrv, x, y, color);
-		y++;
+		ray->tx.texY = (int)ray->tx.texPos;
+		ray->tx.texPos += ray->tx.step;
+		ft_memcpy(&ray->color, info.texstrs[ray->dda.side] + 4 * ray->tx.texX +
+				info.texinf->size_line * ray->tx.texY, 4);
+		img_put_pixel(*xsrv, ray->x, ray->y, ray->color);
+		ray->y++;
 	}
-	while (y < info.map.res[1])
+	while (ray->y < info.map.res[1])
 	{
-		img_put_pixel(xsrv, x, y, floor);
-		y++;
+		img_put_pixel(*xsrv, ray->x, ray->y, PURPLE);
+		ray->y++;
 	}
 }
 
 void		ray(t_game info, t_display xsrv)
 {
-	double	planeX;
-	double	planeY;
-	double	cameraX;
-	double	rayDirX;
-	double	rayDirY;
-	int		x;
-	int		mapX;
-	int		mapY;
-	double	sideDistX;
-	double	sideDistY;
-	double	deltaDistX;
-	double	deltaDistY;
-	double	perpWallDist;
-	// What direction to step in x or y-direction (either +1 or -1)
-	int		stepX;
-	int		stepY;
-	int		hit; // was a wall hit?
-	int		side; // was a NS or a EW wall hit?
-	int		lineHeight;
-	int		drawStart;
-	int		drawEnd;
-	unsigned int		color;
+	t_ray		ray;
 
-	planeX = 0.66 * cos(to_radians(info.player.dir)); // camera plane calcs
-	planeY = 0.66 * sin(to_radians(info.player.dir));
-	x = 0;
-
-	while (x < info.map.res[0])
+	ray.x = 0;
+	init_plane(&ray, info);
+	while (ray.x < info.map.res[0])
 	{
-		hit = 0;
-
-		// Calculating ray position and direction
-		cameraX = 2 * (double)x / (double)(info.map.res[0]) - 1; // x-coord in camera space
-		rayDirX = sin(to_radians(info.player.dir)) + planeX * cameraX;
-		rayDirY = -cos(to_radians(info.player.dir)) + planeY * cameraX;
-
-		/* ft_printf("info.map.res[0] - 1 = %d\n", info.map.res[0] - 1); */
-		// The box of the map we're in
-		mapX = (int)info.player.location[X];
-		mapY = (int)info.player.location[Y];
-
-		// Length of ray from one x or y-side to next x or y-side
-		deltaDistX = ft_abs_d(1 / rayDirX);
-		deltaDistY = ft_abs_d(1 / rayDirY);
-
-		if (rayDirX < 0)
-		{
-			stepX = -1;
-			sideDistX = (info.player.location[X] - mapX) * deltaDistX;
-		}
-		else
-		{
-			stepX = 1;
-			sideDistX = (mapX + 1.0 - info.player.location[X]) * deltaDistX;
-		}
-		if (rayDirY < 0)
-		{
-			stepY = -1;
-			sideDistY = (info.player.location[Y] - mapY) * deltaDistY;
-		}
-		else
-		{
-			stepY = 1;
-			sideDistY = (mapY + 1.0 - info.player.location[Y]) * deltaDistY;
-		}
-
-		// Performing DDA
-		while (hit == 0)
-		{
-			// jump to next map square, OR in x-direction, OR in y-direction
-			if (sideDistX < sideDistY)
-			{
-				sideDistX += deltaDistX;
-				mapX += stepX;
-				side = (rayDirX > 0) ? EAST : WEST;
-			}
-			else
-			{
-				sideDistY += deltaDistY;
-				mapY += stepY;
-				side = (rayDirY > 0) ? SOUTH : NORTH;
-			}
-			// Check if ray has hit a wall or not
-			if (info.map.coords[mapY][mapX] == '1')
-				hit = 1;
-		}
-		if (side == EAST || side == WEST)
-			perpWallDist = (mapX - info.player.location[X] + (1 - stepX) / 2) /
-				rayDirX;
-		else
-			perpWallDist = (mapY - info.player.location[Y] + (1 - stepY) / 2) /
-				rayDirY;
-
-		// Calculate height of line to draw on screen
-		lineHeight = (int)(info.map.res[1] / perpWallDist);
-
-		// Calculate lowest and highest pixel to fill in current stripe
-		drawStart = -lineHeight / 2 + info.map.res[1] / 2;
-		if (drawStart < 0)
-			drawStart = 0;
-		drawEnd = lineHeight / 2 + info.map.res[1] / 2;
-		if (drawEnd >= info.map.res[1])
-			drawEnd = info.map.res[1] - 1;
-
-		// Choose wall color
-		if (side == EAST)
-			color = GREEN;
-		if (side == NORTH)
-			color = RED;
-		if (side == SOUTH)
-			color = PURPLE;
-		if (side == WEST)
-			color = BLUE;
-
-		// give x and y sides different brightness
-		/* if (side == 1) */
-		/* 	color = color / 2; */
-
-		// draw the pixels of the stripe as a vertical line into an image.
-		/* verLine(x, drawStart, drawEnd, color, xsrv, info); */
-
-		// Textures
-		// Value of wallX, the x-coordinate for where the wall was hit
-		double wallX; //where the wall was hit
-		if (side == EAST || side == WEST)
-			wallX = info.player.location[Y] + perpWallDist * rayDirY;
-		else
-			wallX = info.player.location[X] + perpWallDist * rayDirX;
-		wallX -= floor((wallX));
-
-		// corresponding x-coordinate on the texture
-		int texX = (int)(wallX * (double)(128));
-		if ((side == EAST || side == WEST) && rayDirX > 0)
-			texX = 128 - texX - 1;
-		if ((side == NORTH || side == SOUTH) && rayDirY < 0)
-			texX = 128 - texX - 1;
-
-		texX = 128 / 2 - (texX - 128 / 2);
-		// find y-coordinate of texture
-		double step = 1.0 * 128 / lineHeight;
-
-		// Starting texture coordinate
-		double texPos = (drawStart - info.map.res[1] / 2 + lineHeight / 2) * step;
-		int		y;
-		y = 0;
-		while (y < drawStart)
-		{
-			img_put_pixel(xsrv, x, y, BLUE);
-			y++;
-		}
-		while (y < drawEnd)
-		{
-			int	texY = (int)texPos;
-			texPos += step;
-			ft_memcpy(&color, info.texstrs[side] + 4 * texX + info.texinf->size_line * texY, 4);
-			/* printf("color = %d\n", color); */
-			img_put_pixel(xsrv, x, y, color);
-			y++;
-		}
-		while (y < info.map.res[1])
-		{
-			img_put_pixel(xsrv, x, y, PURPLE);
-			y++;
-		}
-		x++;
+		new_ray(&ray, info);
+		dda_setup(&ray.dda, info);
+		dda(&ray.dda, info);
+		image_setup(&ray, info);
+		texture_setup(&ray, info);
+		draw_image(&ray, info, &xsrv);
+		ray.x++;
 	}
 }

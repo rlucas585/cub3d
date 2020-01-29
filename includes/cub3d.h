@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 17:19:57 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/29 17:40:56 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,47 @@ typedef struct		s_all
 	t_display		*xsrv;
 	t_game			*info;
 }					t_all;
+
+typedef struct		s_dda
+{
+	double			rayDirX;
+	double			rayDirY;
+	double			deltaDistX;
+	double			deltaDistY;
+	double			sideDistX;
+	double			sideDistY;
+	double			perpWallDist;
+	int				mapX;
+	int				mapY;
+	int				stepX;
+	int				stepY;
+	int				hit;
+	int				side;
+}					t_dda;
+
+typedef struct		s_raytex
+{
+	double			wallX;
+	int				texX;
+	int				texY;
+	double			step;
+	double			texPos;
+}					t_raytex;
+
+typedef struct		s_ray
+{
+	t_dda			dda;
+	t_raytex		tx;
+	double			planeX;
+	double			planeY;
+	double			cameraX;
+	int				x;
+	int				y;
+	unsigned int	color;
+	int				lineheight;
+	int				drawStart;
+	int				drawEnd;
+}					t_ray;
 
 typedef int			(*t_parsef)(char *line, t_map *mapinfo);
 typedef void		(*t_act)(t_game *info, t_display *xsrv);
@@ -198,13 +239,31 @@ int			delete_info(int err, t_map map);
 int			delete_all(int err, t_all all);
 
 /*
-** Raycasting algorithm and writing, in raycasting.c
+** DDA functions, in dda.c
 */
 
-void		ray(t_game info, t_display xsrv); // Waaaay too long
-void		verLine(int x, int start, int end, int color, t_display xsrv, t_game info);
+void		noray_dda(t_dda *dda, t_game info);
+void		dda_setup(t_dda *dda, t_game info);
+void		dda(t_dda *dda, t_game info);
+void		dda_movement(t_dda *dda, t_game info);
+
+/*
+** Separate components of the raycasting algorithm, in ray_setup.c.
+*/
+
+void		init_plane(t_ray *ray, t_game info);
+void		new_ray(t_ray *ray, t_game info);
+void		image_setup(t_ray *ray, t_game info);
+void		texture_setup(t_ray *ray, t_game info);
+
+/*
+** Orchestrator of the raycasting algorithm, and functions to create images,
+** in raycasting.c.
+*/
+
 void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color);
 void		create_image(t_display xsrv, t_game info);
+void		ray(t_game info, t_display xsrv); // Waaaay too long
 
 /*
 ** Function to establish connection with Xserver, initialize a window and

@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/27 16:33:08 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/29 16:56:13 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ SRCS = main2.c \
 	   raycasting.c \
 	   find_player.c \
 	   connect.c \
-	   actions1.c
+	   actions1.c \
+	   dda.c \
+	   ray_setup.c
 
 OBJ = $(SRCS:.c=.o)
 
