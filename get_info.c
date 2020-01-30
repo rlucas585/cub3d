@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/17 14:49:27 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 17:02:19 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 #include <mlx.h>
 #include <fcntl.h>
 
-/* Get resolution from .cub file and place in 2-length integer array for x and y
- * values. */
+/*
+** Get resolution from .cub file and place in 2-length integer array for x and y
+** values.
+*/
+
 int			get_resolution(char *line, t_map *mapinfo)
 {
 	int		i;
@@ -36,7 +39,10 @@ int			get_resolution(char *line, t_map *mapinfo)
 	return (ERROR);
 }
 
-/* Jumptable to assign path to texture path to correct location in array. */
+/*
+** Jumptable to assign path to texture path to correct location in array.
+*/
+
 static int	textures(int c)
 {
 	static int	compass[128] = {
@@ -50,7 +56,10 @@ static int	textures(int c)
 	return (compass[(int)c]);
 }
 
-/* Get texture paths from .cub file. */
+/*
+** Get texture paths from .cub file.
+*/
+
 int			get_texture(char *line, t_map *mapinfo)
 {
 	char	*texpath;

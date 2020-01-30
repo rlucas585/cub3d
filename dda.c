@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/29 16:53:15 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 17:56:20 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 17:14:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,31 +80,4 @@ void		dda(t_dda *dda, t_game info)
 	else
 		dda->perpWallDist = (dda->mapY - info.player.location[Y] +
 				(1 - dda->stepY) / 2) / dda->rayDirY;
-}
-
-void		dda_movement(t_dda *dda, t_game info, double dist)
-{
-	while (dda->hit == 0 && dda->perpWallDist < dist)
-	{
-		if (dda->sideDistX < dda->sideDistY)
-		{
-			dda->sideDistX += dda->deltaDistX;
-			dda->mapX += dda->stepX;
-			dda->side = 1;
-		}
-		else
-		{
-			dda->sideDistY += dda->deltaDistY;
-			dda->mapY += dda->stepY;
-			dda->side = 0;
-		}
-		if (dda->side)
-			dda->perpWallDist = (dda->mapX - info.player.location[X] +
-					(1 - dda->stepX) / 2) / dda->rayDirX;
-		else
-			dda->perpWallDist = (dda->mapY - info.player.location[Y] +
-					(1 - dda->stepY) / 2) / dda->rayDirY;
-		if (info.map.coords[dda->mapY][dda->mapX] == '1')
-			dda->hit = 1;
-	}
 }

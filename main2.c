@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 19:49:59 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 18:57:37 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,36 @@
 #include <mlx.h>
 #include <stdio.h>
 
+void		toggle(int key, t_all *all, int on_off)
+{
+	if (key == KEY_A)
+		all->key.a = on_off;
+	if (key == KEY_S)
+		all->key.s = on_off;
+	if (key == KEY_D)
+		all->key.d = on_off;
+	if (key == KEY_W)
+		all->key.w = on_off;
+	if (key == KEY_LEFT)
+		all->key.left = on_off;
+	if (key == KEY_RIGHT)
+		all->key.right = on_off;
+}
+
 int			keypress(int key, t_all *all)
 {
-	t_act					funct;
-	static const t_act		actiontable[128] = {
-		[KEY_A] = &move_left,
-		[KEY_S] = &move_back,
-		[KEY_D] = &move_right,
-		[KEY_W] = &move_forward,
-		[KEY_LEFT] = &turn_left,
-		[KEY_RIGHT] = &turn_right,
-		[KEY_ESC] = &escape,
-	};
-
-	funct = actiontable[key];
-	if (funct)
-		funct(all);
 	if (key == KEY_ESC)
+	{
+		escape(all);
 		exit(0);
+	}
+	toggle(key, all, 1);
 	return (1);
 }
 
-int			keyrelease(t_all *all)
+int			keyrelease(int key, t_all *all)
 {
-	all->keytest = 1;
+	toggle(key, all, 0);
 	return (1);
 }
 
@@ -53,8 +59,8 @@ void		one_tex(t_all *all, int dir, void **img)
 	int			x;
 	int			y;
 
-	x = 128;
-	y = 128;
+	x = TEXWIDTH;
+	y = TEXHEIGHT;
 	img[dir] = mlx_png_file_to_image(all->xsrv->dpy,
 			all->info->map.textures[dir], &x, &y);
 	if (!img[dir])
@@ -75,6 +81,7 @@ void		init_tex(t_all *all)
 	while (i < 5)
 	{
 		all->info->texstrs[i] = NULL;
+		all->info->imgs[i] = NULL;
 		i++;
 	}
 	all->info->texinf = (t_imginf *)malloc(sizeof(t_imginf));
@@ -84,6 +91,24 @@ void		init_tex(t_all *all)
 	one_tex(all, EAST, &all->info->imgs[EAST]);
 	one_tex(all, SOUTH, &all->info->imgs[SOUTH]);
 	one_tex(all, WEST, &all->info->imgs[WEST]);
+	one_tex(all, SPRITE, &all->info->imgs[SPRITE]);
+}
+
+int			loop_func(t_all *all)
+{
+	player_actions(all);
+	create_image(*all->xsrv, *all->info);
+	return (1);
+}
+
+void		init_keys(t_all *all)
+{
+	all->key.w = 0;
+	all->key.s = 0;
+	all->key.a = 0;
+	all->key.d = 0;
+	all->key.left = 0;
+	all->key.right = 0;
 }
 
 int			main(int argc, char **argv)
@@ -102,11 +127,12 @@ int			main(int argc, char **argv)
 	all.xsrv = &xsrv;
 	all.info = &game;
 	init_tex(&all);
-	all.keytest = 0;
+	init_keys(&all);
+	mlx_do_key_autorepeatoff(all.xsrv->dpy);
 	mlx_hook(all.xsrv->w, 2, 0, &keypress, &all);
 	mlx_hook(all.xsrv->w, 3, 0, &keyrelease, &all);
 	mlx_hook(all.xsrv->w, 17, 0, &crosspress, &all);
-	create_image(xsrv, game);
+	mlx_loop_hook(xsrv.dpy, &loop_func, &all);
 	mlx_loop(xsrv.dpy);
 	return (0);
 }

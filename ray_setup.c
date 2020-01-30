@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/29 16:56:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 16:56:45 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 18:41:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ void		texture_setup(t_ray *ray, t_game info)
 		ray->tx.wallX = info.player.location[X] + ray->dda.perpWallDist *
 			ray->dda.rayDirX;
 	ray->tx.wallX -= floor((ray->tx.wallX));
-	ray->tx.texX = (int)(ray->tx.wallX * (double)128);
+	ray->tx.texX = (int)(ray->tx.wallX * (double)TEXWIDTH);
 	if ((ray->dda.side == EAST || ray->dda.side == WEST) && ray->dda.rayDirX > 0)
-		ray->tx.texX = 128 - ray->tx.texX - 1;
+		ray->tx.texX = TEXWIDTH - ray->tx.texX - 1;
 	if ((ray->dda.side == NORTH || ray->dda.side == SOUTH) && ray->dda.rayDirY < 0)
-		ray->tx.texX = 128 - ray->tx.texX - 1;
-	ray->tx.texX = 128 / 2 - (ray->tx.texX - 128 / 2) - 1;
-	ray->tx.step = 1.0 * 128 / ray->lineheight;
+		ray->tx.texX = TEXWIDTH - ray->tx.texX - 1;
+	ray->tx.texX = TEXWIDTH / 2 - (ray->tx.texX - TEXWIDTH / 2) - 1;
+	ray->tx.step = 1.0 * TEXHEIGHT / ray->lineheight;
 	ray->tx.texPos = (ray->drawStart - info.map.res[1] / 2 +
 			ray->lineheight / 2) * ray->tx.step;
 }

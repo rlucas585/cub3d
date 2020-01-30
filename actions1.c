@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 16:07:54 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 19:44:27 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 16:53:22 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,9 @@ void		move_left(t_all *all)
 
 	left = all->info->player.dir - 90;
 	left = (left < 0) ? left + 360 : left;
-	move(all->info, 0.4, left);
+	move(all->info, 0.2, left);
 	bump(&all->info->player.location[X],
 			&all->info->player.location[Y], all->info->map.coords);
-	create_image(*all->xsrv, *all->info);
 }
 
 void		move_right(t_all *all)
@@ -74,22 +73,16 @@ void		move_right(t_all *all)
 
 	right = all->info->player.dir + 90;
 	right = (right > 360) ? right - 360 : right;
-	move(all->info, 0.4, right);
+	move(all->info, 0.2, right);
 	bump(&all->info->player.location[X],
 			&all->info->player.location[Y], all->info->map.coords);
-	create_image(*all->xsrv, *all->info);
 }
 
 void		move_forward(t_all *all)
 {
-	while (all->keytest == 0)
-	{
-		move(all->info, 0.5, all->info->player.dir);
-		bump(&all->info->player.location[X],
-				&all->info->player.location[Y], all->info->map.coords);
-		create_image(*all->xsrv, *all->info);
-	}
-	all->keytest = 0;
+	move(all->info, FORWARDSPEED, all->info->player.dir);
+	bump(&all->info->player.location[X],
+			&all->info->player.location[Y], all->info->map.coords);
 }
 
 void		move_back(t_all *all)
@@ -98,30 +91,43 @@ void		move_back(t_all *all)
 
 	reverse = all->info->player.dir - 180;
 	reverse = (reverse < 0) ? reverse + 360 : reverse;
-	move(all->info, 0.4, reverse);
+	move(all->info, BACKWARDSPEED, reverse);
 	bump(&all->info->player.location[X],
 			&all->info->player.location[Y], all->info->map.coords);
-	create_image(*all->xsrv, *all->info);
 }
 
 void		turn_left(t_all *all)
 {
-	all->info->player.dir -= 10;
+	all->info->player.dir -= TURNANGLE;
 	if (all->info->player.dir < 0)
 		all->info->player.dir += 360;
-	create_image(*all->xsrv, *all->info);
 }
 
 void		turn_right(t_all *all)
 {
-	all->info->player.dir += 10;
+	all->info->player.dir += TURNANGLE;
 	if (all->info->player.dir >= 360)
 		all->info->player.dir -= 360;
-	create_image(*all->xsrv, *all->info);
 }
 
 void		escape(t_all *all)
 {
 	delete_info(0, all->info->map);
 	mlx_destroy_window(all->xsrv->dpy, all->xsrv->w);
+}
+
+void		player_actions(t_all *all)
+{
+	if (all->key.left)
+		turn_left(all);
+	if (all->key.right)
+		turn_right(all);
+	if (all->key.w)
+		move_forward(all);
+	if (all->key.s)
+		move_back(all);
+	if (all->key.a)
+		move_left(all);
+	if (all->key.d)
+		move_right(all);
 }

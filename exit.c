@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 17:24:34 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 19:00:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
+#include <mlx.h>
 
 void		delete_map(char **map)
 {
@@ -55,15 +56,18 @@ void		delete_imgs(void *imgs[5])
 	}
 }
 
-void		delete_img_data(char *strs[5])
+void		delete_img_data(t_all all)
 {
 	int		i;
 
 	i = 0;
 	while (i < 5)
 	{
-		if (strs[i])
-			free(strs[i]);
+		if (all.info->imgs[i])
+		{
+			ft_printf("i = %d\n", i);
+			/* mlx_destroy_image(all.xsrv, all.info->imgs[i]); */
+		}
 		i++;
 	}
 }
@@ -79,7 +83,9 @@ int			delete_all(int err, t_all all)
 {
 	delete_map(all.info->map.coords);
 	delete_tex(all.info->map.textures);
-	delete_img_data(all.info->texstrs);
+	ft_printf("hi\n");
+	delete_img_data(all);
+	ft_printf("hi\n");
 	if (all.xsrv->imginf)
 		free(all.xsrv->imginf);
 	if (all.info->texinf)

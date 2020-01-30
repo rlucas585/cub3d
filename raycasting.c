@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 18:27:44 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 18:45:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		draw_image(t_ray *ray, t_game info, t_display *xsrv)
 	ray->y = 0;
 	while (ray->y < ray->drawStart)
 	{
-		img_put_pixel(*xsrv, ray->x, ray->y, BLUE);
+		/* img_put_pixel(*xsrv, ray->x, ray->y, info.map.ceilingcolor); */
 		ray->y++;
 	}
 	while (ray->y < ray->drawEnd)
@@ -65,7 +65,7 @@ void		draw_image(t_ray *ray, t_game info, t_display *xsrv)
 	}
 	while (ray->y < info.map.res[1])
 	{
-		img_put_pixel(*xsrv, ray->x, ray->y, PURPLE);
+		/* img_put_pixel(*xsrv, ray->x, ray->y, info.map.floorcolor); */
 		ray->y++;
 	}
 }
@@ -76,6 +76,41 @@ void		ray(t_game info, t_display xsrv)
 
 	ray.x = 0;
 	init_plane(&ray, info);
+	/* for (int y = 0; y < info.map.res[1]; y++) */
+	/* { */
+	/* 	float rayDirX0 = sin(to_radians(info.player.dir)) - ray.planeX; */
+	/* 	float rayDirY0 = -cos(to_radians(info.player.dir)) - ray.planeY; */
+	/* 	float rayDirX1 = sin(to_radians(info.player.dir)) + ray.planeX; */
+	/* 	float rayDirY1 = -cos(to_radians(info.player.dir)) + ray.planeY; */
+    /*  */
+	/* 	int	p = y - info.map.res[1] / 2; */
+	/* 	float posZ = 0.5 * info.map.res[1]; */
+    /*  */
+	/* 	float rowDistance = posZ / p; */
+	/* 	float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / info.map.res[1]; */
+	/* 	float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / info.map.res[1]; */
+    /*  */
+	/* 	float floorX = info.player.location[X] + rowDistance * rayDirX0; */
+	/* 	float floorY = info.player.location[Y] + rowDistance * rayDirY0; */
+    /*  */
+	/* 	for (int x = 0; x < info.map.res[0]; ++x) */
+	/* 	{ */
+	/* 		int	cellX = (int)(floorX); */
+	/* 		int	cellY = (int)(floorY); */
+    /*  */
+	/* 		int	tx = (int)(TEXWIDTH * (floorX - cellX)) & (128 - 1); */
+	/* 		int	ty = (int)(TEXHEIGHT * (floorY - cellY)) & (128 - 1); */
+    /*  */
+	/* 		floorX += floorStepX; */
+	/* 		floorY += floorStepY; */
+    /*  */
+	/* 		unsigned int	color; */
+    /*  */
+	/* 		ft_memcpy(&color, info.texstrs[NORTH] + 4 * tx + */
+	/* 				info.texinf->size_line * ty, 4); */
+	/* 		img_put_pixel(xsrv, x, y, color); */
+	/* 	} */
+	/* } */
 	while (ray.x < info.map.res[0])
 	{
 		new_ray(&ray, info);

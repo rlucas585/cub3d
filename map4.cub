@@ -1,16 +1,16 @@
 R 1920 1080
 
-NO ./textures/barack2.png
-SO ./textures/madeline2.png
+NO ./textures/wood.png
+SO ./textures/bluestone2.png
 
-WE ./textures/dog2.png
-EA ./textures/taylor2.png
+WE ./textures/mossy.png
+EA ./textures/redbrick.png
 
-S ./path_to_the_sprite_texture
+S ./textures/wood.png
 
-F 220,100,0
+F 178,178,178
 
-C 225,30,0
+C 101,216,255
 
 1111111111111111111111111111111
 1000000000000000000000000000001

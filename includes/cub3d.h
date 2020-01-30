@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/29 19:46:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/30 18:42:32 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 # define CUB3D_H
 
 # define VALID_MAP_CHARS "012NESW "
+# define FORWARDSPEED 0.3
+# define BACKWARDSPEED 0.25
+# define STRAFESPEED 0.2
+# define TURNANGLE 5
+# define TEXWIDTH 64
+# define TEXHEIGHT 64
 
 # include <stdlib.h>
 
@@ -57,11 +63,21 @@ typedef struct		s_display
 	char			*imga;
 }					t_display;
 
+typedef struct		s_keys
+{
+	int				w;
+	int				s;
+	int				a;
+	int				d;
+	int				left;
+	int				right;
+}					t_keys;
+
 typedef struct		s_all
 {
 	t_display		*xsrv;
 	t_game			*info;
-	int				keytest;
+	t_keys			key;
 }					t_all;
 
 typedef struct		s_dda
@@ -151,7 +167,7 @@ typedef enum		e_errors
 	CONNECTION_FAIL = 111
 }					t_errors;
 
-typedef enum		e_keys
+typedef enum		e_keydefs
 {
 	KEY_A = 0,
 	KEY_S,
@@ -160,7 +176,7 @@ typedef enum		e_keys
 	KEY_ESC = 53,
 	KEY_LEFT = 123,
 	KEY_RIGHT,
-}					t_keys;
+}					t_keydefs;
 
 /*
 ** Opening file functions, and checking argument errors. In open_file.c.
@@ -291,6 +307,11 @@ void		move_back(t_all *all);
 void		turn_left(t_all *all);
 void		turn_right(t_all *all);
 void		escape(t_all *all);
+
+// Testing
+
+int			keyrelease(int key, t_all *all);
+void		player_actions(t_all *all);
 
 /*
 **
