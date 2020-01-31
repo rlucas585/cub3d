@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 15:10:50 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:39:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,170 +32,218 @@ void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color)
 ** Create a raycasted image, put it to the window, then destroy it.
 */
 
-void		create_image(t_display xsrv, t_game info)
+void		create_image(t_cub *cub)
 {
-	xsrv.img = mlx_new_image(xsrv.dpy, info.map.res[0], info.map.res[1]);
-	if (!xsrv.img)
-		exit(ft_error(delete_info(CONNECTION_FAIL, info.map), 0));
-	xsrv.imga = mlx_get_data_addr(xsrv.img, &xsrv.imginf->bpp,
-			&xsrv.imginf->size_line, &xsrv.imginf->endian);
-	if (!xsrv.imga)
-		exit(ft_error(delete_info(CONNECTION_FAIL, info.map), 0));
-	ray(info, xsrv);
-	mlx_put_image_to_window(xsrv.dpy, xsrv.w, xsrv.img, 0, 0);
-	mlx_destroy_image(xsrv.dpy, xsrv.img);
+	cub->xsrv.img = mlx_new_image(cub->xsrv.dpy, cub->info.res.x,
+			cub->info.res.y);
+	if (!cub->xsrv.img)
+		exit(ft_error(delete_all(CONNECTION_FAIL, *cub), 0));
+	cub->xsrv.imga = mlx_get_data_addr(cub->xsrv.img, &cub->xsrv.imginf->bpp,
+			&cub->xsrv.imginf->size_line, &cub->xsrv.imginf->endian);
+	if (!cub->xsrv.imga)
+		exit(ft_error(delete_all(CONNECTION_FAIL, *cub), 0));
+	ray(cub);
+	mlx_put_image_to_window(cub->xsrv.dpy, cub->xsrv.w, cub->xsrv.img, 0, 0);
+	mlx_destroy_image(cub->xsrv.dpy, cub->xsrv.img);
 }
 
-void		draw_image(t_ray *ray, t_game info, t_display *xsrv)
+void		ray_setup1(t_info info, t_ray *ray, int x)
 {
-	/* ray->y = 0; */
-	ray->y = ray->drawStart;
-	/* while (ray->y < ray->drawStart) */
-	/* { */
-		/* img_put_pixel(*xsrv, ray->x, ray->y, info.map.ceilingcolor); */
-	/* 	ray->y++; */
-	/* } */
-	while (ray->y < ray->drawEnd)
+		ray->camX = 2 * (double)x / (double)info.res.x - 1;
+		ray->beam.x = sin(to_radians(info.dir)) + ray->plane.x * ray->camX;
+		ray->beam.y = -cos(to_radians(info.dir)) + ray->plane.y * ray->camX;
+		ray->map.x = (int)info.pos.x;
+		ray->map.y = (int)info.pos.y;
+		ray->delt.x = ft_abs_d(1 / ray->beam.x);
+		ray->delt.y = ft_abs_d(1 / ray->beam.y);
+}
+
+void		ray_setup2(t_info info, t_ray *ray)
+{
+		if (ray->beam.x < 0)
+		{
+			ray->step.x = -1;
+			ray->sidedist.x = (info.pos.x - ray->map.x) * ray->delt.x;
+		}
+		else
+		{
+			ray->step.x = 1;
+			ray->sidedist.x = (ray->map.x + 1.0 - info.pos.x) * ray->delt.x;
+		}
+		if (ray->beam.y < 0)
+		{
+			ray->step.y = -1;
+			ray->sidedist.y = (info.pos.y - ray->map.y) * ray->delt.y;
+		}
+		else
+		{
+			ray->step.y = 1;
+			ray->sidedist.y = (ray->map.y + 1.0 - info.pos.y) * ray->delt.y;
+		}
+}
+
+void		dda(t_info info, t_ray *ray)
+{
+	ray->hit = 0;
+	while (ray->hit == 0)
 	{
-		ray->tx.texY = (int)ray->tx.texPos;
-		ray->tx.texPos += ray->tx.step;
-		ray->color = info.texstrs[ray->dda.side][ray->tx.texX +
-			TEXHEIGHT * ray->tx.texY];
-		img_put_pixel(*xsrv, ray->x, ray->y, ray->color);
-		ray->y++;
+		if (ray->sidedist.x < ray->sidedist.y)
+		{
+			ray->sidedist.x += ray->delt.x;
+			ray->map.x += ray->step.x;
+			ray->side = (ray->beam.x > 0) ? EAST : WEST;
+		}
+		else
+		{
+			ray->sidedist.y += ray->delt.y;
+			ray->map.y += ray->step.y;
+			ray->side = (ray->beam.y > 0) ? SOUTH : NORTH;
+		}
+		if (info.map[ray->map.y][ray->map.x] == '1')
+			ray->hit = 1;
 	}
-	/* while (ray->y < info.map.res[1]) */
-	/* { */
-		/* img_put_pixel(*xsrv, ray->x, ray->y, info.map.floorcolor); */
-	/* 	ray->y++; */
-	/* } */
+	if (ray->side == EAST || ray->side == WEST)
+		ray->pdist = (ray->map.x - info.pos.x + (1 - ray->step.y) / 2) /
+			ray->beam.y;
+	else
+		ray->pdist = (ray->map.y - info.pos.y + (1 - ray->step.y) / 2) /
+			ray->beam.y;
 }
 
-/* void		sprite_casting(t_game info, t_display xsrv, double *ZBuffer) */
-/* { */
-/* 	int			*spriteOrder; */
-/* 	double		*spriteDistance; */
-/* 	int			i; */
-/*  */
-/* 	i = 0; */
-/* 	spriteOrder = (int *)malloc(sizeof(int) * info.spritenum); */
-/* 	spriteDistance = (double *)malloc(sizeof(double) * info.spritenum); */
-/* 	while (i < info.spritenum) */
-/* 	{ */
-/* 		spriteOrder[i] = i; */
-/* 		spriteDistance[i] = ((info.player.location[X] - sprite[i])) */
-/* 	} */
-/* } */
 
-/* int			tile_at(int x, int y, t_game info) */
-/* { */
-/* 	return (info->map.) */
-/* } */
+void		draw_setup(t_info info, t_ray *ray)
+{
+	ray->height = (int)(info.res.y / ray->pdist);
+	ray->drawStart = -ray->height / 2 + info.res.y / 2;
+	if (ray->drawStart < 0)
+		ray->drawStart = 0;
+	ray->drawEnd = ray->height / 2 + info.res.y / 2;
+	if (ray->drawEnd >= info.res.y)
+		ray->drawEnd = info.res.y - 1;
+	if (ray->side == EAST || ray->side == WEST)
+		ray->wallX = info.pos.y + ray->pdist * ray->beam.y;
+	else
+		ray->wallX = info.pos.x + ray->pdist * ray->beam.x;
+	ray->wallX -= floor(ray->wallX);
+	ray->tx.x = (int)(ray->wallX * (double)TEXWIDTH);
+	if ((ray->side == EAST || ray->side == WEST) && ray->beam.x > 0)
+		ray->tx.x = TEXWIDTH - ray->tx.x - 1;
+	if ((ray->side == NORTH || ray->side == SOUTH) && ray->beam.y < 0)
+		ray->tx.x = TEXWIDTH - ray->tx.x - 1;
+	ray->tx.x = TEXWIDTH / 2 - (ray->tx.x - TEXWIDTH / 2) - 1;
+	ray->txstep = 1.0 * TEXHEIGHT / ray->height;
+	ray->texPos = (ray->drawStart - info.res.y / 2 + ray->height / 2) *
+		ray->txstep;
+}
 
-void		ray(t_game info, t_display xsrv)
+void		wallcast(t_cub *cub, t_ray *ray, int x)
+{
+	int		y;
+	int		color;
+
+	y = ray->drawStart;
+	while (y < ray->drawEnd)
+	{
+		ray->tx.y = (int)ray->texPos;
+		ray->texPos += ray->txstep;
+		color = cub->info.texstrs[ray->side][ray->tx.x + TEXHEIGHT * ray->tx.y];
+		img_put_pixel(cub->xsrv, x, y, color);
+		y++;
+	}
+}
+
+void		wallcast_notex(t_cub *cub, t_ray *ray, int x)
+{
+	int		y;
+	int		color;
+
+	y = 0;
+	while (y < ray->drawStart)
+	{
+		img_put_pixel(cub->xsrv, x, y, cub->info.ceiling);
+		y++;
+	}
+	while (y < ray->drawEnd)
+	{
+		ray->tx.y = (int)ray->texPos;
+		ray->texPos += ray->txstep;
+		color = cub->info.texstrs[ray->side][ray->tx.x + TEXHEIGHT * ray->tx.y];
+		img_put_pixel(cub->xsrv, x, y, color);
+		y++;
+	}
+	while (y < cub->info.res.y)
+	{
+		img_put_pixel(cub->xsrv, x, y, cub->info.floor);
+		y++;
+	}
+}
+
+void		floorcast_setup(t_info info, t_ray *ray, t_2d *wall_pos)
+{
+	if (ray->side == EAST)
+	{
+		wall_pos->x = ray->map.x;
+		wall_pos->y = ray->map.y + ray->wallX;
+	}
+	if (ray->side == WEST)
+	{
+		wall_pos->x = ray->map.x + 1.0;
+		wall_pos->y = ray->map.y + ray->wallX;
+	}
+	if (ray->side == SOUTH)
+	{
+		wall_pos->x = ray->map.x + ray->wallX;
+		wall_pos->y = ray->map.y;
+	}
+	if (ray->side == NORTH)
+	{
+		wall_pos->x = ray->map.x + ray->wallX;
+		wall_pos->y = ray->map.y + 1.0;
+	}
+	if (ray->drawEnd < 0)
+		ray->drawEnd = info.res.y;
+}
+
+void		floorcast(t_cub *cub, t_ray *ray, int x)
+{
+	int			y;
+	int			color;
+	t_floor		fc;
+
+	y = ray->drawEnd + 1;
+	floorcast_setup(cub->info, ray, &fc.wall);
+	while (y < cub->info.res.y)
+	{
+		fc.weight = (cub->info.res.y / (2.0 * y - cub->info.res.y)) /
+			ray->pdist;
+		fc.pos.x = fc.weight * fc.wall.x + (1.0 - fc.weight) * cub->info.pos.x;
+		fc.pos.y = fc.weight * fc.wall.y + (1.0 - fc.weight) * cub->info.pos.y;
+		fc.tx.x = (int)(fc.pos.x * TEXWIDTH) % TEXWIDTH;
+		fc.tx.y = (int)(fc.pos.y * TEXHEIGHT) % TEXHEIGHT;
+		color = cub->info.texs[SPRITE][TEXWIDTH * fc.tx.y + fc.tx.x];
+		img_put_pixel(cub->xsrv, x, y, color);
+		color = cub->info.texs[SPRITE][TEXWIDTH * fc.tx.y + fc.tx.x];
+		img_put_pixel(cub->xsrv, x, cub->info.res.y - y, color);
+		y++;
+	}
+}
+
+void		ray(t_cub *cub)
 {
 	t_ray		ray;
-	int		y;
-	double	weight;
-	double	fcwallx;
-	double	fcwally;
-	double	fcposx;
-	double	fcposy;
-	int		fctexX;
-	int		fctexY;
-	double		*ZBuffer;
+	int			x;
 
-	ZBuffer = (double *)malloc(sizeof(double) * info.map.res[0]);
-	ray.x = 0;
-	init_plane(&ray, info);
-	while (ray.x < info.map.res[0])
+	x = 0;
+	ray.plane.x = 0.66 * cos(to_radians(cub->info.dir));
+	ray.plane.y = 0.66 * sin(to_radians(cub->info.dir));
+	while (x < cub->info.res.x)
 	{
-		new_ray(&ray, info);
-		dda_setup(&ray.dda, info);
-		dda(&ray.dda, info);
-		image_setup(&ray, info);
-		texture_setup(&ray, info);
-		draw_image(&ray, info, &xsrv);
-
-		// Shamelessly lifted. This needs to be understood and rewritten prior
-		// to submission. Raycasting for the floor and ceiling.
-		y = ray.drawEnd + 1;
-		if (ray.dda.side == EAST)
-		{
-			fcwallx = ray.dda.mapX;
-			fcwally = ray.dda.mapY + ray.tx.wallX;
-		}
-		if (ray.dda.side == WEST)
-		{
-			fcwallx = ray.dda.mapX + 1.0;
-			fcwally = ray.dda.mapY + ray.tx.wallX;
-		}
-		if (ray.dda.side == SOUTH)
-		{
-			fcwallx = ray.dda.mapX + ray.tx.wallX;
-			fcwally = ray.dda.mapY;
-		}
-		if (ray.dda.side == NORTH)
-		{
-			fcwallx = ray.dda.mapX + ray.tx.wallX;
-			fcwally = ray.dda.mapY + 1.0;
-		}
-		if (ray.drawEnd < 0)
-			ray.drawEnd = info.map.res[1];
-		while (y < info.map.res[1])
-		{
-			weight = (info.map.res[1] / (2.0 * y - info.map.res[1])) / ray.dda.perpWallDist;
-			fcposx = weight * fcwallx + (1.0 - weight) * info.player.location[X];
-			fcposy = weight * fcwally + (1.0 - weight) * info.player.location[Y];
-			fctexX = (int)(fcposx * TEXWIDTH) % TEXWIDTH;
-			fctexY = (int)(fcposy * TEXHEIGHT) % TEXHEIGHT;
-			ray.color = info.texstrs[SPRITE][TEXWIDTH * fctexY + fctexX];
-			img_put_pixel(xsrv, ray.x, y, ray.color);
-			ray.color = info.texstrs[SPRITE][TEXWIDTH * fctexY + fctexX];
-			img_put_pixel(xsrv, ray.x, info.map.res[1] - y, ray.color);
-			y++;
-		}
-		ZBuffer[ray.x] = ray.dda.perpWallDist;
-		ray.x++;
+		ray_setup1(cub->info, &ray, x);
+		ray_setup2(cub->info, &ray);
+		dda(cub->info, &ray);
+		draw_setup(cub->info, &ray);
+		wallcast_notex(cub, &ray, x);
+		/* floorcast(cub, &ray, x); */
+		x++;
 	}
-	/* for (int y = 0; y < info.map.res[1]; y++) */
-	/* { */
-	/* 	float rayDirX0 = sin(to_radians(info.player.dir)) - ray.planeX; */
-	/* 	float rayDirY0 = -cos(to_radians(info.player.dir)) - ray.planeY; */
-	/* 	float rayDirX1 = sin(to_radians(info.player.dir)) + ray.planeX; */
-	/* 	float rayDirY1 = -cos(to_radians(info.player.dir)) + ray.planeY; */
-    /*  */
-	/* 	int	p = y - info.map.res[1] / 2; */
-	/* 	float posZ = 0.5 * info.map.res[1]; */
-    /*  */
-	/* 	float rowDistance = posZ / p; */
-	/* 	float floorStepX = rowDistance * (rayDirX1 - rayDirX0) / info.map.res[1]; */
-	/* 	float floorStepY = rowDistance * (rayDirY1 - rayDirY0) / info.map.res[1]; */
-    /*  */
-	/* 	float floorX = info.player.location[X] + rowDistance * rayDirX0; */
-	/* 	float floorY = info.player.location[Y] + rowDistance * rayDirY0; */
-    /*  */
-	/* 	for (int x = 0; x < info.map.res[0]; ++x) */
-	/* 	{ */
-	/* 		int	cellX = (int)(floorX); */
-	/* 		int	cellY = (int)(floorY); */
-    /*  */
-	/* 		int	tx = (int)(TEXWIDTH * (floorX - cellX)) & (128 - 1); */
-	/* 		int	ty = (int)(TEXHEIGHT * (floorY - cellY)) & (128 - 1); */
-    /*  */
-	/* 		floorX += floorStepX; */
-	/* 		floorY += floorStepY; */
-    /*  */
-	/* 		unsigned int	color; */
-    /*  */
-	/* 		color = info.texstrs[SPRITE][TEXWIDTH * ty + tx]; */
-	/* 		color = (color >> 1) & 8355711; */
-	/* 		img_put_pixel(xsrv, x, y, color); */
-    /*  */
-	/* 		color = info.texstrs[SPRITE][TEXWIDTH * ty + tx]; */
-	/* 		color = (color >> 1) & 8355711; */
-	/* 		img_put_pixel(xsrv, x, y, color); */
-	/* 	} */
-	/* } */
-	/* sprite_casting(info, xsrv, ZBuffer); */
 }

@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:39:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 17:27:20 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:29:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
+#include <stdio.h>
 
 /*
 ** Jumptable for direction to face in, measured in degrees.
@@ -34,14 +35,11 @@ static double		dir_table(int c)
 ** faced (in degrees).
 */
 
-static t_player		make_player(int x, int y, int c)
+static void		make_player(int x, int y, int c, t_info *info)
 {
-	t_player	player;
-
-	player.location[X] = (double)x + 0.5;
-	player.location[Y] = (double)y + 0.5;
-	player.dir = dir_table(c);
-	return (player);
+	info->pos.x = (double)x + 0.5;
+	info->pos.y = (double)y + 0.5;
+	info->dir = dir_table(c);
 }
 
 /*
@@ -49,30 +47,28 @@ static t_player		make_player(int x, int y, int c)
 ** returned. make_player() will create the t_player.
 */
 
-t_player			find_player(t_game game)
+void			find_player(t_info *info)
 {
 	int			x;
 	int			y;
-	t_player	player;
 
 	x = 1;
 	y = 1;
-	player.location[X] = 0;
-	while (x < (int)ft_strlen(game.map.coords[0]) - 1)
+	info->pos.x = 0;
+	while (y < (int)ft_arrlen(info->map) - 1)
 	{
-		while (y < (int)ft_arrlen(game.map.coords) - 1)
+		while (x < (int)ft_strlen(info->map[y]) - 1)
 		{
-			if (ft_strchr("NESW", game.map.coords[y][x]))
+			if (ft_strchr("NESW", info->map[y][x]))
 			{
-				if (player.location[Y] != 0)
-					exit(ft_error(delete_info(DUP_PLAYERS, game.map), 0));
-				player = make_player(x, y, game.map.coords[y][x]);
-				game.map.coords[y][x] = '0';
+				if (info->pos.x != 0)
+					exit(ft_error(delete_info(DUP_PLAYERS, *info), 0));
+				make_player(x, y, info->map[y][x], info);
+				info->map[y][x] = '0';
 			}
-			y++;
+			x++;
 		}
-		x++;
-		y = 1;
+		y++;
+		x = 1;
 	}
-	return (player);
 }

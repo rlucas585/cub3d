@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 16:17:55 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:16:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,27 @@ t_parsef	route_parsing(char c)
 ** map into an array of strings, with each string containing a row of the map
 */
 
-void		parse_map(int fd, char *line, int linenum, t_map *map)
+void		parse_map(int fd, char *line, int linenum, t_info *info)
 {
 	int			gnlret;
 	size_t		linewidth;
 
-	map->coords = NULL;
+	info->map = NULL;
 	gnlret = 1;
 	linewidth = ft_strlen(line);
 	while (gnlret)
 	{
-		map->coords = row_ptrs(make_row(line), *map);
-		if (!map->coords)
-			exit(ft_error(delete_info(MEM_FAIL, *map), 0));
+		info->map = row_ptrs(make_row(line), *info);
+		if (!info->map)
+			exit(ft_error(delete_info(MEM_FAIL, *info), 0));
 		free(line);
 		line = NULL;
 		gnlret = get_next_line(fd, &line);
 		linenum++;
 		if (!line)
-			exit(ft_error(delete_info(MEM_FAIL, *map), 0));
+			exit(ft_error(delete_info(MEM_FAIL, *info), 0));
 		if (gnlret == 1 && !validate_map(line, linewidth))
-			exit(ft_error(delete_info(BAD_FORMAT, *map), linenum));
+			exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
 	}
 	free(line);
 }
@@ -70,7 +70,7 @@ void		parse_map(int fd, char *line, int linenum, t_map *map)
 ** relevant function. Information is placed in the t_map structure mapinfo.
 */
 
-int			parse_line(int fd, char *line, t_map *mapinfo, int linenum)
+int			parse_line(int fd, char *line, t_info *info, int linenum)
 {
 	t_parsef		funct;
 
@@ -82,17 +82,17 @@ int			parse_line(int fd, char *line, t_map *mapinfo, int linenum)
 	if (!funct)
 	{
 		free(line);
-		exit(ft_error(delete_info(BAD_FORMAT, *mapinfo), linenum));
+		exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
 	}
 	if (line[0] == '1')
 	{
-		parse_map(fd, line, linenum, mapinfo);
+		parse_map(fd, line, linenum, info);
 		return (1);
 	}
-	else if (funct(line, mapinfo) == -1)
+	else if (funct(line, info) == -1)
 	{
 		free(line);
-		exit(ft_error(delete_info(BAD_FORMAT, *mapinfo), linenum));
+		exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
 	}
 	return (0);
 }
@@ -102,12 +102,12 @@ int			parse_line(int fd, char *line, t_map *mapinfo, int linenum)
 ** through linenum to give linenumber in error messages.
 */
 
-t_map		cub_parser(int fd)
+t_info		cub_parser(int fd)
 {
 	char		*line;
 	int			exitno;
 	int			linenum;
-	t_map		mapinfo;
+	t_info		mapinfo;
 
 	linenum = 1;
 	exitno = get_next_line(fd, &line);

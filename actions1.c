@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 16:07:54 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/30 16:53:22 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:07:10 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,89 +45,84 @@ void		bump(double *x, double *y, char **map)
 	}
 }
 
-void		move(t_game *info, double dist, int dir)
+void		move(t_info *info, double dist, int dir)
 {
-	if (info->map.coords[(int)(info->player.location[Y])]
-			[(int)(info->player.location[X] + dist *
+	if (info->map[(int)(info->pos.y)][(int)(info->pos.x + dist *
 				sin(to_radians(dir)))] != '1')
-		info->player.location[X] += dist * sin(to_radians(dir));
-	if (info->map.coords[(int)(info->player.location[Y] + dist *
-			-cos(to_radians(dir)))][(int)(info->player.location[X])] != '1')
-		info->player.location[Y] += dist * -cos(to_radians(dir));
+		info->pos.x += dist * sin(to_radians(dir));
+	if (info->map[(int)(info->pos.y + dist *
+			-cos(to_radians(dir)))][(int)(info->pos.x)] != '1')
+		info->pos.y += dist * -cos(to_radians(dir));
 }
 
-void		move_left(t_all *all)
+void		move_left(t_cub *cub)
 {
 	int			left;
 
-	left = all->info->player.dir - 90;
+	left = cub->info.dir - 90;
 	left = (left < 0) ? left + 360 : left;
-	move(all->info, 0.2, left);
-	bump(&all->info->player.location[X],
-			&all->info->player.location[Y], all->info->map.coords);
+	move(&cub->info, 0.2, left);
+	bump(&cub->info.pos.x, &cub->info.pos.y, cub->info.map);
 }
 
-void		move_right(t_all *all)
+void		move_right(t_cub *cub)
 {
 	int			right;
 
-	right = all->info->player.dir + 90;
+	right = cub->info.dir + 90;
 	right = (right > 360) ? right - 360 : right;
-	move(all->info, 0.2, right);
-	bump(&all->info->player.location[X],
-			&all->info->player.location[Y], all->info->map.coords);
+	move(&cub->info, 0.2, right);
+	bump(&cub->info.pos.x, &cub->info.pos.y, cub->info.map);
 }
 
-void		move_forward(t_all *all)
+void		move_forward(t_cub *cub)
 {
-	move(all->info, FORWARDSPEED, all->info->player.dir);
-	bump(&all->info->player.location[X],
-			&all->info->player.location[Y], all->info->map.coords);
+	move(&cub->info, FORWARDSPEED, cub->info.dir);
+	bump(&cub->info.pos.x, &cub->info.pos.y, cub->info.map);
 }
 
-void		move_back(t_all *all)
+void		move_back(t_cub *cub)
 {
 	int			reverse;
 
-	reverse = all->info->player.dir - 180;
+	reverse = cub->info.dir - 180;
 	reverse = (reverse < 0) ? reverse + 360 : reverse;
-	move(all->info, BACKWARDSPEED, reverse);
-	bump(&all->info->player.location[X],
-			&all->info->player.location[Y], all->info->map.coords);
+	move(&cub->info, BACKWARDSPEED, reverse);
+	bump(&cub->info.pos.x, &cub->info.pos.y, cub->info.map);
 }
 
-void		turn_left(t_all *all)
+void		turn_left(t_cub *cub)
 {
-	all->info->player.dir -= TURNANGLE;
-	if (all->info->player.dir < 0)
-		all->info->player.dir += 360;
+	cub->info.dir -= TURNANGLE;
+	if (cub->info.dir < 0)
+		cub->info.dir += 360;
 }
 
-void		turn_right(t_all *all)
+void		turn_right(t_cub *cub)
 {
-	all->info->player.dir += TURNANGLE;
-	if (all->info->player.dir >= 360)
-		all->info->player.dir -= 360;
+	cub->info.dir += TURNANGLE;
+	if (cub->info.dir >= 360)
+		cub->info.dir -= 360;
 }
 
-void		escape(t_all *all)
+void		escape(t_cub *cub)
 {
-	delete_info(0, all->info->map);
-	mlx_destroy_window(all->xsrv->dpy, all->xsrv->w);
+	delete_info(0, cub->info);
+	mlx_destroy_window(cub->xsrv.dpy, cub->xsrv.w);
 }
 
-void		player_actions(t_all *all)
+void		player_actions(t_cub *cub)
 {
-	if (all->key.left)
-		turn_left(all);
-	if (all->key.right)
-		turn_right(all);
-	if (all->key.w)
-		move_forward(all);
-	if (all->key.s)
-		move_back(all);
-	if (all->key.a)
-		move_left(all);
-	if (all->key.d)
-		move_right(all);
+	if (cub->key.left)
+		turn_left(cub);
+	if (cub->key.right)
+		turn_right(cub);
+	if (cub->key.w)
+		move_forward(cub);
+	if (cub->key.s)
+		move_back(cub);
+	if (cub->key.a)
+		move_left(cub);
+	if (cub->key.d)
+		move_right(cub);
 }

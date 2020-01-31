@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/30 17:02:19 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:22:18 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,21 @@
 ** values.
 */
 
-int			get_resolution(char *line, t_map *mapinfo)
+int			get_resolution(char *line, t_info *info)
 {
 	int		i;
 
 	i = 1;
 	if (line[i] == 0)
 		return (ERROR);
-	mapinfo->res[0] = ft_atoi(line + i);
+	info->res.x = ft_atoi(line + i);
 	i++;
 	while (line[i] && line[i] != ' ')
 		i++;
 	if (line[i] == 0)
 		return (ERROR);
-	mapinfo->res[1] = ft_atoi(line + i);
-	if (mapinfo->res[0] > 0 && mapinfo->res[1] > 0)
+	info->res.y = ft_atoi(line + i);
+	if (info->res.x > 0 && info->res.y > 0)
 		return (1);
 	return (ERROR);
 }
@@ -60,7 +60,7 @@ static int	textures(int c)
 ** Get texture paths from .cub file.
 */
 
-int			get_texture(char *line, t_map *mapinfo)
+int			get_texture(char *line, t_info *info)
 {
 	char	*texpath;
 	int		i;
@@ -78,13 +78,13 @@ int			get_texture(char *line, t_map *mapinfo)
 	texpath = ft_strdup(line + i);
 	if (!texpath)
 		return (ERROR);
-	mapinfo->textures[textureid] = texpath;
+	info->texs[textureid] = texpath;
 	return (1);
 }
 
 /* Get color information for floor and ceiling from .cub file, store as single
 *  integers with correct format for mlx_pixel_put(). */
-int			get_color(char *line, t_map *mapinfo)
+int			get_color(char *line, t_info *info)
 {
 	int		red;
 	int		green;
@@ -107,8 +107,8 @@ int			get_color(char *line, t_map *mapinfo)
 	green = ft_atoi(ft_strchr(line, ',') + 1);
 	blue = ft_atoi(ft_strrchr(line, ',') + 1);
 	if (line[0] == 'F')
-		mapinfo->floorcolor = rgb(red, green, blue);
+		info->floor = rgb(red, green, blue);
 	else
-		mapinfo->ceilingcolor = rgb(red, green, blue);
+		info->ceiling = rgb(red, green, blue);
 	return (1);
 }

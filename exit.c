@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 14:40:45 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:16:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,21 @@ void		delete_imgs(void *imgs[5])
 	}
 }
 
-int			delete_info(int err, t_map map)
+int			delete_info(int err, t_info info)
 {
-	delete_map(map.coords);
-	delete_tex(map.textures);
+	delete_map(info.map);
+	delete_tex(info.texs);
 	return (err);
 }
 
-int			delete_all(int err, t_all all)
+int			delete_all(int err, t_cub cub)
 {
-	delete_map(all.info->map.coords);
-	delete_tex(all.info->map.textures);
-	if (all.xsrv->imginf)
-		free(all.xsrv->imginf);
-	if (all.info->texinf)
-		free(all.info->texinf);
-	delete_imgs(all.info->imgs);
+	delete_map(cub.info.map);
+	delete_tex(cub.info.texs);
+	if (cub.xsrv.imginf)
+		free(cub.xsrv.imginf);
+	if (cub.info.texinf)
+		free(cub.info.texinf);
+	delete_imgs(cub.info.imgs);
 	return (err);
 }

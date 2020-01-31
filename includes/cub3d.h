@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 13:30:33 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:19:22 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,17 @@
 
 # include <stdlib.h>
 
-typedef struct		s_map
+typedef struct		s_2i
 {
-	char			**coords;
-	int				res[2];
-	char			*textures[5];
-	int				floorcolor;
-	int				ceilingcolor;
-}					t_map;
+	int				x;
+	int				y;
+}					t_2i;
 
-typedef struct		s_player
+typedef struct		s_2d
 {
-	double			location[2];
-	double			dir;
-}					t_player;
+	double			x;
+	double			y;
+}					t_2d;
 
 typedef struct		s_imginf
 {
@@ -45,15 +42,20 @@ typedef struct		s_imginf
 	int				endian;
 }					t_imginf;
 
-typedef struct		s_game
+typedef struct		s_info
 {
-	t_map			map;
-	t_player		player;
+	char			**map;
+	t_2i			res;
+	char			*texs[5];
+	int				floor;
+	int				ceiling;
+	int				spritenum;
+	t_2d			pos;
+	double			dir;
 	int				*texstrs[5];
 	void			*imgs[5];
 	t_imginf		*texinf;
-	int				spritenum;
-}					t_game;
+}					t_info;
 
 typedef struct		s_display
 {
@@ -74,56 +76,43 @@ typedef struct		s_keys
 	int				right;
 }					t_keys;
 
-typedef struct		s_all
+typedef struct		s_cub
 {
-	t_display		*xsrv;
-	t_game			*info;
+	t_display		xsrv;
+	t_info			info;
 	t_keys			key;
-}					t_all;
+}					t_cub;
 
-typedef struct		s_dda
+typedef struct		s_floor
 {
-	double			rayDirX;
-	double			rayDirY;
-	double			deltaDistX;
-	double			deltaDistY;
-	double			sideDistX;
-	double			sideDistY;
-	double			perpWallDist;
-	int				mapX;
-	int				mapY;
-	int				stepX;
-	int				stepY;
-	int				hit;
-	int				side;
-}					t_dda;
-
-typedef struct		s_raytex
-{
-	double			wallX;
-	int				texX;
-	int				texY;
-	double			step;
-	double			texPos;
-}					t_raytex;
+	double			weight;
+	t_2d			wall;
+	t_2d			pos;
+	t_2i			tx;
+}					t_floor;
 
 typedef struct		s_ray
 {
-	t_dda			dda;
-	t_raytex		tx;
-	double			planeX;
-	double			planeY;
-	double			cameraX;
-	int				x;
-	int				y;
-	int				color;
-	int				lineheight;
+	t_2d			plane;
+	t_2d			beam;
+	t_2i			map;
+	double			camX;
+	t_2d			delt;
+	t_2i			step;
+	t_2d			sidedist;
+	int				side;
+	double			pdist;
+	int				hit;
+	int				height;
 	int				drawStart;
 	int				drawEnd;
+	double			wallX;
+	t_2i			tx;
+	double			txstep;
+	double			texPos;
 }					t_ray;
 
-typedef int			(*t_parsef)(char *line, t_map *mapinfo);
-typedef void		(*t_act)(t_all *all);
+typedef int			(*t_parsef)(char *line, t_info *info);
 
 typedef enum		e_coords
 {
@@ -139,16 +128,6 @@ typedef enum		e_textures
 	WEST = 3,
 	SPRITE = 4
 }					t_textures;
-
-typedef enum		e_colors
-{
-	RED = 16468276,
-	GREEN = 12106534,
-	BLUE = 8627608,
-	PURPLE = 13862555,
-	CEILING = 2631720,
-	FLOOR = 9601908
-}					t_colors;
 
 typedef enum		e_errors
 {
@@ -205,46 +184,46 @@ int			ft_error(int err, int linenum);
 */
 
 int			validate_map(char *line, size_t width);
-void		validate_n_s_walls(t_map mapinfo);
+void		validate_n_s_walls(t_info info);
 
 /*
 ** Function to find and create the player on the map. In find_player.c.
 */
 
-t_player	find_player(t_game game);
+void			find_player(t_info *info);
 
 /* 
 ** Functions to read info from a line into relevant mapinfo, in get_info.c.
 */
 
-int			get_resolution(char *line, t_map *mapinfo);
-int			get_texture(char *line, t_map *mapinfo);
-int			get_color(char *line, t_map *mapinfo);
+int			get_resolution(char *line, t_info *info);
+int			get_texture(char *line, t_info *info);
+int			get_color(char *line, t_info *info);
 
 /*
 ** Utility functions in utils.c
 */
 
 char		*make_row(char *line);
-char		**row_ptrs(char *newrow, t_map map);
+char		**row_ptrs(char *newrow, t_info info);
 size_t		ft_arrlen(char **array);
 
 /*
 ** Troubleshooting functions that should be deleted, in utils.c.
 */
 
-void		print_mapinfo(t_map mapinfo);
-void		print_playerinfo(t_player player);
-void		print_gameinfo(t_game game);
+void		print_mapinfo(t_info info);
+void		print_playerinfo(t_info info);
+void		print_gameinfo(t_info info);
 
 /*
 ** Functions to direct parsing of .cub file, in parse_cub.c.
 */
 
 t_parsef	route_parsing(char c);
-void		parse_map(int fd, char *line, int linenum, t_map *map);
-int			parse_line(int fd, char *line, t_map *mapinfo, int linenum);
-t_map		cub_parser(int fd);
+void		parse_map(int fd, char *line, int linenum, t_info *info);
+int			parse_line(int fd, char *line, t_info *info, int linenum);
+t_info		cub_parser(int fd);
 
 /*
 ** Functions to delete malloced data when exiting the program. In exit.c.
@@ -253,26 +232,14 @@ t_map		cub_parser(int fd);
 void		delete_map(char **map);
 void		delete_tex(char *textures[5]);
 void		delete_imgs(void *imgs[5]);
-int			delete_info(int err, t_map map);
-int			delete_all(int err, t_all all);
+int			delete_info(int err, t_info info);
+int			delete_all(int err, t_cub cub);
 
 /*
 ** DDA functions, in dda.c
 */
 
-void		noray_dda(t_dda *dda, t_game info, int dir);
-void		dda_setup(t_dda *dda, t_game info);
-void		dda(t_dda *dda, t_game info);
-void		dda_movement(t_dda *dda, t_game info, double dist);
-
-/*
-** Separate components of the raycasting algorithm, in ray_setup.c.
-*/
-
-void		init_plane(t_ray *ray, t_game info);
-void		new_ray(t_ray *ray, t_game info);
-void		image_setup(t_ray *ray, t_game info);
-void		texture_setup(t_ray *ray, t_game info);
+void		dda(t_info info, t_ray *ray);
 
 /*
 ** Orchestrator of the raycasting algorithm, and functions to create images,
@@ -280,15 +247,15 @@ void		texture_setup(t_ray *ray, t_game info);
 */
 
 void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color);
-void		create_image(t_display xsrv, t_game info);
-void		ray(t_game info, t_display xsrv); // Waaaay too long
+void		create_image(t_cub *cub);
+void		ray(t_cub *cub);
 
 /*
 ** Function to establish connection with Xserver, initialize a window and
 ** image. In connect.c.
 */
 
-t_display	establish_connection(t_game info);
+void		establish_connection(t_cub *cub);
 
 /*
 ** Small math functions, not super necessary.
@@ -301,18 +268,18 @@ double		to_radians(double degrees);
 ** Movement functions, in actions1.c
 */
 
-void		move_left(t_all *all);
-void		move_right(t_all *all);
-void		move_forward(t_all *all);
-void		move_back(t_all *all);
-void		turn_left(t_all *all);
-void		turn_right(t_all *all);
-void		escape(t_all *all);
+void		move_left(t_cub *cub);
+void		move_right(t_cub *cub);
+void		move_forward(t_cub *cub);
+void		move_back(t_cub *cub);
+void		turn_left(t_cub *cub);
+void		turn_right(t_cub *cub);
+void		escape(t_cub *cub);
 
 // Testing
 
-int			keyrelease(int key, t_all *all);
-void		player_actions(t_all *all);
+int			keyrelease(int key, t_cub *cub);
+void		player_actions(t_cub *cub);
 
 /*
 **

@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/30 18:31:51 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/31 19:03:15 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFTDIR = libft/
 
 MLXDIR = minilibx_mms_20191207_beta/
 
-SRCS = main2.c \
+SRCS = main.c \
 	   color.c \
 	   get_info.c \
 	   utils.c \
@@ -28,9 +28,7 @@ SRCS = main2.c \
 	   raycasting.c \
 	   find_player.c \
 	   connect.c \
-	   actions1.c \
-	   dda.c \
-	   ray_setup.c
+	   actions1.c
 
 OBJ = $(SRCS:.c=.o)
 
@@ -60,11 +58,6 @@ clean:
 	@echo "Removing objects in all directories..."
 	@$(MAKE) -C $(LIBFTDIR) clean
 	@rm -f $(OBJ)
-
-test: makeobjects
-	@echo "Compiling test program"
-	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
-		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft main5.c
 
 fclean: clean
 	@echo "Removing program and libraries in all directories..."

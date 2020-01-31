@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:52:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 15:51:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:19:36 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@ int			check_file(const char *str)
 	char		*ext;
 	size_t		i;
 
+	i = 0;
 	while (str[i])
 		i++;
 	if (i < 4)
 		return (BAD_FILETYPE);
-	ext = str + i - 4;
+	ext = (char *)(str + i - 4);
 	if (ft_strncmp(ext, ".cub", 4) != 0)
 		return (BAD_FILETYPE);
 	return (0);

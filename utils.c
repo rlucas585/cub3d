@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 13:01:58 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:21:56 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,29 @@ char		*make_row(char *line)
 ** array and then adds one new one at the end.
 */
 
-char		**row_ptrs(char *newrow, t_map map)
+char		**row_ptrs(char *newrow, t_info info)
 {
 	int			i;
 	char		**ptr_array;
 
 	i = 0;
 	if (!newrow)
-		exit(ft_error(delete_info(MEM_FAIL, map), 0));
-	while (map.coords != NULL && map.coords[i] != NULL)
+		exit(ft_error(delete_info(MEM_FAIL, info), 0));
+	while (info.map != NULL && info.map[i] != NULL)
 		i++;
 	ptr_array = (char **)malloc(sizeof(char *) * (i + 2));
 	if (!ptr_array)
 		return (NULL);
 	i = 0;
-	while (map.coords != NULL && map.coords[i] != NULL)
+	while (info.map != NULL && info.map[i] != NULL)
 	{
-		ptr_array[i] = map.coords[i];
+		ptr_array[i] = info.map[i];
 		i++;
 	}
 	ptr_array[i] = newrow;
 	ptr_array[i + 1] = NULL;
-	if (map.coords)
-		free(map.coords);
+	if (info.map)
+		free(info.map);
 	return (ptr_array);
 }
 
@@ -118,42 +118,42 @@ size_t			ft_arrlen(char **array)
 ** submission of project, only for troubleshooting.
 */
 
-void		print_mapinfo(t_map mapinfo)
+void		print_mapinfo(t_info info)
 {
-	int			x;
+	int			y;
 
-	x = 0;
-	ft_printf("Resolution = %dx%d\n", mapinfo.res[0], mapinfo.res[1]);
-	while (x < 5)
+	y = 0;
+	ft_printf("Resolution = %dx%d\n", info.res.x, info.res.y);
+	while (y < 5)
 	{
-		ft_printf("textures: %d = %s\n", x, mapinfo.textures[x]);
-		x++;
+		ft_printf("textures: %d = %s\n", y, info.texs[y]);
+		y++;
 	}
-	x = 0;
-	while (mapinfo.coords[x])
+	y = 0;
+	while (info.map[y])
 	{
-		ft_printf("%s\n", mapinfo.coords[x]);
-		x++;
+		ft_printf("%s\n", info.map[y]);
+		y++;
 	}
 }
 
-void		print_playerinfo(t_player player)
+void		print_playerinfo(t_info info)
 {
-	printf("Player coordinates: X = %d Y = %d dirX = %f dirY = %f angle=%f\n",
-			(int)player.location[X], (int)player.location[Y], sin(to_radians(player.dir)),
-			-cos(to_radians(player.dir)), player.dir);
+	printf("Player coordinates: X = %f Y = %f dirX = %f dirY = %f angle=%f\n",
+			info.pos.x, info.pos.y, sin(to_radians(info.dir)),
+			-cos(to_radians(info.dir)), info.dir);
 }
 
-void		print_spriteinfo(t_game info)
+void		print_spriteinfo(t_info info)
 {
 	printf("Number of sprites: %d\n", info.spritenum);
 }
 
-void		print_gameinfo(t_game game)
+void		print_gameinfo(t_info info)
 {
-	print_mapinfo(game.map);
-	print_playerinfo(game.player);
-	print_spriteinfo(game);
+	print_mapinfo(info);
+	print_playerinfo(info);
+	print_spriteinfo(info);
 }
 
 double		to_degrees(double radians)

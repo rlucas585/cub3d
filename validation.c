@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 16:20:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 19:10:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ int				validate_map(char *line, size_t width)
 	return (1);
 }
 
-void			validate_n_s_walls(t_map mapinfo)
+void			validate_n_s_walls(t_info info)
 {
-	if (ft_arrlen(mapinfo.coords) < 3)
-		exit(ft_error(delete_info(TOO_SHORT, mapinfo), 0));
-	if (ft_strlen(mapinfo.coords[0]) < 3)
-		exit(ft_error(delete_info(TOO_THIN, mapinfo), 0));
-	if (!only_chars_in_set(mapinfo.coords[0], "1"))
-		exit(ft_error(delete_info(N_S_WALL_ERROR, mapinfo), 0));
-	if (!only_chars_in_set(mapinfo.coords[ft_arrlen(mapinfo.coords) - 1], "1"))
-		exit(ft_error(delete_info(N_S_WALL_ERROR, mapinfo), 0));
+	if (ft_arrlen(info.map) < 3)
+		exit(ft_error(delete_info(TOO_SHORT, info), 0));
+	if (ft_strlen(info.map[0]) < 3)
+		exit(ft_error(delete_info(TOO_THIN, info), 0));
+	if (!only_chars_in_set(info.map[0], "1"))
+		exit(ft_error(delete_info(N_S_WALL_ERROR, info), 0));
+	if (!only_chars_in_set(info.map[ft_arrlen(info.map) - 1], "1"))
+		exit(ft_error(delete_info(N_S_WALL_ERROR, info), 0));
 }
