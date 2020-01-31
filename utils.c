@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/22 14:23:16 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 13:01:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,16 @@ void		print_playerinfo(t_player player)
 			-cos(to_radians(player.dir)), player.dir);
 }
 
+void		print_spriteinfo(t_game info)
+{
+	printf("Number of sprites: %d\n", info.spritenum);
+}
+
 void		print_gameinfo(t_game game)
 {
 	print_mapinfo(game.map);
 	print_playerinfo(game.player);
+	print_spriteinfo(game);
 }
 
 double		to_degrees(double radians)

@@ -1,12 +1,12 @@
 R 1920 1080
 
 NO ./textures/wood.png
-SO ./textures/bluestone2.png
+SO ./textures/bluestone.png
 
 WE ./textures/mossy.png
 EA ./textures/redbrick.png
 
-S ./textures/wood.png
+S ./textures/taylor3.png
 
 F 178,178,178
 

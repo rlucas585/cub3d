@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/30 18:57:37 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 13:31:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void		one_tex(t_all *all, int dir, void **img)
 			all->info->map.textures[dir], &x, &y);
 	if (!img[dir])
 		exit(ft_error(delete_all(MISSING_TEX, *all), 0));
-	all->info->texstrs[dir] = mlx_get_data_addr(img[dir],
+	all->info->texstrs[dir] = (int *)mlx_get_data_addr(img[dir],
 			&all->info->texinf->bpp,
 			&all->info->texinf->size_line,
 			&all->info->texinf->endian);
@@ -111,6 +111,35 @@ void		init_keys(t_all *all)
 	all->key.right = 0;
 }
 
+int			numstrchr(char *str, int c)
+{
+	size_t		i;
+	int			total;
+
+	i = 0;
+	total = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			total++;
+		i++;
+	}
+	return (total);
+}
+
+void		count_sprites(t_game *info)
+{
+	size_t		y;
+
+	y = 0;
+	info->spritenum = 0;
+	while (info->map.coords[y])
+	{
+		info->spritenum += numstrchr(info->map.coords[y], '2');
+		y++;
+	}
+}
+
 int			main(int argc, char **argv)
 {
 	t_game		game;
@@ -122,7 +151,8 @@ int			main(int argc, char **argv)
 	game.player = find_player(game);
 	if (game.player.location[X] == 0)
 		exit(ft_error(delete_info(NO_PLAYER, game.map), 0));
-	/* print_gameinfo(game); */
+	count_sprites(&game);
+	print_gameinfo(game);
 	xsrv = establish_connection(game);
 	all.xsrv = &xsrv;
 	all.info = &game;

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/30 18:42:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 13:30:33 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,10 @@ typedef struct		s_game
 {
 	t_map			map;
 	t_player		player;
-	char			*texstrs[5];
+	int				*texstrs[5];
 	void			*imgs[5];
 	t_imginf		*texinf;
+	int				spritenum;
 }					t_game;
 
 typedef struct		s_display
@@ -115,7 +116,7 @@ typedef struct		s_ray
 	double			cameraX;
 	int				x;
 	int				y;
-	unsigned int	color;
+	int				color;
 	int				lineheight;
 	int				drawStart;
 	int				drawEnd;

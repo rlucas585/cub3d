@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/30 18:45:23 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 15:10:50 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,34 +48,116 @@ void		create_image(t_display xsrv, t_game info)
 
 void		draw_image(t_ray *ray, t_game info, t_display *xsrv)
 {
-	ray->y = 0;
-	while (ray->y < ray->drawStart)
-	{
+	/* ray->y = 0; */
+	ray->y = ray->drawStart;
+	/* while (ray->y < ray->drawStart) */
+	/* { */
 		/* img_put_pixel(*xsrv, ray->x, ray->y, info.map.ceilingcolor); */
-		ray->y++;
-	}
+	/* 	ray->y++; */
+	/* } */
 	while (ray->y < ray->drawEnd)
 	{
 		ray->tx.texY = (int)ray->tx.texPos;
 		ray->tx.texPos += ray->tx.step;
-		ft_memcpy(&ray->color, info.texstrs[ray->dda.side] + 4 * ray->tx.texX +
-				info.texinf->size_line * ray->tx.texY, 4);
+		ray->color = info.texstrs[ray->dda.side][ray->tx.texX +
+			TEXHEIGHT * ray->tx.texY];
 		img_put_pixel(*xsrv, ray->x, ray->y, ray->color);
 		ray->y++;
 	}
-	while (ray->y < info.map.res[1])
-	{
+	/* while (ray->y < info.map.res[1]) */
+	/* { */
 		/* img_put_pixel(*xsrv, ray->x, ray->y, info.map.floorcolor); */
-		ray->y++;
-	}
+	/* 	ray->y++; */
+	/* } */
 }
+
+/* void		sprite_casting(t_game info, t_display xsrv, double *ZBuffer) */
+/* { */
+/* 	int			*spriteOrder; */
+/* 	double		*spriteDistance; */
+/* 	int			i; */
+/*  */
+/* 	i = 0; */
+/* 	spriteOrder = (int *)malloc(sizeof(int) * info.spritenum); */
+/* 	spriteDistance = (double *)malloc(sizeof(double) * info.spritenum); */
+/* 	while (i < info.spritenum) */
+/* 	{ */
+/* 		spriteOrder[i] = i; */
+/* 		spriteDistance[i] = ((info.player.location[X] - sprite[i])) */
+/* 	} */
+/* } */
+
+/* int			tile_at(int x, int y, t_game info) */
+/* { */
+/* 	return (info->map.) */
+/* } */
 
 void		ray(t_game info, t_display xsrv)
 {
 	t_ray		ray;
+	int		y;
+	double	weight;
+	double	fcwallx;
+	double	fcwally;
+	double	fcposx;
+	double	fcposy;
+	int		fctexX;
+	int		fctexY;
+	double		*ZBuffer;
 
+	ZBuffer = (double *)malloc(sizeof(double) * info.map.res[0]);
 	ray.x = 0;
 	init_plane(&ray, info);
+	while (ray.x < info.map.res[0])
+	{
+		new_ray(&ray, info);
+		dda_setup(&ray.dda, info);
+		dda(&ray.dda, info);
+		image_setup(&ray, info);
+		texture_setup(&ray, info);
+		draw_image(&ray, info, &xsrv);
+
+		// Shamelessly lifted. This needs to be understood and rewritten prior
+		// to submission. Raycasting for the floor and ceiling.
+		y = ray.drawEnd + 1;
+		if (ray.dda.side == EAST)
+		{
+			fcwallx = ray.dda.mapX;
+			fcwally = ray.dda.mapY + ray.tx.wallX;
+		}
+		if (ray.dda.side == WEST)
+		{
+			fcwallx = ray.dda.mapX + 1.0;
+			fcwally = ray.dda.mapY + ray.tx.wallX;
+		}
+		if (ray.dda.side == SOUTH)
+		{
+			fcwallx = ray.dda.mapX + ray.tx.wallX;
+			fcwally = ray.dda.mapY;
+		}
+		if (ray.dda.side == NORTH)
+		{
+			fcwallx = ray.dda.mapX + ray.tx.wallX;
+			fcwally = ray.dda.mapY + 1.0;
+		}
+		if (ray.drawEnd < 0)
+			ray.drawEnd = info.map.res[1];
+		while (y < info.map.res[1])
+		{
+			weight = (info.map.res[1] / (2.0 * y - info.map.res[1])) / ray.dda.perpWallDist;
+			fcposx = weight * fcwallx + (1.0 - weight) * info.player.location[X];
+			fcposy = weight * fcwally + (1.0 - weight) * info.player.location[Y];
+			fctexX = (int)(fcposx * TEXWIDTH) % TEXWIDTH;
+			fctexY = (int)(fcposy * TEXHEIGHT) % TEXHEIGHT;
+			ray.color = info.texstrs[SPRITE][TEXWIDTH * fctexY + fctexX];
+			img_put_pixel(xsrv, ray.x, y, ray.color);
+			ray.color = info.texstrs[SPRITE][TEXWIDTH * fctexY + fctexX];
+			img_put_pixel(xsrv, ray.x, info.map.res[1] - y, ray.color);
+			y++;
+		}
+		ZBuffer[ray.x] = ray.dda.perpWallDist;
+		ray.x++;
+	}
 	/* for (int y = 0; y < info.map.res[1]; y++) */
 	/* { */
 	/* 	float rayDirX0 = sin(to_radians(info.player.dir)) - ray.planeX; */
@@ -106,19 +188,14 @@ void		ray(t_game info, t_display xsrv)
     /*  */
 	/* 		unsigned int	color; */
     /*  */
-	/* 		ft_memcpy(&color, info.texstrs[NORTH] + 4 * tx + */
-	/* 				info.texinf->size_line * ty, 4); */
+	/* 		color = info.texstrs[SPRITE][TEXWIDTH * ty + tx]; */
+	/* 		color = (color >> 1) & 8355711; */
+	/* 		img_put_pixel(xsrv, x, y, color); */
+    /*  */
+	/* 		color = info.texstrs[SPRITE][TEXWIDTH * ty + tx]; */
+	/* 		color = (color >> 1) & 8355711; */
 	/* 		img_put_pixel(xsrv, x, y, color); */
 	/* 	} */
 	/* } */
-	while (ray.x < info.map.res[0])
-	{
-		new_ray(&ray, info);
-		dda_setup(&ray.dda, info);
-		dda(&ray.dda, info);
-		image_setup(&ray, info);
-		texture_setup(&ray, info);
-		draw_image(&ray, info, &xsrv);
-		ray.x++;
-	}
+	/* sprite_casting(info, xsrv, ZBuffer); */
 }

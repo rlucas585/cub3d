@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/30 19:00:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 14:40:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,6 @@ void		delete_imgs(void *imgs[5])
 	}
 }
 
-void		delete_img_data(t_all all)
-{
-	int		i;
-
-	i = 0;
-	while (i < 5)
-	{
-		if (all.info->imgs[i])
-		{
-			ft_printf("i = %d\n", i);
-			/* mlx_destroy_image(all.xsrv, all.info->imgs[i]); */
-		}
-		i++;
-	}
-}
-
 int			delete_info(int err, t_map map)
 {
 	delete_map(map.coords);
@@ -83,9 +67,6 @@ int			delete_all(int err, t_all all)
 {
 	delete_map(all.info->map.coords);
 	delete_tex(all.info->map.textures);
-	ft_printf("hi\n");
-	delete_img_data(all);
-	ft_printf("hi\n");
 	if (all.xsrv->imginf)
 		free(all.xsrv->imginf);
 	if (all.info->texinf)
