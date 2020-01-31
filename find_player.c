@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:39:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 19:29:23 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 20:25:09 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** Jumptable for direction to face in, measured in degrees.
 */
 
-static double		dir_table(int c)
+static double	dir_table(int c)
 {
 	static int	dir_array[128] = {
 		['N'] = 0,
@@ -31,7 +31,7 @@ static double		dir_table(int c)
 }
 
 /*
-** Make a structure for player once found, containing location and direction 
+** Make a structure for player once found, containing location and direction
 ** faced (in degrees).
 */
 

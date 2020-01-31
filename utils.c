@@ -6,16 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 19:21:56 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 20:32:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
 #include <math.h>
-
-#include <stdio.h>
-/* delete this later */
 
 /*
 ** Utility functions for the cub3d project
@@ -102,7 +99,7 @@ char		**row_ptrs(char *newrow, t_info info)
 ** Get the length of a 2d array of strings.
 */
 
-size_t			ft_arrlen(char **array)
+size_t		ft_arrlen(char **array)
 {
 	size_t		i;
 
@@ -112,56 +109,23 @@ size_t			ft_arrlen(char **array)
 	return (i);
 }
 
-
 /*
-** Print the mapinfo information. Should be removed from directory prior to
-** submission of project, only for troubleshooting.
+** ft_strchr, except it returns the number of occurrences of a character in a
+** string.
 */
 
-void		print_mapinfo(t_info info)
+int			numstrchr(char *str, int c)
 {
-	int			y;
+	size_t		i;
+	int			total;
 
-	y = 0;
-	ft_printf("Resolution = %dx%d\n", info.res.x, info.res.y);
-	while (y < 5)
+	i = 0;
+	total = 0;
+	while (str[i])
 	{
-		ft_printf("textures: %d = %s\n", y, info.texs[y]);
-		y++;
+		if (str[i] == c)
+			total++;
+		i++;
 	}
-	y = 0;
-	while (info.map[y])
-	{
-		ft_printf("%s\n", info.map[y]);
-		y++;
-	}
-}
-
-void		print_playerinfo(t_info info)
-{
-	printf("Player coordinates: X = %f Y = %f dirX = %f dirY = %f angle=%f\n",
-			info.pos.x, info.pos.y, sin(to_radians(info.dir)),
-			-cos(to_radians(info.dir)), info.dir);
-}
-
-void		print_spriteinfo(t_info info)
-{
-	printf("Number of sprites: %d\n", info.spritenum);
-}
-
-void		print_gameinfo(t_info info)
-{
-	print_mapinfo(info);
-	print_playerinfo(info);
-	print_spriteinfo(info);
-}
-
-double		to_degrees(double radians)
-{
-	return ((180 / M_PI) * radians);
-}
-
-double		to_radians(double degrees)
-{
-	return ((degrees * M_PI) / 180);
+	return (total);
 }

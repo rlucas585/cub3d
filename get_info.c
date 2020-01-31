@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 19:22:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 20:24:44 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,11 @@ int			get_texture(char *line, t_info *info)
 	return (1);
 }
 
-/* Get color information for floor and ceiling from .cub file, store as single
-*  integers with correct format for mlx_pixel_put(). */
+/*
+** Get color information for floor and ceiling from .cub file, store as single
+** integers with correct format for mlx_pixel_put().
+*/
+
 int			get_color(char *line, t_info *info)
 {
 	int		red;

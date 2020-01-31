@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main2.c                                            :+:    :+:            */
+/*   hooks2.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:47:54 by rlucas        ########   odam.nl         */
+/*   Created: 2020/01/31 20:35:06 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/01/31 20:46:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
 #include <mlx.h>
-#include <stdio.h>
 
-int			main(int argc, char **argv)
+void		init_keys(t_cub *cub)
 {
-	t_cub		cub;
+	cub->key.w = 0;
+	cub->key.s = 0;
+	cub->key.a = 0;
+	cub->key.d = 0;
+	cub->key.left = 0;
+	cub->key.right = 0;
+}
 
-	cub.info = cub_parser(open_file(argc, argv));
-	validate_n_s_walls(cub.info);
-	find_player(&cub.info);
-	if (cub.info.pos.x == 0)
-		exit(ft_error(delete_info(NO_PLAYER, cub.info), 0));
-	count_sprites(&cub.info);
-	print_gameinfo(cub.info);
-	establish_connection(&cub);
-	init_tex(&cub);
-	init_keys(&cub);
-	init_hooks(&cub);
-	mlx_loop(cub.xsrv.dpy);
-	return (0);
+void		init_hooks(t_cub *cub)
+{
+	mlx_do_key_autorepeatoff(cub->xsrv.dpy);
+	mlx_hook(cub->xsrv.w, 2, 0, &keypress, cub);
+	mlx_hook(cub->xsrv.w, 3, 0, &keyrelease, cub);
+	mlx_hook(cub->xsrv.w, 17, 0, &crosspress, cub);
+	mlx_loop_hook(cub->xsrv.dpy, &loop_func, cub);
 }

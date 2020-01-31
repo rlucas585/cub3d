@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 19:19:22 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 21:02:03 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ typedef struct		s_ray
 	t_2d			plane;
 	t_2d			beam;
 	t_2i			map;
-	double			camX;
+	double			camx;
 	t_2d			delt;
 	t_2i			step;
 	t_2d			sidedist;
@@ -104,12 +104,12 @@ typedef struct		s_ray
 	double			pdist;
 	int				hit;
 	int				height;
-	int				drawStart;
-	int				drawEnd;
-	double			wallX;
+	int				draw_start;
+	int				draw_end;
+	double			wallx;
 	t_2i			tx;
 	double			txstep;
-	double			texPos;
+	double			tex_pos;
 }					t_ray;
 
 typedef int			(*t_parsef)(char *line, t_info *info);
@@ -162,127 +162,160 @@ typedef enum		e_keydefs
 ** Opening file functions, and checking argument errors. In open_file.c.
 */
 
-int			check_file(const char *str);
-int			open_file(int argc, char **argv);
+int					check_file(const char *str);
+int					open_file(int argc, char **argv);
 
 /*
 ** Color function, converts from 8-bit integers into a single 32-bit integer
 ** containing the information from three 8-bit integers. In color.c.
 */
 
-int			rgb(int red, int green, int blue);
+int					rgb(int red, int green, int blue);
 
 /*
 ** Error messaging, in errors.c.
 */
 
-int			ft_error(int err, int linenum);
+int					ft_error(int err, int linenum);
 
 /*
 ** Check that the map is valid, both during creation and after completion.
 ** Located in validation.c.
 */
 
-int			validate_map(char *line, size_t width);
-void		validate_n_s_walls(t_info info);
+int					validate_map(char *line, size_t width);
+void				validate_n_s_walls(t_info info);
 
 /*
 ** Function to find and create the player on the map. In find_player.c.
 */
 
-void			find_player(t_info *info);
+void				find_player(t_info *info);
 
-/* 
+/*
 ** Functions to read info from a line into relevant mapinfo, in get_info.c.
 */
 
-int			get_resolution(char *line, t_info *info);
-int			get_texture(char *line, t_info *info);
-int			get_color(char *line, t_info *info);
+int					get_resolution(char *line, t_info *info);
+int					get_texture(char *line, t_info *info);
+int					get_color(char *line, t_info *info);
 
 /*
-** Utility functions in utils.c
+** Utility functions in utils.c.
 */
 
-char		*make_row(char *line);
-char		**row_ptrs(char *newrow, t_info info);
-size_t		ft_arrlen(char **array);
+char				*make_row(char *line);
+char				**row_ptrs(char *newrow, t_info info);
+size_t				ft_arrlen(char **array);
+int					numstrchr(char *str, int c);
+
+/*
+** Utility functions in utils2.c.
+*/
+
+void				count_sprites(t_info *info);
+void				bump(double *x, double *y, char **map);
 
 /*
 ** Troubleshooting functions that should be deleted, in utils.c.
 */
 
-void		print_mapinfo(t_info info);
-void		print_playerinfo(t_info info);
-void		print_gameinfo(t_info info);
+void				print_mapinfo(t_info info);
+void				print_playerinfo(t_info info);
+void				print_gameinfo(t_info info);
 
 /*
 ** Functions to direct parsing of .cub file, in parse_cub.c.
 */
 
-t_parsef	route_parsing(char c);
-void		parse_map(int fd, char *line, int linenum, t_info *info);
-int			parse_line(int fd, char *line, t_info *info, int linenum);
-t_info		cub_parser(int fd);
+t_parsef			route_parsing(char c);
+void				parse_map(int fd, char *line, int linenum, t_info *info);
+int					parse_line(int fd, char *line, t_info *info, int linenum);
+t_info				cub_parser(int fd);
 
 /*
 ** Functions to delete malloced data when exiting the program. In exit.c.
 */
 
-void		delete_map(char **map);
-void		delete_tex(char *textures[5]);
-void		delete_imgs(void *imgs[5]);
-int			delete_info(int err, t_info info);
-int			delete_all(int err, t_cub cub);
+void				delete_map(char **map);
+void				delete_tex(char *textures[5]);
+void				delete_imgs(void *imgs[5]);
+int					delete_info(int err, t_info info);
+int					delete_all(int err, t_cub cub);
 
 /*
-** DDA functions, in dda.c
+** DDA function, in raycasting.c
 */
 
-void		dda(t_info info, t_ray *ray);
+void				dda(t_info info, t_ray *ray);
 
 /*
 ** Orchestrator of the raycasting algorithm, and functions to create images,
 ** in raycasting.c.
 */
 
-void		img_put_pixel(t_display xsrv, int x, int y, unsigned int color);
-void		create_image(t_cub *cub);
-void		ray(t_cub *cub);
+void				img_put_pixel(t_display xsrv, int x, int y,
+		unsigned int color);
+void				create_image(t_cub *cub);
+void				ray(t_cub *cub);
+
+/*
+** Casting functions to fill in an image.
+*/
+
+void				wallcast(t_cub *cub, t_ray *ray, int x);
+void				floorcast_setup(t_info info, t_ray *ray, t_2d *wall_pos);
+void				floorcast(t_cub *cub, t_ray *ray, int x);
 
 /*
 ** Function to establish connection with Xserver, initialize a window and
 ** image. In connect.c.
 */
 
-void		establish_connection(t_cub *cub);
+void				establish_connection(t_cub *cub);
+
+/*
+** Initialise textures, in textures.c.
+*/
+
+void				init_tex(t_cub *cub);
 
 /*
 ** Small math functions, not super necessary.
 */
 
-double		to_degrees(double radians);
-double		to_radians(double degrees);
+double				to_degrees(double radians);
+double				to_radians(double degrees);
 
 /*
 ** Movement functions, in actions1.c
 */
 
-void		move_left(t_cub *cub);
-void		move_right(t_cub *cub);
-void		move_forward(t_cub *cub);
-void		move_back(t_cub *cub);
-void		turn_left(t_cub *cub);
-void		turn_right(t_cub *cub);
-void		escape(t_cub *cub);
-
-// Testing
-
-int			keyrelease(int key, t_cub *cub);
-void		player_actions(t_cub *cub);
+void				move(t_info *info, double dist, int dir);
+void				move_left(t_cub *cub);
+void				move_right(t_cub *cub);
+void				move_forward(t_cub *cub);
+void				move_back(t_cub *cub);
 
 /*
-**
+** Movement functions, in actions2.c
 */
+
+void				turn_left(t_cub *cub);
+void				turn_right(t_cub *cub);
+void				escape(t_cub *cub);
+void				player_actions(t_cub *cub);
+
+/*
+** Hook functions, in hooks*.c.
+*/
+
+void				toggle(int key, t_cub *cub, int on_off);
+int					keypress(int key, t_cub *cub);
+int					keyrelease(int key, t_cub *cub);
+int					crosspress(t_cub *cub);
+int					loop_func(t_cub *cub);
+void				init_keys(t_cub *cub);
+void				init_hooks(t_cub *cub);
 
 #endif

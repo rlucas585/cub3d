@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/31 19:03:15 by rlucas        ########   odam.nl          #
+#    Updated: 2020/01/31 20:53:47 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,16 @@ SRCS = main.c \
 	   raycasting.c \
 	   find_player.c \
 	   connect.c \
-	   actions1.c
+	   actions1.c \
+	   actions2.c \
+	   cast.c \
+	   math1.c \
+	   printinfo.c \
+	   draw_images.c \
+	   textures.c \
+	   hooks1.c \
+	   hooks2.c \
+	   utils2.c
 
 OBJ = $(SRCS:.c=.o)
 

@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_power.c                                         :+:    :+:            */
+/*   math1.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/01/17 11:25:03 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 21:06:46 by rlucas        ########   odam.nl         */
+/*   Created: 2020/01/31 20:21:58 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/01/31 20:27:13 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-** Originally created for miniprintf project, Very basic and has undefined
-** behaviour for negative powers - which could be amended.
-*/
+#include <math.h>
 
-long		ft_power(long n, int pow)
+double		to_degrees(double radians)
 {
-	if (pow == 0)
-		return (1);
-	if (pow == 1)
-		return (n);
-	return (n * ft_power(n, pow - 1));
+	return ((180 / M_PI) * radians);
+}
+
+double		to_radians(double degrees)
+{
+	return ((degrees * M_PI) / 180);
 }

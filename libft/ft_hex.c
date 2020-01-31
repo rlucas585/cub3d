@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 16:12:37 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/17 11:47:46 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/01/31 21:06:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@ static int		single_hex(int c)
 	return (-1);
 }
 
-/* MAX_INT in hexadecimal is 7FFFFFF. */
-/* -1 returned in event of error */
+/*
+** MAX_INT in hexadecimal is 7FFFFFF.
+** -1 returned in event of error.
+*/
+
 int				ft_hex(const char *str)
 {
 	int			result;
