@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 19:16:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/03 13:15:38 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,19 @@ int			delete_info(int err, t_info info)
 
 int			delete_all(int err, t_cub cub)
 {
+	int		i;
+
+	i = 0;
 	delete_map(cub.info.map);
 	delete_tex(cub.info.texs);
 	if (cub.xsrv.imginf)
 		free(cub.xsrv.imginf);
-	if (cub.info.texinf)
-		free(cub.info.texinf);
+	while (i < 5)
+	{
+		if (cub.info.texinf[i])
+			free(cub.info.texinf);
+		i++;
+	}
 	delete_imgs(cub.info.imgs);
 	return (err);
 }

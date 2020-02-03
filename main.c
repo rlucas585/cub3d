@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:47:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/03 13:33:31 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int			main(int argc, char **argv)
 	find_player(&cub.info);
 	if (cub.info.pos.x == 0)
 		exit(ft_error(delete_info(NO_PLAYER, cub.info), 0));
-	count_sprites(&cub.info);
+	init_sprites(&cub.info);
 	print_gameinfo(cub.info);
 	establish_connection(&cub);
 	init_tex(&cub);

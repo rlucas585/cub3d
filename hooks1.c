@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:33:48 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:44:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/03 10:15:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,4 @@ int			crosspress(t_cub *cub)
 {
 	escape(cub);
 	exit(0);
-}
-
-int			loop_func(t_cub *cub)
-{
-	player_actions(cub);
-	create_image(cub);
-	return (1);
 }

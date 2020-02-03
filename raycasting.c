@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 21:03:49 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/03 16:25:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <libft.h>
 #include <cub3d.h>
 #include <math.h>
+#include <stdio.h>
 
-void		ray_setup1(t_info info, t_ray *ray, int x)
+static void		ray_setup1(t_info info, t_ray *ray, int x)
 {
 	ray->camx = 2 * (double)x / (double)info.res.x - 1;
 	ray->beam.x = sin(to_radians(info.dir)) + ray->plane.x * ray->camx;
@@ -26,7 +27,7 @@ void		ray_setup1(t_info info, t_ray *ray, int x)
 	ray->delt.y = ft_abs_d(1 / ray->beam.y);
 }
 
-void		ray_setup2(t_info info, t_ray *ray)
+static void		ray_setup2(t_info info, t_ray *ray)
 {
 	if (ray->beam.x < 0)
 	{
@@ -50,7 +51,7 @@ void		ray_setup2(t_info info, t_ray *ray)
 	}
 }
 
-void		dda(t_info info, t_ray *ray)
+static void		dda(t_info info, t_ray *ray)
 {
 	ray->hit = 0;
 	while (ray->hit == 0)
@@ -78,7 +79,7 @@ void		dda(t_info info, t_ray *ray)
 			ray->beam.y;
 }
 
-void		draw_setup(t_info info, t_ray *ray)
+static void		draw_setup(t_info info, t_ray *ray)
 {
 	ray->height = (int)(info.res.y / ray->pdist);
 	ray->draw_start = -ray->height / 2 + info.res.y / 2;
@@ -103,11 +104,14 @@ void		draw_setup(t_info info, t_ray *ray)
 		ray->txstep;
 }
 
-void		ray(t_cub *cub)
+void			ray(t_cub *cub)
 {
 	t_ray		ray;
+	double		*ZBuffer;
 	int			x;
 
+	ZBuffer = (double *)malloc(sizeof(double) * cub->info.res.x);
+	// Should protect this malloc as well and free before the end of ray();
 	x = 0;
 	ray.plane.x = 0.66 * cos(to_radians(cub->info.dir));
 	ray.plane.y = 0.66 * sin(to_radians(cub->info.dir));
@@ -119,6 +123,9 @@ void		ray(t_cub *cub)
 		draw_setup(cub->info, &ray);
 		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
+		ZBuffer[x] = ray.pdist;
 		x++;
 	}
+	draw_sprites(cub, ZBuffer, ray.plane);
+	free(ZBuffer);
 }

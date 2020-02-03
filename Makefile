@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/01/31 20:53:47 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/03 10:26:48 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,9 @@ SRCS = main.c \
 	   textures.c \
 	   hooks1.c \
 	   hooks2.c \
-	   utils2.c
+	   utils2.c \
+	   loop.c \
+	   sprite_cast.c
 
 OBJ = $(SRCS:.c=.o)
 

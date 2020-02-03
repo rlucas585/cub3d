@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:22:29 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:27:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/03 12:26:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,16 @@ void		print_playerinfo(t_info info)
 
 void		print_spriteinfo(t_info info)
 {
+	int		i;
+
+	i = 0;
 	printf("Number of sprites: %d\n", info.spritenum);
+	while (i < info.spritenum)
+	{
+		printf("Sprite %d: x: %f y: %f type: %d\n", i, info.sprts[i].pos.x,
+				info.sprts[i].pos.y, info.sprts[i].type);
+		i++;
+	}
 }
 
 void		print_gameinfo(t_info info)

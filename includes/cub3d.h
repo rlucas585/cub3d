@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 21:02:03 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/03 13:14:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,33 @@ typedef struct		s_2d
 	double			y;
 }					t_2d;
 
+typedef	struct		s_wh
+{
+	int				width;
+	int				height;
+}					t_wh;
+
+typedef struct		s_sprite
+{
+	t_2d			pos;
+	int				type;
+}					t_sprite;
+
+typedef struct		s_sray
+{
+	int				*sprite_order;
+	double			*sprite_dist;
+	t_2d			spos;
+	double			inv_det;
+	t_2d			transform;
+	int				sscreenx;
+	t_wh			sprt;
+	t_2i			draw_start;
+	t_2i			draw_end;
+	t_2i			tx;
+	int				color;
+}					t_sray;
+
 typedef struct		s_imginf
 {
 	int				bpp;
@@ -54,7 +81,8 @@ typedef struct		s_info
 	double			dir;
 	int				*texstrs[5];
 	void			*imgs[5];
-	t_imginf		*texinf;
+	t_sprite		*sprts;
+	t_imginf		*texinf[5];
 }					t_info;
 
 typedef struct		s_display
@@ -213,15 +241,16 @@ int					numstrchr(char *str, int c);
 ** Utility functions in utils2.c.
 */
 
-void				count_sprites(t_info *info);
+void				init_sprites(t_info *info);
 void				bump(double *x, double *y, char **map);
 
 /*
-** Troubleshooting functions that should be deleted, in utils.c.
+** Troubleshooting functions that should be deleted, in printfinfo.c
 */
 
 void				print_mapinfo(t_info info);
 void				print_playerinfo(t_info info);
+void				print_spriteinfo(t_info info);
 void				print_gameinfo(t_info info);
 
 /*
@@ -244,28 +273,32 @@ int					delete_info(int err, t_info info);
 int					delete_all(int err, t_cub cub);
 
 /*
-** DDA function, in raycasting.c
+** Functions to draw with. In draw_images.c
 */
 
-void				dda(t_info info, t_ray *ray);
+void				img_put_pixel(t_display xsrv, int x, int y,
+		unsigned int color);
 
 /*
 ** Orchestrator of the raycasting algorithm, and functions to create images,
 ** in raycasting.c.
 */
 
-void				img_put_pixel(t_display xsrv, int x, int y,
-		unsigned int color);
-void				create_image(t_cub *cub);
 void				ray(t_cub *cub);
 
 /*
-** Casting functions to fill in an image.
+** Casting functions to fill in an image. In cast.c.
 */
 
 void				wallcast(t_cub *cub, t_ray *ray, int x);
 void				floorcast_setup(t_info info, t_ray *ray, t_2d *wall_pos);
 void				floorcast(t_cub *cub, t_ray *ray, int x);
+
+/*
+** Casting sprites, int sprite_cast.c
+*/
+
+void				draw_sprites(t_cub *cub, double *ZBuffer, t_2d plane);
 
 /*
 ** Function to establish connection with Xserver, initialize a window and
@@ -281,7 +314,7 @@ void				establish_connection(t_cub *cub);
 void				init_tex(t_cub *cub);
 
 /*
-** Small math functions, not super necessary.
+** Small math functions, not super necessary, in math1.c.
 */
 
 double				to_degrees(double radians);
@@ -307,6 +340,12 @@ void				escape(t_cub *cub);
 void				player_actions(t_cub *cub);
 
 /*
+** Looping function of the program. In loop.c
+*/
+
+int					loop_func(t_cub *cub);
+
+/*
 ** Hook functions, in hooks*.c.
 */
 
@@ -314,7 +353,6 @@ void				toggle(int key, t_cub *cub, int on_off);
 int					keypress(int key, t_cub *cub);
 int					keyrelease(int key, t_cub *cub);
 int					crosspress(t_cub *cub);
-int					loop_func(t_cub *cub);
 void				init_keys(t_cub *cub);
 void				init_hooks(t_cub *cub);
 

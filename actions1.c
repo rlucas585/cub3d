@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 16:07:54 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:52:52 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/03 13:43:48 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 
 void		move(t_info *info, double dist, int dir)
 {
-	if (info->map[(int)(info->pos.y)][(int)(info->pos.x + dist *
-				sin(to_radians(dir)))] != '1')
+	if (!ft_strchr("12", info->map[(int)(info->pos.y)][(int)(info->pos.x +
+					dist * sin(to_radians(dir)))]))
 		info->pos.x += dist * sin(to_radians(dir));
-	if (info->map[(int)(info->pos.y + dist *
-			-cos(to_radians(dir)))][(int)(info->pos.x)] != '1')
+	if (!ft_strchr("12", info->map[(int)(info->pos.y + dist *
+			-cos(to_radians(dir)))][(int)(info->pos.x)]))
 		info->pos.y += dist * -cos(to_radians(dir));
 }
 
