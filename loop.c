@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:14:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 16:24:49 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 15:54:13 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ static void		create_image(t_cub *cub)
 	mlx_put_image_to_window(cub->xsrv.dpy, cub->xsrv.w, cub->xsrv.img, 0, 0);
 	mlx_destroy_image(cub->xsrv.dpy, cub->xsrv.img);
 }
+
+/*
+** Remember to fix the error in map parsing, "NOO" is accepted instead of "NO";
+*/
 
 int				loop_func(t_cub *cub)
 {

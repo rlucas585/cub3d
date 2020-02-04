@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 12:34:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 15:57:35 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void		sprite_setup1(t_cub cub, t_sray *sray)
 	/* printf("Before: "); */
 	/* print_sprites(cub.info.spritenum, sray->sprite_order, sray->sprite_dist); */
 	sortsprites(cub.info.spritenum, &sray->sprite_order, &sray->sprite_dist);
+	/* printf("After: "); */
+	/* print_sprites(cub.info.spritenum, sray->sprite_order, sray->sprite_dist); */
 }
 
 void		sprite_setup2(t_info info, t_sray *sray, int i, t_2d plane)
@@ -162,7 +164,13 @@ void		sprite_cast(t_cub *cub, double *ZBuffer, t_sray *sray)
 				sray->color = cub->info.texstrs[SPRITE][TEXWIDTH * sray->tx.y +
 				sray->tx.x];
 				if ((sray->color & 0x00FFFFFF) != 0)
+				{
+					/* if (y > 500) */
+					/* 	printf("before img_put_pixel\n"); */
 					img_put_pixel(*cub, stripe, y, sray->color);
+					/* if (y > 500) */
+					/* 	printf("after img_put_pixel\n"); */
+				}
 				y++;
 			}
 		}
