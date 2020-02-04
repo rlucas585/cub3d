@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:24:44 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 19:28:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ int			get_resolution(char *line, t_info *info)
 	if (line[i] == 0)
 		return (ERROR);
 	info->res.y = ft_atoi(line + i);
+	if (info->res.y > 1400)
+		info->res.y = 1400;
+	if (info->res.x > 2560)
+		info->res.x = 2560;
 	if (info->res.x > 0 && info->res.y > 0)
 		return (1);
 	return (ERROR);
@@ -51,9 +55,34 @@ static int	textures(int c)
 		['X'] = SOUTH,
 		['W'] = WEST,
 		['S'] = SPRITE,
+		['F'] = FLOOR,
+		['C'] = CEILING
 	};
 
 	return (compass[(int)c]);
+}
+
+/*
+** Check valid texture name.
+*/
+
+int			chktex(char *line)
+{
+	if (ft_strncmp(line, "NO ", 3) == 0)
+		return (1);
+	if (ft_strncmp(line, "XO ", 3) == 0)
+		return (1);
+	if (ft_strncmp(line, "WE ", 3) == 0)
+		return (1);
+	if (ft_strncmp(line, "EA ", 3) == 0)
+		return (1);
+	if (ft_strncmp(line, "S ", 2) == 0)
+		return (1);
+	if (ft_strncmp(line, "F ", 2) == 0)
+		return (1);
+	if (ft_strncmp(line, "C ", 2) == 0)
+		return (1);
+	return (0);
 }
 
 /*
@@ -67,6 +96,8 @@ int			get_texture(char *line, t_info *info)
 	int		textureid;
 
 	i = 0;
+	if (chktex(line) != 1)
+		return (ERROR);
 	textureid = textures(line[0]);
 	while (line[i] != '/')
 		i++;
@@ -80,6 +111,25 @@ int			get_texture(char *line, t_info *info)
 		return (ERROR);
 	info->texs[textureid] = texpath;
 	return (1);
+}
+
+/*
+** Check to see if the floor and ceiling have been given as a color, or as a
+** texture.
+*/
+
+int			get_floor_ceiling(char *line, t_info *info)
+{
+	if (ft_strchr(line, '.'))
+	{
+		if (line[0] == 'F')
+			info->floor = -1;
+		if (line[0] == 'C')
+			info->ceiling = -1;
+		return (get_texture(line, info));
+	}
+	else
+		return (get_color(line, info));
 }
 
 /*

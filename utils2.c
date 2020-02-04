@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:47:31 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 16:27:40 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 19:33:12 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void			init_sprites(t_info *info)
 	}
 }
 
-void		bump(double *x, double *y, char **map)
+void			bump(double *x, double *y, char **map)
 {
 	if (ceil(*y) == *y)
 	{

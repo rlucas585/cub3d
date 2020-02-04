@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 15:57:35 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 19:37:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,7 @@ void		sprite_setup1(t_cub cub, t_sray *sray)
 				(pos.y - spos.y) * (pos.y - spos.y));
 		i++;
 	}
-	/* printf("Before: "); */
-	/* print_sprites(cub.info.spritenum, sray->sprite_order, sray->sprite_dist); */
 	sortsprites(cub.info.spritenum, &sray->sprite_order, &sray->sprite_dist);
-	/* printf("After: "); */
-	/* print_sprites(cub.info.spritenum, sray->sprite_order, sray->sprite_dist); */
 }
 
 void		sprite_setup2(t_info info, t_sray *sray, int i, t_2d plane)
@@ -142,7 +138,7 @@ void		sprite_setup2(t_info info, t_sray *sray, int i, t_2d plane)
 		sray->draw_end.x = info.res.x - 1;
 }
 
-void		sprite_cast(t_cub *cub, double *ZBuffer, t_sray *sray)
+void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 {
 	int			stripe;
 	int			y;
@@ -155,7 +151,7 @@ void		sprite_cast(t_cub *cub, double *ZBuffer, t_sray *sray)
 						sray->sscreenx)) * TEXWIDTH / sray->sprt.width) / 256;
 		y = sray->draw_start.y;
 		if (sray->transform.y > 0 && stripe > 0 && stripe < cub->info.res.x &&
-				sray->transform.y < ZBuffer[stripe])
+				sray->transform.y < z_buffer[stripe])
 		{
 			while (y < sray->draw_end.y)
 			{
@@ -164,13 +160,7 @@ void		sprite_cast(t_cub *cub, double *ZBuffer, t_sray *sray)
 				sray->color = cub->info.texstrs[SPRITE][TEXWIDTH * sray->tx.y +
 				sray->tx.x];
 				if ((sray->color & 0x00FFFFFF) != 0)
-				{
-					/* if (y > 500) */
-					/* 	printf("before img_put_pixel\n"); */
 					img_put_pixel(*cub, stripe, y, sray->color);
-					/* if (y > 500) */
-					/* 	printf("after img_put_pixel\n"); */
-				}
 				y++;
 			}
 		}
@@ -178,19 +168,17 @@ void		sprite_cast(t_cub *cub, double *ZBuffer, t_sray *sray)
 	}
 }
 
-void		draw_sprites(t_cub *cub, double *ZBuffer, t_2d plane)
+void		draw_sprites(t_cub *cub, double *z_buffer, t_2d plane)
 {
 	t_sray		sray;
 	int			i;
 
 	i = 0;
 	sprite_setup1(*cub, &sray);
-	/* printf("After: "); */
-	/* print_sprites(cub->info.spritenum, sray.sprite_order, sray.sprite_dist); */
 	while (i < cub->info.spritenum)
 	{
 		sprite_setup2(cub->info, &sray, i, plane);
-		sprite_cast(cub, ZBuffer, &sray);
+		sprite_cast(cub, z_buffer, &sray);
 		i++;
 	}
 	free(sray.sprite_order);

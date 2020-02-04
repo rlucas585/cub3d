@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 13:15:38 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 16:48:03 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void		delete_map(char **map)
 	free(map);
 }
 
-void		delete_tex(char *textures[5])
+void		delete_tex(char *textures[7])
 {
 	int		i;
 
 	i = 0;
-	while (i < 5)
+	while (i < 7)
 	{
 		if (textures[i])
 			free(textures[i]);
@@ -43,12 +43,12 @@ void		delete_tex(char *textures[5])
 	}
 }
 
-void		delete_imgs(void *imgs[5])
+void		delete_imgs(void *imgs[7])
 {
 	int		i;
 
 	i = 0;
-	while (i < 5)
+	while (i < 7)
 	{
 		if (imgs[i])
 			free(imgs[i]);

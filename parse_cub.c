@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 19:16:43 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 20:34:33 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ t_parsef	route_parsing(char c)
 		['W'] = &get_texture,
 		['E'] = &get_texture,
 		['S'] = &get_texture,
-		['F'] = &get_color,
-		['C'] = &get_color,
+		['F'] = &get_floor_ceiling,
+		['C'] = &get_floor_ceiling,
 		['1'] = &get_color,
 	};
 
@@ -110,11 +110,16 @@ t_info		cub_parser(int fd)
 	t_info		mapinfo;
 
 	linenum = 1;
+	mapinfo.floor = 0;
+	mapinfo.ceiling = 0;
 	exitno = get_next_line(fd, &line);
+	if (exitno <= 0)
+		exit (ft_error(BAD_FILETYPE, 0));
 	while (exitno > 0)
 	{
 		if (!line)
 			break ;
+		/* This is wrong somehow, I'm leaking something */
 		if (!parse_line(fd, line, &mapinfo, linenum))
 			free(line);
 		line = NULL;

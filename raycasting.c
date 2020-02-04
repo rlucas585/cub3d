@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 12:20:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 19:31:09 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,12 @@ static void		draw_setup(t_info info, t_ray *ray)
 void			ray(t_cub *cub)
 {
 	t_ray		ray;
-	double		*ZBuffer;
+	double		*z_buffer;
 	int			x;
 
-	ZBuffer = (double *)malloc(sizeof(double) * cub->info.res.x);
-	// Should protect this malloc as well and free before the end of ray();
+	z_buffer = (double *)malloc(sizeof(double) * cub->info.res.x);
+	if (!z_buffer)
+		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
 	x = 0;
 	ray.plane.x = 0.66 * cos(to_radians(cub->info.dir));
 	ray.plane.y = 0.66 * sin(to_radians(cub->info.dir));
@@ -123,10 +124,10 @@ void			ray(t_cub *cub)
 		draw_setup(cub->info, &ray);
 		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
-		ZBuffer[x] = ray.pdist;
+		z_buffer[x] = ray.pdist;
 		x++;
 	}
-	draw_sprites(cub, ZBuffer, ray.plane);
-	free(ZBuffer);
-	ft_bzero(ZBuffer, (size_t)cub->info.res.x);
+	draw_sprites(cub, z_buffer, ray.plane);
+	free(z_buffer);
+	ft_bzero(z_buffer, (size_t)cub->info.res.x);
 }

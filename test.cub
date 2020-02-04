@@ -1,0 +1,19 @@
+WE ./textures/mossy.png
+EA ./textures/redbrick.png
+
+S ./textures/taylor3.png
+
+C 0,0,0
+C 255,255,255
+F 0,0,0
+
+R 1000 1000
+
+NO ./textures/wall1.png
+SO ./textures/bluestone.png
+
+
+
+11111111
+120000W1
+11111111

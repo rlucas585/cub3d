@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:29:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 13:16:31 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 16:47:51 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void			init_tex(t_cub *cub)
 	int			i;
 
 	i = 0;
-	while (i < 5)
+	while (i < 7)
 	{
 		cub->info.texstrs[i] = NULL;
 		cub->info.imgs[i] = NULL;
@@ -53,4 +53,8 @@ void			init_tex(t_cub *cub)
 	one_tex(cub, SOUTH, &cub->info.imgs[SOUTH]);
 	one_tex(cub, WEST, &cub->info.imgs[WEST]);
 	one_tex(cub, SPRITE, &cub->info.imgs[SPRITE]);
+	if (cub->info.floor == -1)
+		one_tex(cub, FLOOR, &cub->info.imgs[FLOOR]);
+	if (cub->info.ceiling == -1)
+		one_tex(cub, CEILING, &cub->info.imgs[CEILING]);
 }

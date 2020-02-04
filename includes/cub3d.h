@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 12:13:49 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 19:31:42 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,16 @@ typedef struct		s_info
 {
 	char			**map;
 	t_2i			res;
-	char			*texs[5];
+	char			*texs[7];
 	int				floor;
 	int				ceiling;
 	int				spritenum;
 	t_2d			pos;
 	double			dir;
-	int				*texstrs[5];
-	void			*imgs[5];
+	int				*texstrs[7];
+	void			*imgs[7];
 	t_sprite		*sprts;
-	t_imginf		*texinf[5];
+	t_imginf		*texinf[7];
 }					t_info;
 
 typedef struct		s_display
@@ -154,7 +154,9 @@ typedef enum		e_textures
 	EAST = 1,
 	SOUTH = 2,
 	WEST = 3,
-	SPRITE = 4
+	SPRITE = 4,
+	FLOOR = 5,
+	CEILING = 6
 }					t_textures;
 
 typedef enum		e_errors
@@ -226,6 +228,7 @@ void				find_player(t_info *info);
 
 int					get_resolution(char *line, t_info *info);
 int					get_texture(char *line, t_info *info);
+int					get_floor_ceiling(char *line, t_info *info);
 int					get_color(char *line, t_info *info);
 
 /*
@@ -297,7 +300,7 @@ void				floorcast(t_cub *cub, t_ray *ray, int x);
 ** Casting sprites, int sprite_cast.c
 */
 
-void				draw_sprites(t_cub *cub, double *ZBuffer, t_2d plane);
+void				draw_sprites(t_cub *cub, double *z_buffer, t_2d plane);
 
 /*
 ** Function to establish connection with Xserver, initialize a window and
