@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/03 10:26:48 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/04 12:06:00 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ all: $(NAME)
 
 $(NAME): makeobjects
 	@echo  "Compiling Program..."
-	@gcc -O3 $(FLAGS) -o $(NAME) $(INCLUDES) \
+	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft $(OBJ)
 
 makelibraries:

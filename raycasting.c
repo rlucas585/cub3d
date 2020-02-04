@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 16:25:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 12:20:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,4 +128,5 @@ void			ray(t_cub *cub)
 	}
 	draw_sprites(cub, ZBuffer, ray.plane);
 	free(ZBuffer);
+	ft_bzero(ZBuffer, (size_t)cub->info.res.x);
 }

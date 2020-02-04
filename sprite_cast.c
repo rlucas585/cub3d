@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 16:46:11 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 12:34:36 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,32 @@ void		double_swap(double *a, double *b)
 	*b = temp;
 }
 
+void		print_sprites(int number, int *order, double *dist)
+{
+	int		i;
+
+	i = 0;
+	printf("Order: [");
+	while (i < number)
+	{
+		if (i == number - 1)
+			printf("%d]\n", order[i]);
+		else
+			printf("%d, ", order[i]);
+		i++;
+	}
+	i = 0;
+	printf("Distance: [");
+	while (i < number)
+	{
+		if (i == number - 1)
+			printf("%f]\n", dist[i]);
+		else
+			printf("%f, ", dist[i]);
+		i++;
+	}
+}
+
 void		sortsprites(int number, int **order, double **dist)
 {
 	int		x;
@@ -40,15 +66,14 @@ void		sortsprites(int number, int **order, double **dist)
 
 	x = 0;
 	y = 0;
-	(void)order;
 	while (x < number)
 	{
-		while (y < number - x - 2)
+		while (y < number - x - 1)
 		{
-			if (*dist[y] > *dist[y + 1])
+			if ((*dist)[y] < (*dist)[y + 1])
 			{
-				int_swap(order[y], order[y + 1]);
-				double_swap(dist[y], dist[y + 1]);
+				int_swap(&(*order)[y], &(*order)[y + 1]);
+				double_swap(&(*dist)[y], &(*dist)[y + 1]);
 			}
 			y++;
 		}
@@ -82,23 +107,9 @@ void		sprite_setup1(t_cub cub, t_sray *sray)
 				(pos.y - spos.y) * (pos.y - spos.y));
 		i++;
 	}
-	/* printf("sprite order: ["); */
-	/* for (int j = 0; j < cub.info.spritenum; j++) */
-	/* 	printf("%d, ", sray->sprite_order[j]); */
-	/* printf("]\n"); */
-	/* printf("sprite distances: ["); */
-	/* for (int j = 0; j < cub.info.spritenum; j++) */
-	/* 	printf("%f, ", sray->sprite_dist[j]); */
-	/* printf("]\n"); */
+	/* printf("Before: "); */
+	/* print_sprites(cub.info.spritenum, sray->sprite_order, sray->sprite_dist); */
 	sortsprites(cub.info.spritenum, &sray->sprite_order, &sray->sprite_dist);
-	/* printf("sprite order: ["); */
-	/* for (int j = 0; j < cub.info.spritenum; j++) */
-	/* 	printf("%d, ", sray->sprite_order[j]); */
-	/* printf("]\n"); */
-	/* printf("sprite distances: ["); */
-	/* for (int j = 0; j < cub.info.spritenum; j++) */
-	/* 	printf("%f, ", sray->sprite_dist[j]); */
-	/* printf("]\n"); */
 }
 
 void		sprite_setup2(t_info info, t_sray *sray, int i, t_2d plane)
@@ -148,11 +159,11 @@ void		sprite_cast(t_cub *cub, double *ZBuffer, t_sray *sray)
 			{
 				d = (y) * 256 - cub->info.res.y * 128 + sray->sprt.height * 128;
 				sray->tx.y = ((d * TEXHEIGHT) / sray->sprt.height) / 256;
-				y++;
 				sray->color = cub->info.texstrs[SPRITE][TEXWIDTH * sray->tx.y +
 				sray->tx.x];
 				if ((sray->color & 0x00FFFFFF) != 0)
-					img_put_pixel(cub->xsrv, stripe, y, sray->color);
+					img_put_pixel(*cub, stripe, y, sray->color);
+				y++;
 			}
 		}
 		stripe++;
@@ -166,6 +177,8 @@ void		draw_sprites(t_cub *cub, double *ZBuffer, t_2d plane)
 
 	i = 0;
 	sprite_setup1(*cub, &sray);
+	/* printf("After: "); */
+	/* print_sprites(cub->info.spritenum, sray.sprite_order, sray.sprite_dist); */
 	while (i < cub->info.spritenum)
 	{
 		sprite_setup2(cub->info, &sray, i, plane);

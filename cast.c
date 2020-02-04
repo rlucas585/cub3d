@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:15:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 21:01:34 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 12:14:55 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		wallcast(t_cub *cub, t_ray *ray, int x)
 		ray->tx.y = (int)ray->tex_pos;
 		ray->tex_pos += ray->txstep;
 		color = cub->info.texstrs[ray->side][ray->tx.x + TEXHEIGHT * ray->tx.y];
-		img_put_pixel(cub->xsrv, x, y, color);
+		img_put_pixel(*cub, x, y, color);
 		y++;
 	}
 }
@@ -74,9 +74,9 @@ void		floorcast(t_cub *cub, t_ray *ray, int x)
 		fc.tx.x = (int)(fc.pos.x * TEXWIDTH) % TEXWIDTH;
 		fc.tx.y = (int)(fc.pos.y * TEXHEIGHT) % TEXHEIGHT;
 		color = cub->info.texstrs[SPRITE][TEXWIDTH * fc.tx.y + fc.tx.x];
-		img_put_pixel(cub->xsrv, x, y, color);
+		img_put_pixel(*cub, x, y, color);
 		color = cub->info.texstrs[SPRITE][TEXWIDTH * fc.tx.y + fc.tx.x];
-		img_put_pixel(cub->xsrv, x, cub->info.res.y - y, color);
+		img_put_pixel(*cub, x, cub->info.res.y - y, color);
 		y++;
 	}
 }

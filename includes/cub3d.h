@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 13:14:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/04 12:13:49 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define CUB3D_H
 
 # define VALID_MAP_CHARS "012NESW "
-# define FORWARDSPEED 0.3
-# define BACKWARDSPEED 0.25
-# define STRAFESPEED 0.2
+# define FORWARDSPEED 0.15
+# define BACKWARDSPEED 0.125
+# define STRAFESPEED 0.1
 # define TURNANGLE 5
 # define TEXWIDTH 64
 # define TEXHEIGHT 64
@@ -276,8 +276,7 @@ int					delete_all(int err, t_cub cub);
 ** Functions to draw with. In draw_images.c
 */
 
-void				img_put_pixel(t_display xsrv, int x, int y,
-		unsigned int color);
+void				img_put_pixel(t_cub cub, int x, int y, unsigned int color);
 
 /*
 ** Orchestrator of the raycasting algorithm, and functions to create images,
