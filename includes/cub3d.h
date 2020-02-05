@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 15:17:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 18:48:37 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,25 @@
 # define TURNANGLE 5
 
 # include <stdlib.h>
+
+typedef struct		s_bmp
+{
+	char			filetype[2];
+	char			filesize[4];
+	char			reserved[4];
+	char			pixeldataoffset[4];
+	char			headersize[4];
+	char			imagewidth[4];
+	char			imageheight[4];
+	char			planes[2];
+	char			bpp[2];
+	char			compression[4];
+	char			imagesize[4];
+	char			xpixelspermeter[4];
+	char			ypixelspermeter[4];
+	char			totalcolors[4];
+	char			importantcolors[4];
+}					t_bmp;
 
 typedef struct		s_rgb
 {
@@ -98,7 +117,6 @@ typedef struct		s_info
 	t_sprite		*sprts;
 	t_imginf		*texinf[7];
 	double			*z_buffer;
-	int				save;
 }					t_info;
 
 typedef struct		s_display
@@ -125,6 +143,7 @@ typedef struct		s_cub
 	t_display		xsrv;
 	t_info			info;
 	t_keys			key;
+	int				save;
 }					t_cub;
 
 typedef struct		s_floor
@@ -190,6 +209,7 @@ typedef enum		e_errors
 	MISSING_TEX = 14,
 	MISSING_PARAM = 15,
 	DUP_PARAM = 16,
+	BMP_FAIL = 17,
 	INVALID_ARGUMENT = 22,
 	BAD_FILETYPE = 79,
 	CONNECTION_FAIL = 111

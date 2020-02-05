@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 15:20:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 18:49:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void		init_info(t_info *info)
 	info->res.y = 0;
 	info->f_or_c.x = 0;
 	info->f_or_c.y = 0;
-	info->save = 0;
 }
 
 int			main(int argc, char **argv)

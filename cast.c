@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:15:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 13:54:02 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 18:39:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void		floorcast_setup(t_info info, t_ray *ray, t_2d *wall_pos)
 
 void		tex_c_and_f(t_cub *cub, t_ray *ray, int x)
 {
-	int			y;
-	int			color;
-	t_floor		fc;
+	int				y;
+	unsigned int	color;
+	t_floor			fc;
 
 	y = ray->draw_end + 1;
 	floorcast_setup(cub->info, ray, &fc.wall);
@@ -89,9 +89,9 @@ void		tex_c_and_f(t_cub *cub, t_ray *ray, int x)
 
 void		tex_c(t_cub *cub, t_ray *ray, int x)
 {
-	int			y;
-	int			color;
-	t_floor		fc;
+	int				y;
+	unsigned int	color;
+	t_floor			fc;
 
 	y = ray->draw_end + 1;
 	floorcast_setup(cub->info, ray, &fc.wall);
@@ -101,11 +101,11 @@ void		tex_c(t_cub *cub, t_ray *ray, int x)
 			ray->pdist;
 		fc.pos.x = fc.weight * fc.wall.x + (1.0 - fc.weight) * cub->info.pos.x;
 		fc.pos.y = fc.weight * fc.wall.y + (1.0 - fc.weight) * cub->info.pos.y;
-		fc.tx.x = (int)(fc.pos.x * cub->info.texinf[ray->side]->size.x) %
+		fc.tx.x = (int)(fc.pos.x * cub->info.texinf[CEILING]->size.x) %
 			cub->info.texinf[ray->side]->size.x;
-		fc.tx.y = (int)(fc.pos.y * cub->info.texinf[ray->side]->size.y) %
+		fc.tx.y = (int)(fc.pos.y * cub->info.texinf[CEILING]->size.y) %
 			cub->info.texinf[ray->side]->size.y;
-		color = cub->info.texstrs[CEILING][cub->info.texinf[ray->side]->size.x *
+		color = cub->info.texstrs[CEILING][cub->info.texinf[CEILING]->size.x *
 			fc.tx.y + fc.tx.x];
 		img_put_pixel(*cub, x, y, cub->info.floor.x);
 		img_put_pixel(*cub, x, cub->info.res.y - y, color);
@@ -115,9 +115,9 @@ void		tex_c(t_cub *cub, t_ray *ray, int x)
 
 void		tex_f(t_cub *cub, t_ray *ray, int x)
 {
-	int			y;
-	int			color;
-	t_floor		fc;
+	int				y;
+	unsigned int	color;
+	t_floor			fc;
 
 	y = ray->draw_end + 1;
 	floorcast_setup(cub->info, ray, &fc.wall);
@@ -127,11 +127,11 @@ void		tex_f(t_cub *cub, t_ray *ray, int x)
 			ray->pdist;
 		fc.pos.x = fc.weight * fc.wall.x + (1.0 - fc.weight) * cub->info.pos.x;
 		fc.pos.y = fc.weight * fc.wall.y + (1.0 - fc.weight) * cub->info.pos.y;
-		fc.tx.x = (int)(fc.pos.x * cub->info.texinf[ray->side]->size.x) %
+		fc.tx.x = (int)(fc.pos.x * cub->info.texinf[FLOOR]->size.x) %
 			cub->info.texinf[ray->side]->size.x;
-		fc.tx.y = (int)(fc.pos.y * cub->info.texinf[ray->side]->size.y) %
+		fc.tx.y = (int)(fc.pos.y * cub->info.texinf[FLOOR]->size.y) %
 			cub->info.texinf[ray->side]->size.y;
-		color = cub->info.texstrs[FLOOR][cub->info.texinf[ray->side]->size.x *
+		color = cub->info.texstrs[FLOOR][cub->info.texinf[FLOOR]->size.x *
 			fc.tx.y + fc.tx.x];
 		img_put_pixel(*cub, x, y, color);
 		img_put_pixel(*cub, x, cub->info.res.y - y, cub->info.ceiling.x);
@@ -154,13 +154,13 @@ void		no_tex(t_cub *cub, t_ray *ray, int x)
 
 void		floorcast(t_cub *cub, t_ray *ray, int x)
 {
-	if (cub->info.floor.rgb.a == 1 && cub->info.ceiling.rgb.a == 1)
+	if (cub->info.f_or_c.x == 2 && cub->info.f_or_c.y == 2)
 		tex_c_and_f(cub, ray, x);
-	else if (cub->info.floor.rgb.a == 1 || cub->info.ceiling.rgb.a == 1)
+	else if (cub->info.f_or_c.x == 2 || cub->info.f_or_c.y == 2)
 	{
-		if (cub->info.floor.rgb.a == 1)
+		if (cub->info.f_or_c.x == 2)
 			tex_f(cub, ray, x);
-		if (cub->info.ceiling.rgb.a == 1)
+		if (cub->info.f_or_c.y == 2)
 			tex_c(cub, ray, x);
 	}
 	else

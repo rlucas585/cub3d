@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:52:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 15:23:58 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 18:48:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int			open_file(int argc, char **argv, t_cub *cub)
 	if (argc == 3)
 	{
 		if (ft_strncmp(argv[2], "--save", 7) == 0)
-			cub->info.save = 1;
+			cub->save = 1;
 		else
 		{
 			ft_printf_fd(2, "Error\n'%s' is not a valid argument for cub3D\n",

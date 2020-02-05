@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 14:24:40 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 18:13:05 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int				all_params_present(t_info info)
 			return (0);
 		i++;
 	}
-	if (info.f_or_c.x != 1 || info.f_or_c.y != 1)
+	if (info.f_or_c.x == 0 || info.f_or_c.y == 0)
 		return (0);
 	return (1);
 }

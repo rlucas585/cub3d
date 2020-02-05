@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:48:37 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:50:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 17:54:49 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		turn_right(t_cub *cub)
 
 void		escape(t_cub *cub)
 {
-	delete_info(0, cub->info);
+	delete_all(0, *cub);
 	mlx_destroy_window(cub->xsrv.dpy, cub->xsrv.w);
 }
 

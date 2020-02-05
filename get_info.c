@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 14:29:59 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 18:05:10 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,9 @@ int			get_texture(char *line, t_info *info)
 
 int			get_floor_ceiling(char *line, t_info *info)
 {
-	if (line[0] == 'F' && info->f_or_c.x == 1)
+	if (line[0] == 'F' && info->f_or_c.x >= 1)
 		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
-	if (line[0] == 'C' && info->f_or_c.y == 1)
+	if (line[0] == 'C' && info->f_or_c.y >= 1)
 		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
 	if (line[0] == 'F')
 		info->f_or_c.x = 1;
@@ -136,9 +136,9 @@ int			get_floor_ceiling(char *line, t_info *info)
 	if (ft_strchr(line, '.'))
 	{
 		if (line[0] == 'F')
-			info->floor.rgb.a = 1;
+			info->f_or_c.x = 2;
 		if (line[0] == 'C')
-			info->floor.rgb.a = 1;
+			info->f_or_c.y = 2;
 		return (get_texture(line, info));
 	}
 	else
