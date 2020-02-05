@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:29:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 16:47:51 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 14:14:52 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,15 @@
 
 static void		one_tex(t_cub *cub, int side, void **img)
 {
-	int			x;
-	int			y;
-
-	x = TEXWIDTH;
-	y = TEXHEIGHT;
-	img[side] = mlx_png_file_to_image(cub->xsrv.dpy,
-			cub->info.texs[side], &x, &y);
-	if (!img[side])
-		exit(ft_error(delete_all(MISSING_TEX, *cub), 0));
 	cub->info.texinf[side] = (t_imginf *)malloc(sizeof(t_imginf));
 	if (!cub->info.texinf[side])
 		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
-	cub->info.texstrs[side] = (int *)mlx_get_data_addr(img[side],
+	*img = mlx_png_file_to_image(cub->xsrv.dpy,
+			cub->info.texs[side], &cub->info.texinf[side]->size.x,
+			&cub->info.texinf[side]->size.y);
+	if (!(*img))
+		exit(ft_error(delete_all(MISSING_TEX, *cub), 0));
+	cub->info.texstrs[side] = (unsigned int *)mlx_get_data_addr(*img,
 			&cub->info.texinf[side]->bpp,
 			&cub->info.texinf[side]->size_line,
 			&cub->info.texinf[side]->endian);
@@ -39,22 +35,13 @@ static void		one_tex(t_cub *cub, int side, void **img)
 
 void			init_tex(t_cub *cub)
 {
-	int			i;
-
-	i = 0;
-	while (i < 7)
-	{
-		cub->info.texstrs[i] = NULL;
-		cub->info.imgs[i] = NULL;
-		i++;
-	}
 	one_tex(cub, NORTH, &cub->info.imgs[NORTH]);
 	one_tex(cub, EAST, &cub->info.imgs[EAST]);
 	one_tex(cub, SOUTH, &cub->info.imgs[SOUTH]);
 	one_tex(cub, WEST, &cub->info.imgs[WEST]);
 	one_tex(cub, SPRITE, &cub->info.imgs[SPRITE]);
-	if (cub->info.floor == -1)
+	if (cub->info.floor.rgb.a == 1)
 		one_tex(cub, FLOOR, &cub->info.imgs[FLOOR]);
-	if (cub->info.ceiling == -1)
+	if (cub->info.ceiling.rgb.a == 1)
 		one_tex(cub, CEILING, &cub->info.imgs[CEILING]);
 }

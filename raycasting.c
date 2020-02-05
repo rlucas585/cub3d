@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 19:31:09 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 15:13:29 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,13 @@ static void		draw_setup(t_info info, t_ray *ray)
 	else
 		ray->wallx = info.pos.x + ray->pdist * ray->beam.x;
 	ray->wallx -= floor(ray->wallx);
-	ray->tx.x = (int)(ray->wallx * (double)TEXWIDTH);
+	ray->tx.x = (int)(ray->wallx * (double)info.texinf[ray->side]->size.x);
 	if ((ray->side == EAST || ray->side == WEST) && ray->beam.x > 0)
-		ray->tx.x = TEXWIDTH - ray->tx.x - 1;
+		ray->tx.x = info.texinf[ray->side]->size.x - ray->tx.x - 1;
 	if ((ray->side == NORTH || ray->side == SOUTH) && ray->beam.y < 0)
-		ray->tx.x = TEXWIDTH - ray->tx.x - 1;
-	ray->tx.x = TEXWIDTH / 2 - (ray->tx.x - TEXWIDTH / 2) - 1;
-	ray->txstep = 1.0 * TEXHEIGHT / ray->height;
+		ray->tx.x = info.texinf[ray->side]->size.x - ray->tx.x - 1;
+	ray->tx.x = info.texinf[ray->side]->size.x / 2 - (ray->tx.x - info.texinf[ray->side]->size.x / 2) - 1;
+	ray->txstep = 1.0 * info.texinf[ray->side]->size.y / ray->height;
 	ray->tex_pos = (ray->draw_start - info.res.y / 2 + ray->height / 2) *
 		ray->txstep;
 }
@@ -107,11 +107,11 @@ static void		draw_setup(t_info info, t_ray *ray)
 void			ray(t_cub *cub)
 {
 	t_ray		ray;
-	double		*z_buffer;
 	int			x;
 
-	z_buffer = (double *)malloc(sizeof(double) * cub->info.res.x);
-	if (!z_buffer)
+	if (!cub->info.z_buffer)
+		cub->info.z_buffer = (double *)malloc(sizeof(double) * cub->info.res.x);
+	if (!cub->info.z_buffer)
 		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
 	x = 0;
 	ray.plane.x = 0.66 * cos(to_radians(cub->info.dir));
@@ -124,10 +124,9 @@ void			ray(t_cub *cub)
 		draw_setup(cub->info, &ray);
 		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
-		z_buffer[x] = ray.pdist;
+		cub->info.z_buffer[x] = ray.pdist;
 		x++;
 	}
-	draw_sprites(cub, z_buffer, ray.plane);
-	free(z_buffer);
-	ft_bzero(z_buffer, (size_t)cub->info.res.x);
+	draw_sprites(cub, cub->info.z_buffer, ray.plane);
+	ft_bzero(cub->info.z_buffer, (size_t)cub->info.res.x);
 }

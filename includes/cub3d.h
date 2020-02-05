@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 19:31:42 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 15:17:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,26 @@
 # define CUB3D_H
 
 # define VALID_MAP_CHARS "012NESW "
-# define FORWARDSPEED 0.15
-# define BACKWARDSPEED 0.125
-# define STRAFESPEED 0.1
+# define FORWARDSPEED 0.3
+# define BACKWARDSPEED 0.25
+# define STRAFESPEED 0.2
 # define TURNANGLE 5
-# define TEXWIDTH 64
-# define TEXHEIGHT 64
 
 # include <stdlib.h>
+
+typedef struct		s_rgb
+{
+	unsigned char	b;
+	unsigned char	g;
+	unsigned char	r;
+	unsigned char	a;
+}					t_rgb;
+
+typedef union		u_color
+{
+	t_rgb			rgb;
+	unsigned int	x;
+}					t_color;
 
 typedef struct		s_2i
 {
@@ -59,7 +71,7 @@ typedef struct		s_sray
 	t_2i			draw_start;
 	t_2i			draw_end;
 	t_2i			tx;
-	int				color;
+	unsigned int	color;
 }					t_sray;
 
 typedef struct		s_imginf
@@ -67,6 +79,7 @@ typedef struct		s_imginf
 	int				bpp;
 	int				size_line;
 	int				endian;
+	t_2i			size;
 }					t_imginf;
 
 typedef struct		s_info
@@ -74,15 +87,18 @@ typedef struct		s_info
 	char			**map;
 	t_2i			res;
 	char			*texs[7];
-	int				floor;
-	int				ceiling;
+	t_2i			f_or_c;
+	t_color			floor;
+	t_color			ceiling;
 	int				spritenum;
 	t_2d			pos;
 	double			dir;
-	int				*texstrs[7];
+	unsigned int	*texstrs[7];
 	void			*imgs[7];
 	t_sprite		*sprts;
 	t_imginf		*texinf[7];
+	double			*z_buffer;
+	int				save;
 }					t_info;
 
 typedef struct		s_display
@@ -172,6 +188,8 @@ typedef enum		e_errors
 	MEM_FAIL = 12,
 	NO_PLAYER = 13,
 	MISSING_TEX = 14,
+	MISSING_PARAM = 15,
+	DUP_PARAM = 16,
 	INVALID_ARGUMENT = 22,
 	BAD_FILETYPE = 79,
 	CONNECTION_FAIL = 111
@@ -193,7 +211,7 @@ typedef enum		e_keydefs
 */
 
 int					check_file(const char *str);
-int					open_file(int argc, char **argv);
+int					open_file(int argc, char **argv, t_cub *cub);
 
 /*
 ** Color function, converts from 8-bit integers into a single 32-bit integer
@@ -214,7 +232,7 @@ int					ft_error(int err, int linenum);
 */
 
 int					validate_map(char *line, size_t width);
-void				validate_n_s_walls(t_info info);
+void				validate(t_info info);
 
 /*
 ** Function to find and create the player on the map. In find_player.c.

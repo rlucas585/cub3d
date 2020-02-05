@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 19:37:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 12:52:46 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,8 @@ void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 	while (stripe < sray->draw_end.x)
 	{
 		sray->tx.x = (int)(256 * (stripe - (-sray->sprt.width / 2 +
-						sray->sscreenx)) * TEXWIDTH / sray->sprt.width) / 256;
+						sray->sscreenx)) * cub->info.texinf[SPRITE]->size.x /
+				sray->sprt.width) / 256;
 		y = sray->draw_start.y;
 		if (sray->transform.y > 0 && stripe > 0 && stripe < cub->info.res.x &&
 				sray->transform.y < z_buffer[stripe])
@@ -156,9 +157,10 @@ void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 			while (y < sray->draw_end.y)
 			{
 				d = (y) * 256 - cub->info.res.y * 128 + sray->sprt.height * 128;
-				sray->tx.y = ((d * TEXHEIGHT) / sray->sprt.height) / 256;
-				sray->color = cub->info.texstrs[SPRITE][TEXWIDTH * sray->tx.y +
-				sray->tx.x];
+				sray->tx.y = ((d * cub->info.texinf[SPRITE]->size.y) /
+						sray->sprt.height) / 256;
+				sray->color = cub->info.texstrs[SPRITE][cub->info.texinf[SPRITE]
+					->size.x * sray->tx.y + sray->tx.x];
 				if ((sray->color & 0x00FFFFFF) != 0)
 					img_put_pixel(*cub, stripe, y, sray->color);
 				y++;

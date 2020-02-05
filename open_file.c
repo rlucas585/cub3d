@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:52:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 19:19:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 15:23:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int			check_file(const char *str)
 ** Open the file after checking for errors in the supply of arguments.
 */
 
-int			open_file(int argc, char **argv)
+int			open_file(int argc, char **argv, t_cub *cub)
 {
 	int			fd;
 
@@ -48,6 +48,17 @@ int			open_file(int argc, char **argv)
 		exit(ft_error(INVALID_ARGUMENT, 0));
 	if (check_file(argv[1]) == BAD_FILETYPE)
 		exit(ft_error(BAD_FILETYPE, 0));
+	if (argc == 3)
+	{
+		if (ft_strncmp(argv[2], "--save", 7) == 0)
+			cub->info.save = 1;
+		else
+		{
+			ft_printf_fd(2, "Error\n'%s' is not a valid argument for cub3D\n",
+					argv[2]);
+			exit(0);
+		}
+	}
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		exit(ft_error(INVALID_FILE, 0));

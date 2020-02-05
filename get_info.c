@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 19:28:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 14:29:59 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <cub3d.h>
 #include <mlx.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 /*
 ** Get resolution from .cub file and place in 2-length integer array for x and y
@@ -91,14 +92,18 @@ int			chktex(char *line)
 
 int			get_texture(char *line, t_info *info)
 {
-	char	*texpath;
-	int		i;
-	int		textureid;
+	char		*texpath;
+	int			i;
+	int			textureid;
+	static int	array[7];
 
 	i = 0;
 	if (chktex(line) != 1)
 		return (ERROR);
 	textureid = textures(line[0]);
+	if (array[textureid] == 1)
+		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
+	array[textureid] = 1;
 	while (line[i] != '/')
 		i++;
 	if (line[i] == 0)
@@ -120,12 +125,20 @@ int			get_texture(char *line, t_info *info)
 
 int			get_floor_ceiling(char *line, t_info *info)
 {
+	if (line[0] == 'F' && info->f_or_c.x == 1)
+		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
+	if (line[0] == 'C' && info->f_or_c.y == 1)
+		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
+	if (line[0] == 'F')
+		info->f_or_c.x = 1;
+	if (line[0] == 'C')
+		info->f_or_c.y = 1;
 	if (ft_strchr(line, '.'))
 	{
 		if (line[0] == 'F')
-			info->floor = -1;
+			info->floor.rgb.a = 1;
 		if (line[0] == 'C')
-			info->ceiling = -1;
+			info->floor.rgb.a = 1;
 		return (get_texture(line, info));
 	}
 	else
@@ -137,14 +150,38 @@ int			get_floor_ceiling(char *line, t_info *info)
 ** integers with correct format for mlx_pixel_put().
 */
 
+int			validate_color(char *line)
+{
+	char		*last;
+	size_t		i;
+
+	i = 0;
+	last = ft_strrchr(line, ',') + 1;
+	if (ft_atoi(line + 1) > 255 || ft_atoi(line + 1) < 0)
+		return (0);
+	if (ft_atoi(ft_strchr(line, ',') + 1) > 255 ||
+			ft_atoi(ft_strchr(line, ',') + 1) < 0)
+		return (0);
+	if (ft_atoi(ft_strrchr(line, ',') + 1) > 255 ||
+			ft_atoi(ft_strrchr(line, ',') + 1) < 0)
+		return (0);
+	while (last[i] >= '0' && last[i] <= '9')
+		i++;
+	if (last[i] != '\0')
+		return (0);
+	return (1);
+}
+
 int			get_color(char *line, t_info *info)
 {
-	int		red;
-	int		green;
-	int		blue;
 	int		i;
+	t_color	*f_or_c;
 
 	i = 1;
+	if (line[0] == 'F')
+		f_or_c = &info->floor;
+	else
+		f_or_c = &info->ceiling;
 	if (line[1] == 0)
 		return (ERROR);
 	if (ft_strchr(line, ',') == ft_strrchr(line, ',') ||
@@ -156,12 +193,10 @@ int			get_color(char *line, t_info *info)
 			return (ERROR);
 		i++;
 	}
-	red = ft_atoi(line + 1);
-	green = ft_atoi(ft_strchr(line, ',') + 1);
-	blue = ft_atoi(ft_strrchr(line, ',') + 1);
-	if (line[0] == 'F')
-		info->floor = rgb(red, green, blue);
-	else
-		info->ceiling = rgb(red, green, blue);
+	if (!validate_color(line))
+		return (ERROR);
+	(*f_or_c).rgb.r = (unsigned char)ft_atoi(line + 1);
+	(*f_or_c).rgb.g = (unsigned char)ft_atoi(ft_strchr(line, ',') + 1);
+	(*f_or_c).rgb.b = (unsigned char)ft_atoi(ft_strrchr(line, ',') + 1);
 	return (1);
 }

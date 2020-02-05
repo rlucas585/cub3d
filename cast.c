@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:15:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 19:26:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 13:54:02 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,16 @@
 
 void		wallcast(t_cub *cub, t_ray *ray, int x)
 {
-	int		y;
-	int		color;
+	int				y;
+	unsigned int	color;
 
 	y = ray->draw_start;
 	while (y < ray->draw_end)
 	{
 		ray->tx.y = (int)ray->tex_pos;
 		ray->tex_pos += ray->txstep;
-		color = cub->info.texstrs[ray->side][ray->tx.x + TEXHEIGHT * ray->tx.y];
+		color = cub->info.texstrs[ray->side][ray->tx.x +
+			cub->info.texinf[ray->side]->size.y * ray->tx.y];
 		img_put_pixel(*cub, x, y, color);
 		y++;
 	}
@@ -72,11 +73,15 @@ void		tex_c_and_f(t_cub *cub, t_ray *ray, int x)
 			ray->pdist;
 		fc.pos.x = fc.weight * fc.wall.x + (1.0 - fc.weight) * cub->info.pos.x;
 		fc.pos.y = fc.weight * fc.wall.y + (1.0 - fc.weight) * cub->info.pos.y;
-		fc.tx.x = (int)(fc.pos.x * TEXWIDTH) % TEXWIDTH;
-		fc.tx.y = (int)(fc.pos.y * TEXHEIGHT) % TEXHEIGHT;
-		color = cub->info.texstrs[FLOOR][TEXWIDTH * fc.tx.y + fc.tx.x];
+		fc.tx.x = (int)(fc.pos.x * cub->info.texinf[ray->side]->size.x) %
+			cub->info.texinf[ray->side]->size.x;
+		fc.tx.y = (int)(fc.pos.y * cub->info.texinf[ray->side]->size.y) %
+			cub->info.texinf[ray->side]->size.y;
+		color = cub->info.texstrs[FLOOR][cub->info.texinf[ray->side]->size.x *
+			fc.tx.y + fc.tx.x];
 		img_put_pixel(*cub, x, y, color);
-		color = cub->info.texstrs[CEILING][TEXWIDTH * fc.tx.y + fc.tx.x];
+		color = cub->info.texstrs[CEILING][cub->info.texinf[ray->side]->size.x *
+			fc.tx.y + fc.tx.x];
 		img_put_pixel(*cub, x, cub->info.res.y - y, color);
 		y++;
 	}
@@ -96,10 +101,13 @@ void		tex_c(t_cub *cub, t_ray *ray, int x)
 			ray->pdist;
 		fc.pos.x = fc.weight * fc.wall.x + (1.0 - fc.weight) * cub->info.pos.x;
 		fc.pos.y = fc.weight * fc.wall.y + (1.0 - fc.weight) * cub->info.pos.y;
-		fc.tx.x = (int)(fc.pos.x * TEXWIDTH) % TEXWIDTH;
-		fc.tx.y = (int)(fc.pos.y * TEXHEIGHT) % TEXHEIGHT;
-		color = cub->info.texstrs[CEILING][TEXWIDTH * fc.tx.y + fc.tx.x];
-		img_put_pixel(*cub, x, y, cub->info.floor);
+		fc.tx.x = (int)(fc.pos.x * cub->info.texinf[ray->side]->size.x) %
+			cub->info.texinf[ray->side]->size.x;
+		fc.tx.y = (int)(fc.pos.y * cub->info.texinf[ray->side]->size.y) %
+			cub->info.texinf[ray->side]->size.y;
+		color = cub->info.texstrs[CEILING][cub->info.texinf[ray->side]->size.x *
+			fc.tx.y + fc.tx.x];
+		img_put_pixel(*cub, x, y, cub->info.floor.x);
 		img_put_pixel(*cub, x, cub->info.res.y - y, color);
 		y++;
 	}
@@ -119,11 +127,14 @@ void		tex_f(t_cub *cub, t_ray *ray, int x)
 			ray->pdist;
 		fc.pos.x = fc.weight * fc.wall.x + (1.0 - fc.weight) * cub->info.pos.x;
 		fc.pos.y = fc.weight * fc.wall.y + (1.0 - fc.weight) * cub->info.pos.y;
-		fc.tx.x = (int)(fc.pos.x * TEXWIDTH) % TEXWIDTH;
-		fc.tx.y = (int)(fc.pos.y * TEXHEIGHT) % TEXHEIGHT;
-		color = cub->info.texstrs[FLOOR][TEXWIDTH * fc.tx.y + fc.tx.x];
+		fc.tx.x = (int)(fc.pos.x * cub->info.texinf[ray->side]->size.x) %
+			cub->info.texinf[ray->side]->size.x;
+		fc.tx.y = (int)(fc.pos.y * cub->info.texinf[ray->side]->size.y) %
+			cub->info.texinf[ray->side]->size.y;
+		color = cub->info.texstrs[FLOOR][cub->info.texinf[ray->side]->size.x *
+			fc.tx.y + fc.tx.x];
 		img_put_pixel(*cub, x, y, color);
-		img_put_pixel(*cub, x, cub->info.res.y - y, cub->info.ceiling);
+		img_put_pixel(*cub, x, cub->info.res.y - y, cub->info.ceiling.x);
 		y++;
 	}
 }
@@ -135,21 +146,21 @@ void		no_tex(t_cub *cub, t_ray *ray, int x)
 	y = ray->draw_end + 1;
 	while (y < cub->info.res.y)
 	{
-		img_put_pixel(*cub, x, y, cub->info.floor);
-		img_put_pixel(*cub, x, cub->info.res.y - y, cub->info.ceiling);
+		img_put_pixel(*cub, x, y, cub->info.floor.x);
+		img_put_pixel(*cub, x, cub->info.res.y - y, cub->info.ceiling.x);
 		y++;
 	}
 }
 
 void		floorcast(t_cub *cub, t_ray *ray, int x)
 {
-	if (cub->info.floor == -1 && cub->info.ceiling == -1)
+	if (cub->info.floor.rgb.a == 1 && cub->info.ceiling.rgb.a == 1)
 		tex_c_and_f(cub, ray, x);
-	else if (cub->info.floor == -1 || cub->info.ceiling == -1)
+	else if (cub->info.floor.rgb.a == 1 || cub->info.ceiling.rgb.a == 1)
 	{
-		if (cub->info.floor == -1)
+		if (cub->info.floor.rgb.a == 1)
 			tex_f(cub, ray, x);
-		if (cub->info.ceiling == -1)
+		if (cub->info.ceiling.rgb.a == 1)
 			tex_c(cub, ray, x);
 	}
 	else

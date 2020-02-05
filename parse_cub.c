@@ -6,12 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 20:34:33 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 13:54:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
+#include <stdio.h>
 
 /*
 ** Jumptable to select the correct function based on what info is being
@@ -110,8 +111,6 @@ t_info		cub_parser(int fd)
 	t_info		mapinfo;
 
 	linenum = 1;
-	mapinfo.floor = 0;
-	mapinfo.ceiling = 0;
 	exitno = get_next_line(fd, &line);
 	if (exitno <= 0)
 		exit (ft_error(BAD_FILETYPE, 0));

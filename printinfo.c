@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:22:29 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 19:19:19 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 13:40:56 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void		print_mapinfo(t_info info)
 		printf("textures: %d = %s\n", y, info.texs[y]);
 		y++;
 	}
-	if (info.floor == -1)
+	if (info.floor.rgb.a == 1)
 		printf("textures: 5 = %s\n", info.texs[5]);
-	if (info.ceiling == -1)
+	if (info.ceiling.rgb.a == 1)
 		printf("textures: 6 = %s\n", info.texs[6]);
-	printf("Floor = %d\n", info.floor);
-	printf("Ceiling = %d\n", info.ceiling);
+	printf("Floor = %u\n", info.floor.x);
+	printf("Ceiling = %u\n", info.ceiling.x);
 	y = 0;
 	while (info.map[y])
 	{

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/04 16:48:03 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 15:34:15 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void		delete_tex(char *textures[7])
 	i = 0;
 	while (i < 7)
 	{
-		if (textures[i])
-			free(textures[i]);
+		free(textures[i]);
 		i++;
 	}
 }
@@ -50,8 +49,7 @@ void		delete_imgs(void *imgs[7])
 	i = 0;
 	while (i < 7)
 	{
-		if (imgs[i])
-			free(imgs[i]);
+		free(imgs[i]);
 		i++;
 	}
 }
@@ -72,12 +70,13 @@ int			delete_all(int err, t_cub cub)
 	delete_tex(cub.info.texs);
 	if (cub.xsrv.imginf)
 		free(cub.xsrv.imginf);
-	while (i < 5)
+	while (i < 7)
 	{
-		if (cub.info.texinf[i])
-			free(cub.info.texinf);
+		free(cub.info.texinf[i]);
 		i++;
 	}
 	delete_imgs(cub.info.imgs);
+	if (cub.info.z_buffer)
+		free(cub.info.z_buffer);
 	return (err);
 }

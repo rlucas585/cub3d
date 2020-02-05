@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:21:22 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 14:24:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,30 @@ int				validate_map(char *line, size_t width)
 	return (1);
 }
 
-void			validate_n_s_walls(t_info info)
+int				all_params_present(t_info info)
 {
+	int		i;
+
+	i = 0;
+	if (info.map == NULL)
+		return (0);
+	if (info.res.x == 0 || info.res.y == 0)
+		return (0);
+	while (i < 5)
+	{
+		if (info.texs[i] == NULL)
+			return (0);
+		i++;
+	}
+	if (info.f_or_c.x != 1 || info.f_or_c.y != 1)
+		return (0);
+	return (1);
+}
+
+void			validate(t_info info)
+{
+	if (!all_params_present(info))
+		exit(ft_error(delete_info(MISSING_PARAM, info), 0));
 	if (ft_arrlen(info.map) < 3)
 		exit(ft_error(delete_info(TOO_SHORT, info), 0));
 	if (ft_strlen(info.map[0]) < 3)

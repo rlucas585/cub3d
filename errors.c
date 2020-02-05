@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:49:52 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/27 17:07:28 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/05 14:30:37 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int			ft_error(int err, int linenum)
 		[BAD_FILETYPE] = "Inappropriate file type or format\n",
 		[CONNECTION_FAIL] = "Connection failed\n",
 		[MISSING_TEX] = "One or more textures not found\n",
+		[MISSING_PARAM] = "One or more params is not present in .cub file\n",
+		[DUP_PARAM] = "A parameter has been supplied more than once\n"
 	};
 
 	ft_putstr_fd("Error\n", 2);

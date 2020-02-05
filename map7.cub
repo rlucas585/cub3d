@@ -1,0 +1,26 @@
+R 1920 1080
+
+NO ./textures/wall1.png
+SO ./textures/bluestone.png
+
+WE ./textures/mossy.png
+EA ./textures/redbrick.png
+
+S ./textures/taylor3.png
+
+
+C 101,216,1
+C 101,216,1
+C 101,216,1
+C 101,216,1
+C 101,216,1
+F 178,178,178
+F 178,178,178
+F 178,178,178
+F 178,178,178
+
+1111111111111111
+1000000000000001
+10000020000W0001
+1000000000000001
+1111111111111111
