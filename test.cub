@@ -3,7 +3,6 @@ EA ./textures/redbrick.png
 
 S ./textures/taylor3.png
 
-C 0,0,0
 C 255,255,255
 F 0,0,0
 
@@ -14,6 +13,6 @@ SO ./textures/bluestone.png
 
 
 
-11111111
-120000W1
-11111111
+111
+1W1
+111

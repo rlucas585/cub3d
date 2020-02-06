@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 16:31:27 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 17:50:18 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define VALID_MAP_CHARS "012NESW "
+# define VALID_MAP_CHARS "012NESW"
 # define FORWARDSPEED 0.3
 # define BACKWARDSPEED 0.25
 # define STRAFESPEED 0.2
@@ -235,7 +235,7 @@ int					ft_error(int err, int linenum);
 ** Located in validation.c.
 */
 
-int					validate_map(char *line, size_t width);
+int					validate_map1(char *line);
 void				validate(t_info info);
 
 /*

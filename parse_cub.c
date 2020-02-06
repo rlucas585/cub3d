@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 13:54:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 17:50:24 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,9 @@ t_parsef	route_parsing(char c)
 void		parse_map(int fd, char *line, int linenum, t_info *info)
 {
 	int			gnlret;
-	size_t		linewidth;
 
 	info->map = NULL;
 	gnlret = 1;
-	linewidth = ft_strlen(line);
 	while (gnlret)
 	{
 		info->map = row_ptrs(make_row(line), *info);
@@ -60,7 +58,7 @@ void		parse_map(int fd, char *line, int linenum, t_info *info)
 		linenum++;
 		if (!line)
 			exit(ft_error(delete_info(MEM_FAIL, *info), 0));
-		if (gnlret == 1 && !validate_map(line, linewidth))
+		if (gnlret == 1 && !validate_map1(line))
 			exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
 	}
 	free(line);

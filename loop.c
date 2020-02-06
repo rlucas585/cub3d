@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:14:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 16:32:45 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 17:25:13 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,44 @@
 void		save_init_img(t_cub cub)
 {
 	int				fd;
-	unsigned int	size;
-	int				x;
-
-	size = 54 + cub.info.res.x * cub.info.res.y * 3;
-	x = 0;
+	/* unsigned int	size; */
+    /*  */
+	/* size = 54 + (unsigned int)cub.info.res.x * (unsigned int)cub.info.res.y * 3; */
+	/* printf("cub.info.res.x = %i, y = %d\n", cub.info.res.x, cub.info.res.y); */
+	/* printf("size = %u\n", size); */
 	fd = open("output.bmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		exit(ft_error(delete_all(BMP_FAIL, cub), 0));
 	write(fd, "BM", 2); // the filetype (2 bytes)
-	write(fd, &size, 4);
+	/* write(fd, &size, 4); */
+	write(fd, "\x00\x00\x00\x00", 4); // reserved bytes for image processing
 	write(fd, "\x00\x00\x00\x00", 4); // reserved bytes for image processing
 	write(fd, "\x36\x00\x00\x00", 4); // Pixel Data offset
 	write(fd, "\x28\x00\x00\x00", 4); // Size of bitmap header
 	write(fd, &cub.info.res.x, 4); // Image width
 	write(fd, &cub.info.res.y, 4); // Image height
 	write(fd, "\x01\x00", 2); // Number of color planes
-	write(fd, "\x20\x00\x00\x00", 2); // Bits per pixel
+	write(fd, "\x18\x00\x00\x00", 2); // Bits per pixel
 	write(fd, "\x00\x00\x00\x00", 4); // Compression (set to 0)
 	write(fd, "\x00\x00\x00\x00", 4); // Image Size - set to 0 when no compression
 	write(fd, "\x00\x00\x00\x00", 4); // xpixels res of target dev, 0 = no preference
 	write(fd, "\x00\x00\x00\x00", 4); // ypixels, as above
 	write(fd, "\x00\x00\x00\x00", 4); // Total colors in pallet, uses bpp if blank
 	write(fd, "\x00\x00\x00\x00", 4); // Important colors, 0 = ignore
-	while (x < cub.info.res.x)
+	int		x = 0;
+	int		y = cub.info.res.y - 1;
+	while (y >= 0)
 	{
-		write(fd, cub.xsrv.imga, 4 * cub.info.res.x);
-		x++;
+		while (x < cub.info.res.x)
+		{
+			write(fd, cub.xsrv.imga + x * 4 + y * cub.xsrv.imginf->size_line, 3);
+			/* write(fd, "\xff\x00\xff", 3); */
+			x++;
+		}
+		if ((x * 3) % 4 != 0)
+			write(fd, "\x00\x00\x00", 4 - ((x * 3) % 4));
+		x = 0;
+		y--;
 	}
 }
 

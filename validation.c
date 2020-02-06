@@ -6,12 +6,17 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 18:13:05 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 18:38:21 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
+#include <stdio.h>
+
+/* TO DO: Change the validation of the map to validate_map2(), which should use
+ * something like a flood fill algorithm. May need to duplicate the map in order
+ * to implement solution in a somewhat simple way. */
 
 static int		only_chars_in_set(char *str, char *validchars)
 {
@@ -27,13 +32,13 @@ static int		only_chars_in_set(char *str, char *validchars)
 	return (1);
 }
 
-int				validate_map(char *line, size_t width)
+int				validate_map1(char *line)
 {
-	if (ft_strlen(line) != width)
-		return (0);
+	/* if (ft_strlen(line) != width) */
+	/* 	return (0); */
 	if (!only_chars_in_set(line, VALID_MAP_CHARS))
 		return (0);
-	if (line[0] != '1' || line[width - 1] != '1')
+	if (line[ft_strlen(line) - 1] != '1')
 		return (0);
 	return (1);
 }
@@ -58,6 +63,16 @@ int				all_params_present(t_info info)
 	return (1);
 }
 
+/* int				is_hole(char **map, t_2) */
+/*  */
+/* int				validate_map2(t_info info, t_2i pos) */
+/* { */
+/* 	char		**map; */
+/*  */
+/* 	map = info.map; */
+/* 	pos = info.pos; */
+/* } */
+
 void			validate(t_info info)
 {
 	if (!all_params_present(info))
@@ -70,4 +85,6 @@ void			validate(t_info info)
 		exit(ft_error(delete_info(N_S_WALL_ERROR, info), 0));
 	if (!only_chars_in_set(info.map[ft_arrlen(info.map) - 1], "1"))
 		exit(ft_error(delete_info(N_S_WALL_ERROR, info), 0));
+	/* if (!validate_map2(info.map, info.)) */
+	/* 	exit(ft_error(delete_info(N_S_WALL_ERROR, info), 0)); */
 }

@@ -1,1 +1,0 @@
-dd if=/dev/random of=temp_10GB_file bs=1 count=0 seek=1k
