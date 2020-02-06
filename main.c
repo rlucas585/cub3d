@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 18:49:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 12:03:43 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int			main(int argc, char **argv)
 {
 	t_cub		cub;
 
+	cub.imgswap = 0;
 	init_info(&cub.info);
 	cub.info = cub_parser(open_file(argc, argv, &cub));
 	validate(cub.info);
@@ -53,6 +54,7 @@ int			main(int argc, char **argv)
 	init_tex(&cub);
 	init_keys(&cub);
 	init_hooks(&cub);
+	create_image(&cub);
 	mlx_loop(cub.xsrv.dpy);
 	return (0);
 }

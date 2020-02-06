@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:14:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 18:49:56 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 16:32:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void		save_init_img(t_cub cub)
 {
 	int				fd;
 	unsigned int	size;
+	int				x;
 
-	size = 54 + cub.info.res.x * cub.info.res.y * 4;
-	fd = open("output.bmp", O_WRONLY | O_CREAT, 0644);
+	size = 54 + cub.info.res.x * cub.info.res.y * 3;
+	x = 0;
+	fd = open("output.bmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		exit(ft_error(delete_all(BMP_FAIL, cub), 0));
 	write(fd, "BM", 2); // the filetype (2 bytes)
@@ -35,34 +37,48 @@ void		save_init_img(t_cub cub)
 	write(fd, "\x01\x00", 2); // Number of color planes
 	write(fd, "\x20\x00\x00\x00", 2); // Bits per pixel
 	write(fd, "\x00\x00\x00\x00", 4); // Compression (set to 0)
+	write(fd, "\x00\x00\x00\x00", 4); // Image Size - set to 0 when no compression
 	write(fd, "\x00\x00\x00\x00", 4); // xpixels res of target dev, 0 = no preference
 	write(fd, "\x00\x00\x00\x00", 4); // ypixels, as above
 	write(fd, "\x00\x00\x00\x00", 4); // Total colors in pallet, uses bpp if blank
 	write(fd, "\x00\x00\x00\x00", 4); // Important colors, 0 = ignore
+	while (x < cub.info.res.x)
+	{
+		write(fd, cub.xsrv.imga, 4 * cub.info.res.x);
+		x++;
+	}
 }
 
 /*
 ** Create a raycasted image, put it to the window, then destroy it.
 */
 
-static void		create_image(t_cub *cub)
+void			create_image(t_cub *cub)
 {
-	cub->xsrv.img = mlx_new_image(cub->xsrv.dpy, cub->info.res.x,
-			cub->info.res.y);
-	if (!cub->xsrv.img)
-		exit(ft_error(delete_all(CONNECTION_FAIL, *cub), 0));
-	cub->xsrv.imga = mlx_get_data_addr(cub->xsrv.img, &cub->xsrv.imginf->bpp,
-			&cub->xsrv.imginf->size_line, &cub->xsrv.imginf->endian);
-	if (!cub->xsrv.imga)
-		exit(ft_error(delete_all(CONNECTION_FAIL, *cub), 0));
 	ray(cub);
-	mlx_put_image_to_window(cub->xsrv.dpy, cub->xsrv.w, cub->xsrv.img, 0, 0);
+	if (cub->imgswap == 0)
+	{
+		mlx_put_image_to_window(cub->xsrv.dpy, cub->xsrv.w, cub->xsrv.img, 0, 0);
+		cub->imgswap = 1;
+	}
+	else
+	{
+		mlx_put_image_to_window(cub->xsrv.dpy, cub->xsrv.w, cub->xsrv.img2, 0, 0);
+		cub->imgswap = 0;
+	}
 	if (cub->save == 1)
 	{
 		save_init_img(*cub);
 		cub->save = 0;
 	}
-	mlx_destroy_image(cub->xsrv.dpy, cub->xsrv.img);
+}
+
+int				check_keys(t_keys key)
+{
+	if (key.w == 0 && key.s == 0 && key.a == 0 && key.d == 0 &&
+			key.left == 0 && key.right == 0)
+		return (1);
+	return (0);
 }
 
 /*
@@ -71,6 +87,8 @@ static void		create_image(t_cub *cub)
 
 int				loop_func(t_cub *cub)
 {
+	if (check_keys(cub->key))
+		return (1);
 	player_actions(cub);
 	create_image(cub);
 	return (1);

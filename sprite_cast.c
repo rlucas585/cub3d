@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 12:52:46 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 11:47:28 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,16 @@ void		sprite_setup2(t_info info, t_sray *sray, int i, t_2d plane)
 		sray->draw_end.x = info.res.x - 1;
 }
 
+int			init_scast(t_cub *cub, t_sray *sray, int stripe)
+{
+	sray->tx.x = (int)(256 * (stripe - (-sray->sprt.width / 2 +
+					sray->sscreenx)) * cub->info.texinf[SPRITE]->size.x /
+			sray->sprt.width) / 256;
+	if (sray->tx.x >= cub->info.texinf[SPRITE]->size.x)
+		sray->tx.x = cub->info.texinf[SPRITE]->size.x - 1;
+	return (sray->draw_start.y);
+}
+
 void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 {
 	int			stripe;
@@ -145,13 +155,10 @@ void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 	int			d;
 
 	stripe = sray->draw_start.x;
-	while (stripe < sray->draw_end.x)
+	while (stripe <= sray->draw_end.x)
 	{
-		sray->tx.x = (int)(256 * (stripe - (-sray->sprt.width / 2 +
-						sray->sscreenx)) * cub->info.texinf[SPRITE]->size.x /
-				sray->sprt.width) / 256;
-		y = sray->draw_start.y;
-		if (sray->transform.y > 0 && stripe > 0 && stripe < cub->info.res.x &&
+		y = init_scast(cub, sray, stripe);
+		if (sray->transform.y > 0 && stripe >= 0 && stripe < cub->info.res.x &&
 				sray->transform.y < z_buffer[stripe])
 		{
 			while (y < sray->draw_end.y)

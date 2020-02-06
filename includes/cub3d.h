@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 18:48:37 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/06 16:31:27 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,6 @@
 # define TURNANGLE 5
 
 # include <stdlib.h>
-
-typedef struct		s_bmp
-{
-	char			filetype[2];
-	char			filesize[4];
-	char			reserved[4];
-	char			pixeldataoffset[4];
-	char			headersize[4];
-	char			imagewidth[4];
-	char			imageheight[4];
-	char			planes[2];
-	char			bpp[2];
-	char			compression[4];
-	char			imagesize[4];
-	char			xpixelspermeter[4];
-	char			ypixelspermeter[4];
-	char			totalcolors[4];
-	char			importantcolors[4];
-}					t_bmp;
 
 typedef struct		s_rgb
 {
@@ -124,8 +105,10 @@ typedef struct		s_display
 	void			*dpy;
 	void			*w;
 	void			*img;
+	void			*img2;
 	t_imginf		*imginf;
 	char			*imga;
+	char			*imga2;
 }					t_display;
 
 typedef struct		s_keys
@@ -144,6 +127,7 @@ typedef struct		s_cub
 	t_info			info;
 	t_keys			key;
 	int				save;
+	int				imgswap;
 }					t_cub;
 
 typedef struct		s_floor
@@ -383,6 +367,7 @@ void				player_actions(t_cub *cub);
 ** Looping function of the program. In loop.c
 */
 
+void				create_image(t_cub *cub);
 int					loop_func(t_cub *cub);
 
 /*
