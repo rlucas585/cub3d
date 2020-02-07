@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 11:39:04 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 15:43:58 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <libft.h>
 #include <cub3d.h>
 #include <math.h>
-#include <stdio.h>
 
 static void		ray_setup1(t_info info, t_ray *ray, int x)
 {
@@ -98,7 +97,8 @@ static void		draw_setup(t_info info, t_ray *ray)
 		ray->tx.x = info.texinf[ray->side]->size.x - ray->tx.x - 1;
 	if ((ray->side == NORTH || ray->side == SOUTH) && ray->beam.y < 0)
 		ray->tx.x = info.texinf[ray->side]->size.x - ray->tx.x - 1;
-	ray->tx.x = info.texinf[ray->side]->size.x / 2 - (ray->tx.x - info.texinf[ray->side]->size.x / 2) - 1;
+	ray->tx.x = info.texinf[ray->side]->size.x /
+		2 - (ray->tx.x - info.texinf[ray->side]->size.x / 2) - 1;
 	ray->txstep = 1.0 * info.texinf[ray->side]->size.y / ray->height;
 	ray->tex_pos = (ray->draw_start - info.res.y / 2 + ray->height / 2) *
 		ray->txstep;

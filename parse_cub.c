@@ -6,13 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 17:50:24 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 16:07:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
-#include <stdio.h>
 
 /*
 ** Jumptable to select the correct function based on what info is being
@@ -81,7 +80,7 @@ int			parse_line(int fd, char *line, t_info *info, int linenum)
 	if (!funct)
 	{
 		free(line);
-		exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
+		exit(ft_error(delete_info(close_file(fd, BAD_FORMAT), *info), linenum));
 	}
 	if (line[0] == '1')
 	{
@@ -91,7 +90,7 @@ int			parse_line(int fd, char *line, t_info *info, int linenum)
 	else if (funct(line, info) == -1)
 	{
 		free(line);
-		exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
+		exit(ft_error(delete_info(close_file(fd, BAD_FORMAT), *info), linenum));
 	}
 	return (0);
 }
@@ -111,12 +110,11 @@ t_info		cub_parser(int fd)
 	linenum = 1;
 	exitno = get_next_line(fd, &line);
 	if (exitno <= 0)
-		exit (ft_error(BAD_FILETYPE, 0));
+		exit(ft_error(close_file(fd, BAD_FILETYPE), 0));
 	while (exitno > 0)
 	{
 		if (!line)
 			break ;
-		/* This is wrong somehow, I'm leaking something */
 		if (!parse_line(fd, line, &mapinfo, linenum))
 			free(line);
 		line = NULL;
@@ -126,6 +124,7 @@ t_info		cub_parser(int fd)
 	if (line)
 		free(line);
 	if (exitno < 0)
-		exit(ft_error(MEM_FAIL, 0));
+		exit(ft_error(close_file(fd, MEM_FAIL), 0));
+	close(fd);
 	return (mapinfo);
 }

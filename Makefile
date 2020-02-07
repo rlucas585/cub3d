@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/06 11:31:41 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/07 15:34:59 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,11 @@ LIBFTDIR = libft/
 MLXDIR = minilibx_mms_20191207_beta/
 
 SRCS = main.c \
-	   color.c \
 	   get_info.c \
+	   get_info2.c \
 	   utils.c \
+	   utils2.c \
+	   utils3.c \
 	   errors.c \
 	   open_file.c \
 	   parse_cub.c \
@@ -32,14 +34,15 @@ SRCS = main.c \
 	   actions2.c \
 	   cast.c \
 	   math1.c \
-	   printinfo.c \
 	   draw_images.c \
 	   textures.c \
 	   hooks1.c \
 	   hooks2.c \
-	   utils2.c \
 	   loop.c \
-	   sprite_cast.c
+	   sprite_cast.c \
+	   flood_fill.c \
+	   bmpsave.c \
+	   f_c_tex.c
 
 OBJ = $(SRCS:.c=.o)
 
@@ -51,8 +54,10 @@ all: $(NAME)
 
 $(NAME): makeobjects
 	@echo  "Compiling Program..."
-	@gcc -O3 -g $(FLAGS) -o $(NAME) $(INCLUDES) \
+	@gcc -O3 $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft $(OBJ)
+
+bonus: all
 
 makelibraries:
 	@echo "Compiling libft.a..."
@@ -63,7 +68,7 @@ makelibraries:
 
 makeobjects: makelibraries
 	@echo "Compiling object files..."
-	@gcc -O3 -g -c $(FLAGS) $(INCLUDES) $(SRCS)
+	@gcc -O3 -c $(FLAGS) $(INCLUDES) $(SRCS)
 
 clean:
 	@echo "Removing objects in all directories..."
@@ -80,4 +85,4 @@ fclean: clean
 re: fclean all
 
 
-.PHONY: clean fclean all re makelibraries makeobjects
+.PHONY: clean fclean all re makelibraries makeobjects bonus

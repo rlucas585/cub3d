@@ -6,16 +6,15 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 17:54:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 16:10:51 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
 #include <mlx.h>
-#include <stdio.h>
 
-void		init_info(t_info *info)
+static void	init_info(t_info *info)
 {
 	int		i;
 
@@ -49,7 +48,6 @@ int			main(int argc, char **argv)
 	if (cub.info.pos.x == 0)
 		exit(ft_error(delete_info(NO_PLAYER, cub.info), 0));
 	init_sprites(&cub.info);
-	/* print_gameinfo(cub.info); */
 	establish_connection(&cub);
 	init_tex(&cub);
 	init_keys(&cub);

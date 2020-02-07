@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:15:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 18:36:07 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 15:21:13 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 #include <libft.h>
 #include <cub3d.h>
 #include <math.h>
-#include <stdio.h>
+
+/*
+** Put relevant pixels from textures onto the walls.
+*/
 
 void		wallcast(t_cub *cub, t_ray *ray, int x)
 {
@@ -32,6 +35,10 @@ void		wallcast(t_cub *cub, t_ray *ray, int x)
 		y++;
 	}
 }
+
+/*
+** Prepare ray parameters for floorcasting.
+*/
 
 void		floorcast_setup(t_info info, t_ray *ray, t_2d *wall_pos)
 {
@@ -59,88 +66,9 @@ void		floorcast_setup(t_info info, t_ray *ray, t_2d *wall_pos)
 		ray->draw_end = info.res.y;
 }
 
-unsigned int	init_tex_pos(t_floor *fc, t_cub *cub, int side)
-{
-	fc->pos.x = fc->weight * fc->wall.x + (1.0 - fc->weight) * cub->info.pos.x;
-	fc->pos.y = fc->weight * fc->wall.y + (1.0 - fc->weight) * cub->info.pos.y;
-	fc->tx.x = (int)(fc->pos.x * cub->info.texinf[side]->size.x) %
-		cub->info.texinf[side]->size.x;
-	fc->tx.y = (int)(fc->pos.y * cub->info.texinf[side]->size.y) %
-		cub->info.texinf[side]->size.y;
-	return (cub->info.texstrs[side][cub->info.texinf[side]->size.x *
-			fc->tx.y + fc->tx.x]);
-}
-
-void		tex_c_and_f(t_cub *cub, t_ray *ray, int x)
-{
-	int				y;
-	unsigned int	color;
-	t_floor			fc;
-
-	y = ray->draw_end + 1;
-	floorcast_setup(cub->info, ray, &fc.wall);
-	while (y < cub->info.res.y)
-	{
-		fc.weight = (cub->info.res.y / (2.0 * y - cub->info.res.y)) /
-			ray->pdist;
-		color = init_tex_pos(&fc, cub, FLOOR);
-		img_put_pixel(*cub, x, y, color);
-		color = init_tex_pos(&fc, cub, CEILING);
-		img_put_pixel(*cub, x, cub->info.res.y - y - 1, color);
-		y++;
-	}
-}
-
-void		tex_c(t_cub *cub, t_ray *ray, int x)
-{
-	int				y;
-	unsigned int	color;
-	t_floor			fc;
-
-	y = ray->draw_end + 1;
-	floorcast_setup(cub->info, ray, &fc.wall);
-	while (y < cub->info.res.y)
-	{
-		fc.weight = (cub->info.res.y / (2.0 * y - cub->info.res.y)) /
-			ray->pdist;
-		img_put_pixel(*cub, x, y, cub->info.floor.x);
-		color = init_tex_pos(&fc, cub, CEILING);
-		img_put_pixel(*cub, x, cub->info.res.y - y - 1, color);
-		y++;
-	}
-}
-
-void		tex_f(t_cub *cub, t_ray *ray, int x)
-{
-	int				y;
-	unsigned int	color;
-	t_floor			fc;
-
-	y = ray->draw_end + 1;
-	floorcast_setup(cub->info, ray, &fc.wall);
-	while (y < cub->info.res.y)
-	{
-		fc.weight = (cub->info.res.y / (2.0 * y - cub->info.res.y)) /
-			ray->pdist;
-		color = init_tex_pos(&fc, cub, FLOOR);
-		img_put_pixel(*cub, x, y, color);
-		img_put_pixel(*cub, x, cub->info.res.y - y - 1, cub->info.ceiling.x);
-		y++;
-	}
-}
-
-void		no_tex(t_cub *cub, t_ray *ray, int x)
-{
-	int		y;
-
-	y = ray->draw_end + 1;
-	while (y < cub->info.res.y)
-	{
-		img_put_pixel(*cub, x, y, cub->info.floor.x);
-		img_put_pixel(*cub, x, cub->info.res.y - y - 1, cub->info.ceiling.x);
-		y++;
-	}
-}
+/*
+** Floorcast to fill in the floor and ceiling with colors.
+*/
 
 void		floorcast(t_cub *cub, t_ray *ray, int x)
 {

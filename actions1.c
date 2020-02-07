@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 16:07:54 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 13:43:48 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 16:12:52 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <cub3d.h>
 #include <math.h>
 #include <mlx.h>
-
-#include <stdio.h>
 
 void		move(t_info *info, double dist, int dir)
 {

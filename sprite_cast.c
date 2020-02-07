@@ -6,81 +6,13 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 11:47:28 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 15:44:02 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
 #include <math.h>
-#include <stdio.h>
-
-void		int_swap(int *a, int *b)
-{
-	int		temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-void		double_swap(double *a, double *b)
-{
-	double	temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-void		print_sprites(int number, int *order, double *dist)
-{
-	int		i;
-
-	i = 0;
-	printf("Order: [");
-	while (i < number)
-	{
-		if (i == number - 1)
-			printf("%d]\n", order[i]);
-		else
-			printf("%d, ", order[i]);
-		i++;
-	}
-	i = 0;
-	printf("Distance: [");
-	while (i < number)
-	{
-		if (i == number - 1)
-			printf("%f]\n", dist[i]);
-		else
-			printf("%f, ", dist[i]);
-		i++;
-	}
-}
-
-void		sortsprites(int number, int **order, double **dist)
-{
-	int		x;
-	int		y;
-
-	x = 0;
-	y = 0;
-	while (x < number)
-	{
-		while (y < number - x - 1)
-		{
-			if ((*dist)[y] < (*dist)[y + 1])
-			{
-				int_swap(&(*order)[y], &(*order)[y + 1]);
-				double_swap(&(*dist)[y], &(*dist)[y + 1]);
-			}
-			y++;
-		}
-		y = 0;
-		x++;
-	}
-}
 
 void		sprite_setup1(t_cub cub, t_sray *sray)
 {

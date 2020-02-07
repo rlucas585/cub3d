@@ -6,13 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:39:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:25:09 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 16:10:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
-#include <stdio.h>
 
 /*
 ** Jumptable for direction to face in, measured in degrees.
@@ -55,6 +54,8 @@ void			find_player(t_info *info)
 	x = 1;
 	y = 1;
 	info->pos.x = 0;
+	if (!info->map)
+		exit(ft_error(delete_info(NO_MAP, *info), 0));
 	while (y < (int)ft_arrlen(info->map) - 1)
 	{
 		while (x < (int)ft_strlen(info->map[y]) - 1)

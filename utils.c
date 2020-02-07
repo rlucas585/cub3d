@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/01/31 20:32:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 14:33:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static int	get_row_width(char *line)
 
 /*
 ** Used in get_map, makes a string from a single line by cutting out all the
-** spaces.
+** spaces. UPDATE: Spaces are no longer considered valid input, so the if
+** statement with ft_isalnum() is somewhat redundant now.
 */
 
 char		*make_row(char *line)

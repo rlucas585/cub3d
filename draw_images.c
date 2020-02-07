@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:17:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 11:04:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 15:18:33 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void		img_put_pixel(t_cub cub, int x, int y, unsigned int color)
 	if (x < 0 || y < 0)
 		return ;
 	if (cub.imgswap == 0)
-		*(unsigned int *)&cub.xsrv.imga[4 * x + cub.xsrv.imginf->size_line * y] =
-			color;
+		*(unsigned int *)&cub.xsrv.imga[4 * x +
+			cub.xsrv.imginf->size_line * y] = color;
 	else if (cub.imgswap == 1)
-		*(unsigned int *)&cub.xsrv.imga2[4 * x + cub.xsrv.imginf->size_line * y] =
-			color;
+		*(unsigned int *)&cub.xsrv.imga2[4 * x +
+			cub.xsrv.imginf->size_line * y] = color;
 }

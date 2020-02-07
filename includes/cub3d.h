@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 13:57:52 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 16:08:53 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ typedef enum		e_errors
 	TOO_THIN = 5,
 	DUP_PLAYERS = 6,
 	MORE_ARG = 7,
-	N_S_WALL_ERROR = 8,
+	NO_MAP = 8,
 	MEM_FAIL = 12,
 	NO_PLAYER = 13,
 	MISSING_TEX = 14,
@@ -212,6 +212,10 @@ typedef enum		e_keydefs
 }					t_keydefs;
 
 /*
+*******************************Opening File************************************
+*/
+
+/*
 ** Opening file functions, and checking argument errors. In open_file.c.
 */
 
@@ -219,65 +223,8 @@ int					check_file(const char *str);
 int					open_file(int argc, char **argv, t_cub *cub);
 
 /*
-** Color function, converts from 8-bit integers into a single 32-bit integer
-** containing the information from three 8-bit integers. In color.c.
+**********************Parse lines of .cub file and store info******************
 */
-
-int					rgb(int red, int green, int blue);
-
-/*
-** Error messaging, in errors.c.
-*/
-
-int					ft_error(int err, int linenum);
-
-/*
-** Check that the map is valid, both during creation and after completion.
-** Located in validation.c.
-*/
-
-int					validate_map1(char *line);
-void				validate(t_info info);
-
-/*
-** Function to find and create the player on the map. In find_player.c.
-*/
-
-void				find_player(t_info *info);
-
-/*
-** Functions to read info from a line into relevant mapinfo, in get_info.c.
-*/
-
-int					get_resolution(char *line, t_info *info);
-int					get_texture(char *line, t_info *info);
-int					get_floor_ceiling(char *line, t_info *info);
-int					get_color(char *line, t_info *info);
-
-/*
-** Utility functions in utils.c.
-*/
-
-char				*make_row(char *line);
-char				**row_ptrs(char *newrow, t_info info);
-size_t				ft_arrlen(char **array);
-int					numstrchr(char *str, int c);
-
-/*
-** Utility functions in utils2.c.
-*/
-
-void				init_sprites(t_info *info);
-void				bump(double *x, double *y, char **map);
-
-/*
-** Troubleshooting functions that should be deleted, in printfinfo.c
-*/
-
-void				print_mapinfo(t_info info);
-void				print_playerinfo(t_info info);
-void				print_spriteinfo(t_info info);
-void				print_gameinfo(t_info info);
 
 /*
 ** Functions to direct parsing of .cub file, in parse_cub.c.
@@ -289,6 +236,43 @@ int					parse_line(int fd, char *line, t_info *info, int linenum);
 t_info				cub_parser(int fd);
 
 /*
+** Functions to read info from a line into relevant info structure, in
+** get_info.c.
+*/
+
+int					get_resolution(char *line, t_info *info);
+int					get_texture(char *line, t_info *info);
+int					get_floor_ceiling(char *line, t_info *info);
+
+/*
+** More functions to read info from relevant .cub file, in get_info2.c.
+*/
+
+int					get_color(char *line, t_info *info);
+
+/*
+** Function to find and create the player on the map. In find_player.c.
+*/
+
+void				find_player(t_info *info);
+
+/*
+** Initialise textures, in textures.c.
+*/
+
+void				init_tex(t_cub *cub);
+
+/*
+**********************Error messaging and freeing memory***********************
+*/
+
+/*
+** Error messaging, in errors.c.
+*/
+
+int					ft_error(int err, int linenum);
+
+/*
 ** Functions to delete malloced data when exiting the program. In exit.c.
 */
 
@@ -297,6 +281,28 @@ void				delete_tex(char *textures[5]);
 void				delete_imgs(void *imgs[5]);
 int					delete_info(int err, t_info info);
 int					delete_all(int err, t_cub cub);
+
+/*
+*******************************Map validation**********************************
+*/
+
+/*
+** Check that the map is valid, both during creation and after completion.
+** Located in validation.c.
+*/
+
+int					validate_map1(char *line);
+void				validate(t_info info);
+
+/*
+** Flood_fill algorithm function, found in flood_fill.c
+*/
+
+int					validate_map2(t_info info);
+
+/*
+***********************Raycasting and Drawing in image*************************
+*/
 
 /*
 ** Functions to draw with. In draw_images.c
@@ -320,10 +326,25 @@ void				floorcast_setup(t_info info, t_ray *ray, t_2d *wall_pos);
 void				floorcast(t_cub *cub, t_ray *ray, int x);
 
 /*
+** Filling in textured ceiling and floor, used in floorcasting. Found in
+** f_c_tex.c.
+*/
+
+unsigned int		init_tex_pos(t_floor *fc, t_cub *cub, int side);
+void				tex_c_and_f(t_cub *cub, t_ray *ray, int x);
+void				tex_c(t_cub *cub, t_ray *ray, int x);
+void				tex_f(t_cub *cub, t_ray *ray, int x);
+void				no_tex(t_cub *cub, t_ray *ray, int x);
+
+/*
 ** Casting sprites, int sprite_cast.c
 */
 
 void				draw_sprites(t_cub *cub, double *z_buffer, t_2d plane);
+
+/*
+**********************Connection to XServer functions**************************
+*/
 
 /*
 ** Function to establish connection with Xserver, initialize a window and
@@ -333,17 +354,37 @@ void				draw_sprites(t_cub *cub, double *z_buffer, t_2d plane);
 void				establish_connection(t_cub *cub);
 
 /*
-** Initialise textures, in textures.c.
+**************************Program management***********************************
 */
-
-void				init_tex(t_cub *cub);
 
 /*
-** Small math functions, not super necessary, in math1.c.
+** Bitmap function, to save a bitmap of the initial image if the '--save'
+** argument is supplied.
 */
 
-double				to_degrees(double radians);
-double				to_radians(double degrees);
+void				save_init_img(t_cub cub);
+
+/*
+** Looping function of the program. In loop.c
+*/
+
+void				create_image(t_cub *cub);
+int					loop_func(t_cub *cub);
+
+/*
+** Hook functions, in hooks1.c and hooks2.c.
+*/
+
+void				toggle(int key, t_cub *cub, int on_off);
+int					keypress(int key, t_cub *cub);
+int					keyrelease(int key, t_cub *cub);
+int					crosspress(t_cub *cub);
+void				init_keys(t_cub *cub);
+void				init_hooks(t_cub *cub);
+
+/*
+**************************Player action functions******************************
+*/
 
 /*
 ** Movement functions, in actions1.c
@@ -365,21 +406,43 @@ void				escape(t_cub *cub);
 void				player_actions(t_cub *cub);
 
 /*
-** Looping function of the program. In loop.c
+****************************Utility Functions**********************************
 */
-
-void				create_image(t_cub *cub);
-int					loop_func(t_cub *cub);
 
 /*
-** Hook functions, in hooks*.c.
+** Utility functions in utils.c.
 */
 
-void				toggle(int key, t_cub *cub, int on_off);
-int					keypress(int key, t_cub *cub);
-int					keyrelease(int key, t_cub *cub);
-int					crosspress(t_cub *cub);
-void				init_keys(t_cub *cub);
-void				init_hooks(t_cub *cub);
+char				*make_row(char *line);
+char				**row_ptrs(char *newrow, t_info info);
+size_t				ft_arrlen(char **array);
+int					numstrchr(char *str, int c);
+
+/*
+** Utility functions in utils2.c.
+*/
+
+void				int_swap(int *a, int *b);
+void				double_swap(double *a, double *b);
+void				init_sprites(t_info *info);
+void				bump(double *x, double *y, char **map);
+
+/*
+** Utility functions in utils3.c.
+*/
+
+void				sortsprites(int number, int **order, double **dist);
+int					close_file(int fd, int errno);
+
+/*
+** Small math functions, not super necessary, in math1.c.
+*/
+
+double				to_degrees(double radians);
+double				to_radians(double degrees);
+
+/*
+*******************************************************************************
+*/
 
 #endif
