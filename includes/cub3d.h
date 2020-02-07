@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/06 17:50:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 13:57:52 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,11 +183,12 @@ typedef enum		e_errors
 	ERROR = -1,
 	BAD_FORMAT = 1,
 	INVALID_FILE = 2,
-	N_S_WALL_ERROR = 3,
+	NOT_CONTAINED = 3,
 	TOO_SHORT = 4,
 	TOO_THIN = 5,
 	DUP_PLAYERS = 6,
 	MORE_ARG = 7,
+	N_S_WALL_ERROR = 8,
 	MEM_FAIL = 12,
 	NO_PLAYER = 13,
 	MISSING_TEX = 14,

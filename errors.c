@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:49:52 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/05 17:22:17 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 13:58:46 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int			ft_error(int err, int linenum)
 	static char	*error_array[128] = {
 		[BAD_FORMAT] = ".cub file is incorrectly formatted: ",
 		[INVALID_FILE] = "No such file or directory\n",
-		[N_S_WALL_ERROR] = "The North or South wall is not completely 1's\n",
+		[NOT_CONTAINED] = "The map is not correctly contained\n",
+		[N_S_WALL_ERROR] = "The North or South Wall is not all '1's\n",
 		[TOO_SHORT] = "Your map is too short\n",
 		[TOO_THIN] = "Your map is too thin\n",
 		[NO_PLAYER] = "There is no player on the map\n",
