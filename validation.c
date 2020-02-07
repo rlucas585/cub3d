@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:09:05 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/07 16:33:08 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ static int		all_params_present(t_info info)
 int				validate_map1(char *line)
 {
 	if (!only_chars_in_set(line, VALID_MAP_CHARS))
-		return (0);
-	if (line[ft_strlen(line) - 1] != '1')
 		return (0);
 	return (1);
 }
