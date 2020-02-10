@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 16:10:51 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/10 13:44:56 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ int			main(int argc, char **argv)
 	t_cub		cub;
 
 	cub.imgswap = 0;
+	cub.xsrv.img = NULL;
+	cub.xsrv.img2 = NULL;
+	cub.xsrv.w = NULL;
 	init_info(&cub.info);
 	cub.info = cub_parser(open_file(argc, argv, &cub));
 	find_player(&cub.info);

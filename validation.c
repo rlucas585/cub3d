@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 16:33:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/10 12:51:18 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ void			validate(t_info info)
 		exit(ft_error(delete_info(MISSING_PARAM, info), 0));
 	if (ft_arrlen(info.map) < 3)
 		exit(ft_error(delete_info(TOO_SHORT, info), 0));
-	if (ft_strlen(info.map[0]) < 3)
-		exit(ft_error(delete_info(TOO_THIN, info), 0));
 	if (!validate_map2(info))
 		exit(ft_error(delete_info(NOT_CONTAINED, info), 0));
 }

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:44:02 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/10 11:55:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void		draw_sprites(t_cub *cub, double *z_buffer, t_2d plane)
 	while (i < cub->info.spritenum)
 	{
 		sprite_setup2(cub->info, &sray, i, plane);
+		if (sray.sprt.width < 1)
+			sray.sprt.width = 1;
 		sprite_cast(cub, z_buffer, &sray);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:14:53 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:17:21 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/10 13:06:44 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@
 void			create_image(t_cub *cub)
 {
 	ray(cub);
+	if (cub->save == 1)
+	{
+		save_init_img(*cub);
+		escape(cub);
+		exit(0);
+	}
 	if (cub->imgswap == 0)
 	{
 		mlx_put_image_to_window(cub->xsrv.dpy, cub->xsrv.w,
@@ -36,11 +42,6 @@ void			create_image(t_cub *cub)
 				cub->xsrv.img2, 0, 0);
 		cub->imgswap = 0;
 	}
-	if (cub->save == 1)
-	{
-		save_init_img(*cub);
-		cub->save = 0;
-	}
 }
 
 static int		check_keys(t_keys key)
@@ -50,10 +51,6 @@ static int		check_keys(t_keys key)
 		return (1);
 	return (0);
 }
-
-/*
-** Remember to fix the error in map parsing, "NOO" is accepted instead of "NO";
-*/
 
 int				loop_func(t_cub *cub)
 {

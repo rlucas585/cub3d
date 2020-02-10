@@ -1,0 +1,11 @@
+R 1920 1080
+NO ./textures/hitler.png
+SO ./textures/hitler.png
+WE ./textures/hitler.png
+EA ./textures/hitler.png
+S ./textures/barack2.png
+F 50,0,0
+C 5,9,50
+01
+1N1
+01

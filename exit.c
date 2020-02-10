@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:39:13 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/10 13:47:06 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,16 @@ void		delete_tex(char *textures[7])
 	}
 }
 
-void		delete_imgs(void *imgs[7])
+void		delete_imgs(t_cub cub, void *imgs[7])
 {
 	int		i;
 
 	i = 0;
 	while (i < 7)
 	{
-		free(imgs[i]);
+		if (imgs[i])
+			mlx_destroy_image(cub.xsrv.dpy, imgs[i]);
+		free(cub.info.texinf[i]);
 		i++;
 	}
 }
@@ -63,20 +65,18 @@ int			delete_info(int err, t_info info)
 
 int			delete_all(int err, t_cub cub)
 {
-	int		i;
-
-	i = 0;
 	delete_map(cub.info.map);
 	delete_tex(cub.info.texs);
 	if (cub.xsrv.imginf)
 		free(cub.xsrv.imginf);
-	while (i < 7)
-	{
-		free(cub.info.texinf[i]);
-		i++;
-	}
-	delete_imgs(cub.info.imgs);
+	delete_imgs(cub, cub.info.imgs);
 	if (cub.info.z_buffer)
 		free(cub.info.z_buffer);
+	if (cub.xsrv.img)
+		mlx_destroy_image(cub.xsrv.dpy, cub.xsrv.img);
+	if (cub.xsrv.img2)
+		mlx_destroy_image(cub.xsrv.dpy, cub.xsrv.img2);
+	if (cub.xsrv.w)
+		mlx_destroy_window(cub.xsrv.dpy, cub.xsrv.w);
 	return (err);
 }

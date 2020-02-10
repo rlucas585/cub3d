@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 16:08:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/10 13:26:05 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,8 +277,8 @@ int					ft_error(int err, int linenum);
 */
 
 void				delete_map(char **map);
-void				delete_tex(char *textures[5]);
-void				delete_imgs(void *imgs[5]);
+void				delete_tex(char *textures[7]);
+void				delete_imgs(t_cub cub, void *imgs[7]);
 int					delete_info(int err, t_info info);
 int					delete_all(int err, t_cub cub);
 
