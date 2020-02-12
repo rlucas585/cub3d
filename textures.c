@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:29:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:44:11 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/10 20:10:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void		one_tex(t_cub *cub, int side, void **img)
 			&cub->info.texinf[side]->size.y);
 	if (!(*img))
 		exit(ft_error(delete_all(MISSING_TEX, *cub), 0));
-	cub->info.texstrs[side] = (unsigned int *)mlx_get_data_addr(*img,
+	cub->info.texstrs[side] = (char *)mlx_get_data_addr(*img,
 			&cub->info.texinf[side]->bpp,
 			&cub->info.texinf[side]->size_line,
 			&cub->info.texinf[side]->endian);

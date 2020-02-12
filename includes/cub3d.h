@@ -6,14 +6,14 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 13:26:05 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 18:08:00 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define VALID_MAP_CHARS "012NESW"
+# define VALID_MAP_CHARS "012NESW "
 # define FORWARDSPEED 0.3
 # define BACKWARDSPEED 0.25
 # define STRAFESPEED 0.2
@@ -93,7 +93,7 @@ typedef struct		s_info
 	int				spritenum;
 	t_2d			pos;
 	double			dir;
-	unsigned int	*texstrs[7];
+	char			*texstrs[7];
 	void			*imgs[7];
 	t_sprite		*sprts;
 	t_imginf		*texinf[7];
@@ -291,6 +291,7 @@ int					delete_all(int err, t_cub cub);
 ** Located in validation.c.
 */
 
+int					only_chars_in_set(char *str, char *validchars);
 int					validate_map1(char *line);
 void				validate(t_info info);
 
@@ -308,6 +309,8 @@ int					validate_map2(t_info info);
 ** Functions to draw with. In draw_images.c
 */
 
+void				put_sprite_pixel(t_cub *cub, int y, int stripe,
+		t_sray *sray);
 void				img_put_pixel(t_cub cub, int x, int y, unsigned int color);
 
 /*
@@ -433,6 +436,9 @@ void				bump(double *x, double *y, char **map);
 
 void				sortsprites(int number, int **order, double **dist);
 int					close_file(int fd, int errno);
+int					travel_to_char(char *line, char *stopatchars);
+int					travel_through_char(char *line, char *movethroughchars);
+void				free_exit(int fd, char *line, t_info *info, int linenum);
 
 /*
 ** Small math functions, not super necessary, in math1.c.

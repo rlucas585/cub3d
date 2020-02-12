@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:15:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:21:13 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 13:56:35 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ void		wallcast(t_cub *cub, t_ray *ray, int x)
 {
 	int				y;
 	unsigned int	color;
+	char			*img;
 
 	y = ray->draw_start;
 	while (y < ray->draw_end)
 	{
 		ray->tx.y = (int)ray->tex_pos;
 		ray->tex_pos += ray->txstep;
-		color = cub->info.texstrs[ray->side][ray->tx.x +
-			cub->info.texinf[ray->side]->size.y * ray->tx.y];
+		img = cub->info.texstrs[ray->side] + 4 * ray->tx.x +
+				cub->info.texinf[ray->side]->size_line * ray->tx.y;
+		color = *(unsigned int *)img;
 		img_put_pixel(*cub, x, y, color);
 		y++;
 	}

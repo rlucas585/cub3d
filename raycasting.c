@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 11:38:50 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 14:33:44 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static void		draw_setup(t_info info, t_ray *ray)
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
 	ray->draw_end = ray->height / 2 + info.res.y / 2;
-	if (ray->draw_end >= info.res.y)
+	if (ray->draw_end >= info.res.y || ray->draw_end < 0)
 		ray->draw_end = info.res.y - 1;
 	if (ray->side == EAST || ray->side == WEST)
 		ray->wallx = info.pos.y + ray->pdist * ray->beam.y;
@@ -99,6 +99,8 @@ static void		draw_setup(t_info info, t_ray *ray)
 		ray->tx.x = info.texinf[ray->side]->size.x - ray->tx.x - 1;
 	ray->tx.x = info.texinf[ray->side]->size.x /
 		2 - (ray->tx.x - info.texinf[ray->side]->size.x / 2) - 1;
+	if (ray->tx.x < 0)
+		ray->tx.x = 0;
 	ray->txstep = 1.0 * info.texinf[ray->side]->size.y / ray->height;
 	ray->tex_pos = (ray->draw_start - info.res.y / 2 + ray->height / 2) *
 		ray->txstep;

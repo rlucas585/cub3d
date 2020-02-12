@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:17:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:18:33 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 18:07:39 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,23 @@
 #include <libft.h>
 #include <cub3d.h>
 #include <math.h>
+
+/*
+** Put the correct sprite pixel in place. Used in sprite_cast().
+*/
+
+void		put_sprite_pixel(t_cub *cub, int y, int stripe, t_sray *sray)
+{
+	int		d;
+
+	d = (y) * 256 - cub->info.res.y * 128 + sray->sprt.height * 128;
+	sray->tx.y = ((d * cub->info.texinf[SPRITE]->size.y) /
+			sray->sprt.height) / 256;
+	sray->color = *(unsigned int *)(cub->info.texstrs[SPRITE] + 4 *
+			sray->tx.x + cub->info.texinf[SPRITE]->size_line * sray->tx.y);
+	if ((sray->color & 0x00FFFFFF) != 0)
+		img_put_pixel(*cub, stripe, y, sray->color);
+}
 
 /*
 ** Function to place a single pixel in an image at an x & y coordinate.

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 14:46:12 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 18:06:21 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,21 @@ int			get_resolution(char *line, t_info *info)
 	int		i;
 
 	i = 1;
+	if (!only_chars_in_set(line, "R 0123456789"))
+		return (ERROR);
 	if (line[i] == 0)
 		return (ERROR);
+	i += travel_to_char(line + i, "0123456789");
 	info->res.x = ft_atoi(line + i);
-	i++;
-	while (line[i] && line[i] != ' ')
-		i++;
+	i += travel_to_char(line + i, " ");
 	if (line[i] == 0)
 		return (ERROR);
+	i += travel_to_char(line + i, "0123456789");
 	info->res.y = ft_atoi(line + i);
+	while (line[i] >= '0' && line[i] <= '9')
+		i++;
+	if (line[i] != '\0')
+		return (ERROR);
 	if (info->res.y > 1400)
 		info->res.y = 1400;
 	if (info->res.x > 2560)
@@ -85,6 +91,32 @@ static int	chktex(char *line)
 	return (0);
 }
 
+int			find_tex_path(char *line, int i)
+{
+	int		x;
+
+	x = 0;
+	while (line[i] != ' ' && line[i])
+		i++;
+	while (line[i] != '/' && line[i])
+	{
+		if (line[i] != ' ')
+		{
+			if (line[i] != '.' || x == 1)
+				return (ERROR);
+			else
+				x = 1;
+		}
+		i++;
+	}
+	if (line[i] == 0 || x == 0)
+		return (ERROR);
+	if (line[i + 1] == 0)
+		return (ERROR);
+	i++;
+	return (i);
+}
+
 /*
 ** Get texture paths from .cub file.
 */
@@ -103,43 +135,12 @@ int			get_texture(char *line, t_info *info)
 	if (array[textureid] == 1)
 		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
 	array[textureid] = 1;
-	while (line[i] != '/')
-		i++;
-	if (line[i] == 0)
+	i = find_tex_path(line, i);
+	if (i == ERROR)
 		return (ERROR);
-	if (line[i + 1] == 0)
-		return (ERROR);
-	i++;
 	texpath = ft_strdup(line + i);
 	if (!texpath)
 		return (ERROR);
 	info->texs[textureid] = texpath;
 	return (1);
-}
-
-/*
-** Check to see if the floor and ceiling have been given as a color, or as a
-** texture.
-*/
-
-int			get_floor_ceiling(char *line, t_info *info)
-{
-	if (line[0] == 'F' && info->f_or_c.x >= 1)
-		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
-	if (line[0] == 'C' && info->f_or_c.y >= 1)
-		exit(ft_error(delete_info(DUP_PARAM, *info), 0));
-	if (line[0] == 'F')
-		info->f_or_c.x = 1;
-	if (line[0] == 'C')
-		info->f_or_c.y = 1;
-	if (ft_strchr(line, '.'))
-	{
-		if (line[0] == 'F')
-			info->f_or_c.x = 2;
-		if (line[0] == 'C')
-			info->f_or_c.y = 2;
-		return (get_texture(line, info));
-	}
-	else
-		return (get_color(line, info));
 }

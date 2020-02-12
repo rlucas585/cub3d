@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/10 13:46:51 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/12 14:53:49 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,10 +52,10 @@ FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): makeobjects
+$(NAME): makelibraries
 	@echo  "Compiling Program..."
-	@gcc -O3 $(FLAGS) -o $(NAME) $(INCLUDES) \
-		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft $(OBJ)
+	@gcc -g $(FLAGS) -o $(NAME) $(INCLUDES) \
+		-Wl,-rpath,$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft $(SRCS)
 
 bonus: all
 
@@ -68,7 +68,7 @@ makelibraries:
 
 makeobjects: makelibraries
 	@echo "Compiling object files..."
-	@gcc -O3 -c $(FLAGS) $(INCLUDES) $(SRCS)
+	@gcc -c $(FLAGS) $(INCLUDES) $(SRCS)
 
 clean:
 	@echo "Removing objects in all directories..."

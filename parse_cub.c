@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 12:44:45 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 18:03:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,27 +72,24 @@ void		parse_map(int fd, char *line, int linenum, t_info *info)
 int			parse_line(int fd, char *line, t_info *info, int linenum)
 {
 	t_parsef		funct;
+	size_t			i;
 
-	if (ft_strncmp(line, "", 1) == 0)
+	i = 0;
+	i += travel_through_char(line + i, " ");
+	if (line[i] == '\0')
 		return (0);
-	if (ft_strncmp(line, "SO", 2) == 0)
-		line[0] = 'X';
-	funct = route_parsing(line[0]);
+	if (ft_strncmp(line + i, "SO", 2) == 0)
+		line[i] = 'X';
+	funct = route_parsing(line[i]);
 	if (!funct)
-	{
-		free(line);
-		exit(ft_error(delete_info(close_file(fd, BAD_FORMAT), *info), linenum));
-	}
-	if (line[0] == '1' || line[0] == '0')
+		free_exit(fd, line, info, linenum);
+	if (line[i] == '1' || line[i] == '0')
 	{
 		parse_map(fd, line, linenum, info);
 		return (1);
 	}
-	else if (funct(line, info) == -1)
-	{
-		free(line);
-		exit(ft_error(delete_info(close_file(fd, BAD_FORMAT), *info), linenum));
-	}
+	else if (funct(line + i, info) == -1)
+		free_exit(fd, line, info, linenum);
 	return (0);
 }
 

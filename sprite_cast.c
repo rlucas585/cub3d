@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/03 10:25:30 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 17:46:59 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 18:07:07 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,9 @@ void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 {
 	int			stripe;
 	int			y;
-	int			d;
 
 	stripe = sray->draw_start.x;
-	while (stripe <= sray->draw_end.x)
+	while (stripe <= sray->draw_end.x && stripe < cub->info.res.x)
 	{
 		y = init_scast(cub, sray, stripe);
 		if (sray->transform.y > 0 && stripe >= 0 && stripe < cub->info.res.x &&
@@ -95,13 +94,7 @@ void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 		{
 			while (y < sray->draw_end.y)
 			{
-				d = (y) * 256 - cub->info.res.y * 128 + sray->sprt.height * 128;
-				sray->tx.y = ((d * cub->info.texinf[SPRITE]->size.y) /
-						sray->sprt.height) / 256;
-				sray->color = cub->info.texstrs[SPRITE][cub->info.texinf[SPRITE]
-					->size.x * sray->tx.y + sray->tx.x];
-				if ((sray->color & 0x00FFFFFF) != 0)
-					img_put_pixel(*cub, stripe, y, sray->color);
+				put_sprite_pixel(cub, y, stripe, sray);
 				y++;
 			}
 		}

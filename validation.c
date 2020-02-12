@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 12:51:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 17:38:00 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <cub3d.h>
 #include <math.h>
 
-static int		only_chars_in_set(char *str, char *validchars)
+int				only_chars_in_set(char *str, char *validchars)
 {
 	size_t		i;
 

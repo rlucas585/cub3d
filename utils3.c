@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:34:28 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:07:39 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 18:06:51 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** distance.
 */
 
-void	sortsprites(int number, int **order, double **dist)
+void		sortsprites(int number, int **order, double **dist)
 {
 	int		x;
 	int		y;
@@ -47,8 +47,57 @@ void	sortsprites(int number, int **order, double **dist)
 ** in parse_cub.c.
 */
 
-int		close_file(int fd, int errno)
+int			close_file(int fd, int errno)
 {
 	close(fd);
 	return (errno);
+}
+
+/*
+** Get the distance between the start of a string and the first index of the
+** string that contains one of a set of characters. Useful for moving through
+** strings.
+*/
+
+int			travel_to_char(char *line, char *stopatchars)
+{
+	int			i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (ft_strchr(stopatchars, line[i]))
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
+/*
+** The inverse of the above function, move through a string until a character
+** that is NOT in the specified set is reached.
+*/
+
+int			travel_through_char(char *line, char *movethroughchars)
+{
+	int			i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!ft_strchr(movethroughchars, line[i]))
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
+/*
+** Free a character string and exit. Used in parse_line() to fit norm.
+*/
+
+void		free_exit(int fd, char *line, t_info *info, int linenum)
+{
+	free(line);
+	exit(ft_error(delete_info(close_file(fd, BAD_FORMAT), *info), linenum));
 }
