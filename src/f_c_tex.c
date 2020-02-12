@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 15:11:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 14:28:38 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 20:28:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ unsigned int	init_tex_pos(t_floor *fc, t_cub *cub, int side)
 		cub->info.texinf[side]->size.x;
 	fc->tx.y = (int)(fc->pos.y * cub->info.texinf[side]->size.y) %
 		cub->info.texinf[side]->size.y;
+	if (fc->tx.x < 0)
+		fc->tx.x = 0;
+	if (fc->tx.x > cub->info.texinf[side]->size.x)
+		fc->tx.x = cub->info.texinf[side]->size.x - 1;
+	if (fc->tx.y < 0)
+		fc->tx.y = 0;
+	if (fc->tx.y > cub->info.texinf[side]->size.y)
+		fc->tx.y = cub->info.texinf[side]->size.y - 1;
 	img = cub->info.texstrs[side] + 4 * fc->tx.x +
 		cub->info.texinf[side]->size_line * fc->tx.y;
 	color = *(unsigned int *)img;

@@ -1,5 +1,5 @@
 NO ./textures/wall_north.png
-R 1920 1080
+R 600 1080
 SO ./textures/test.png
 WE ./textures/awesomeface.png
 EA ./textures/mossy.png

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:43:48 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 18:06:18 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/12 20:21:14 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static int	validate_color(char *line)
 	size_t		i;
 
 	i = 0;
+	if (numstrchr(line, ',') != 2)
+		return (0);
 	if (only_three_colors(line) == ERROR)
 		return (0);
 	last = ft_strrchr(line, ',') + 1;
@@ -71,10 +73,6 @@ static int	validate_color(char *line)
 		return (0);
 	if (ft_atoi(ft_strrchr(line, ',') + 1) > 255 ||
 			ft_atoi(ft_strrchr(line, ',') + 1) < 0)
-		return (0);
-	while (last[i] >= '0' && last[i] <= '9')
-		i++;
-	if (last[i] != '\0')
 		return (0);
 	return (1);
 }
