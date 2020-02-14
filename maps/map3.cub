@@ -6,7 +6,7 @@ SO ./textures/wall2.png
 WE ./textures/hitler.png
 EA ./textures/wall3.png
 
-S ./path_to_the_sprite_texture
+S ./textures/taylor2.png
 
 F 220,100,0
 
