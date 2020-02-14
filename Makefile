@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/14 12:50:29 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/14 13:14:31 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,4 +91,4 @@ fclean: clean
 re: fclean all
 
 
-.PHONY: clean fclean all re makelibraries bonus
+.PHONY: clean fclean all re bonus
