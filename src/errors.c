@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:49:52 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 16:08:35 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 12:21:15 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int			ft_error(int err, int linenum)
 		[INVALID_FILE] = "No such file or directory\n",
 		[NOT_CONTAINED] = "The map is not correctly contained\n",
 		[TOO_SHORT] = "Your map is too short\n",
-		[TOO_THIN] = "Your map is too thin\n",
+		[BIG_MAP] = "Your map is too large to be validated\n",
 		[NO_MAP] = "There is no map in your .cub file\n",
 		[NO_PLAYER] = "There is no player on the map\n",
 		[DUP_PLAYERS] = "There are two players on the map\n",
 		[MORE_ARG] = "Argument list too long\n",
-		[MEM_FAIL] = "Out of memory\n",
+		[MEM_FAIL] = "Memory failure\n",
 		[INVALID_ARGUMENT] = "Not enough arguments\n",
 		[BAD_FILETYPE] = "Inappropriate file type or format\n",
 		[CONNECTION_FAIL] = "Connection failed\n",

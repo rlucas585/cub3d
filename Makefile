@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/12 20:19:11 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/14 12:50:29 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo  "Compiling Program..."
-	@gcc -g $(FLAGS) -o $(NAME) $(INCLUDES) \
+	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-lmlx -L$(LIBFTDIR) -lft $(OBJ)
 
 bonus: all
@@ -74,7 +74,7 @@ $(MLXDIR)$(MLXLIB):
 
 $(OBJDIR)%.o: $(SRCDIR)/%.c $(MLXDIR)$(MLXLIB)
 	@echo "Compiling $@"
-	@gcc -g -c $(FLAGS) $(INCLUDES) -o $@ $<
+	@gcc -c $(FLAGS) $(INCLUDES) -o $@ $<
 
 clean:
 	@echo "Removing objects in all directories..."

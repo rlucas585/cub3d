@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 18:08:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 12:21:01 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,6 @@ typedef enum		e_errors
 	INVALID_FILE = 2,
 	NOT_CONTAINED = 3,
 	TOO_SHORT = 4,
-	TOO_THIN = 5,
 	DUP_PLAYERS = 6,
 	MORE_ARG = 7,
 	NO_MAP = 8,
@@ -196,6 +195,7 @@ typedef enum		e_errors
 	DUP_PARAM = 16,
 	BMP_FAIL = 17,
 	INVALID_ARGUMENT = 22,
+	BIG_MAP = 23,
 	BAD_FILETYPE = 79,
 	CONNECTION_FAIL = 111
 }					t_errors;

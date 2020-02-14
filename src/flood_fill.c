@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:04:22 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 12:50:12 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 12:50:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static int		is_hole(char **map, int pos_y, int pos_x)
 {
 	if (pos_y - 1 < 0 || pos_x - 1 < 0)
 		return (1);
-	if (pos_x + 1 >= (int)ft_strlen(map[pos_y]))
+	if (pos_x + 1 >= (int)(ft_strlen(map[pos_y])))
 		return (1);
-	if (pos_y + 1 >= (int)ft_arrlen(map))
+	if (pos_y + 1 >= (int)(ft_arrlen(map)))
 		return (1);
 	if (pos_x >= (int)ft_strlen(map[pos_y + 1]) ||
 			pos_x >= (int)ft_strlen(map[pos_y - 1]))
@@ -54,23 +54,51 @@ static int		is_hole(char **map, int pos_y, int pos_x)
 	return (0);
 }
 
-static int		flood_fill(char ***map, int pos_y, int pos_x)
+static int		check_pos(char ***map, int pos_y, int pos_x, int *x)
 {
 	if ((*map)[pos_y][pos_x] == '1' || (*map)[pos_y][pos_x] == 'X')
 		return (1);
+	if (pos_y >= (int)(ft_arrlen(*map)) || pos_y < 0)
+		return (0);
+	if (pos_x >= (int)(ft_strlen((*map)[pos_y])) || pos_x < 0)
+		return (0);
 	if ((*map)[pos_y][pos_x] == '0' || (*map)[pos_y][pos_x] == '2')
 	{
 		if (is_hole(*map, pos_y, pos_x))
 			return (0);
 		(*map)[pos_y][pos_x] = 'X';
 	}
-	if (!flood_fill(map, pos_y + 1, pos_x))
+	(*x)++;
+	if (*x == 90000)
+	{
+		*x = -1;
 		return (0);
-	if (!flood_fill(map, pos_y - 1, pos_x))
+	}
+	return (2);
+}
+
+static int		flood_fill(char ***map, int pos_y, int pos_x, int *x)
+{
+	int		r;
+
+	r = check_pos(map, pos_y, pos_x, x);
+	if (r != 2)
+		return (r);
+	if (!(flood_fill(map, pos_y + 1, pos_x, x) == 1))
 		return (0);
-	if (!flood_fill(map, pos_y, pos_x + 1))
+	if (!(flood_fill(map, pos_y - 1, pos_x, x) == 1))
 		return (0);
-	if (!flood_fill(map, pos_y, pos_x - 1))
+	if (!(flood_fill(map, pos_y, pos_x + 1, x) == 1))
+		return (0);
+	if (!(flood_fill(map, pos_y, pos_x - 1, x) == 1))
+		return (0);
+	if (!(flood_fill(map, pos_y + 1, pos_x + 1, x) == 1))
+		return (0);
+	if (!(flood_fill(map, pos_y + 1, pos_x - 1, x) == 1))
+		return (0);
+	if (!(flood_fill(map, pos_y - 1, pos_x + 1, x) == 1))
+		return (0);
+	if (!(flood_fill(map, pos_y - 1, pos_x - 1, x) == 1))
 		return (0);
 	return (1);
 }
@@ -78,14 +106,17 @@ static int		flood_fill(char ***map, int pos_y, int pos_x)
 int				validate_map2(t_info info)
 {
 	char		**map;
+	int			x;
+	int			r;
 
+	x = 0;
 	if (!copy_map(info.map, &map))
 		exit(ft_error(delete_info(MEM_FAIL, info), 0));
-	if (!flood_fill(&map, (int)floor(info.pos.y), (int)floor(info.pos.x)))
-	{
-		delete_map(map);
-		return (0);
-	}
+	r = flood_fill(&map, (int)floor(info.pos.y), (int)floor(info.pos.x), &x);
 	delete_map(map);
+	if (x == -1)
+		exit(ft_error(delete_info(BIG_MAP, info), 0));
+	if (r == 0)
+		return (0);
 	return (1);
 }
