@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/14 15:51:07 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 16:37:19 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_parsef	route_parsing(char c)
 ** map into an array of strings, with each string containing a row of the map
 */
 
-void		parse_map(int fd, char *line, int linenum, t_info *info)
+void		parse_map(int fd, char *line, int *linenum, t_info *info)
 {
 	int			gnlret;
 
@@ -49,28 +49,17 @@ void		parse_map(int fd, char *line, int linenum, t_info *info)
 	gnlret = 1;
 	while (gnlret)
 	{
-		info->map = row_ptrs(make_row(line), *info);
-		if (!info->map)
-			exit(ft_error(delete_info(MEM_FAIL, *info), 0));
-		free(line);
-		line = NULL;
-		gnlret = get_next_line(fd, &line);
-		linenum++;
-		if (!line)
-			exit(ft_error(delete_info(MEM_FAIL, *info), 0));
-		if (gnlret == 1 && !validate_map1(line))
-			exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
-	}
-	if (ft_strlen(line) == 0)
-	{
-		free(line);
-		return ;
+		gnlret = create_map(fd, &line, linenum, info);
+		if (ft_strlen(line) == 0)
+			break ;
 	}
 	if (!validate_map1(line))
-		exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
-	info->map = row_ptrs(make_row(line), *info);
+		exit(ft_error(delete_info(close_file(fd, BAD_FORMAT),
+						*info), *linenum));
+	if (ft_strlen(line) != 0)
+		info->map = row_ptrs(make_row(line), *info);
 	if (!info->map)
-		exit(ft_error(delete_info(MEM_FAIL, *info), 0));
+		exit(ft_error(delete_info(close_file(fd, MEM_FAIL), *info), 0));
 	free(line);
 }
 
@@ -79,7 +68,7 @@ void		parse_map(int fd, char *line, int linenum, t_info *info)
 ** relevant function. Information is placed in the t_map structure mapinfo.
 */
 
-int			parse_line(int fd, char *line, t_info *info, int linenum)
+int			parse_line(int fd, char *line, t_info *info, int *linenum)
 {
 	t_parsef		funct;
 	size_t			i;
@@ -92,14 +81,14 @@ int			parse_line(int fd, char *line, t_info *info, int linenum)
 		line[i] = 'X';
 	funct = route_parsing(line[i]);
 	if (!funct)
-		free_exit(fd, line, info, linenum);
+		free_exit(fd, line, info, *linenum);
 	if (line[i] == '1' || line[i] == '0')
 	{
 		parse_map(fd, line, linenum, info);
-		return (1);
+		return (check_after_map(fd, line, info, linenum));
 	}
 	else if (funct(line + i, info) == -1)
-		free_exit(fd, line, info, linenum);
+		free_exit(fd, line, info, *linenum);
 	return (0);
 }
 
@@ -123,7 +112,7 @@ t_info		cub_parser(int fd)
 	{
 		if (!line)
 			break ;
-		if (!parse_line(fd, line, &mapinfo, linenum))
+		if (!parse_line(fd, line, &mapinfo, &linenum))
 			free(line);
 		line = NULL;
 		linenum++;

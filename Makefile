@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/14 13:14:31 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/14 16:41:47 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)utils.c \
 	   $(SRCDIR)utils2.c \
 	   $(SRCDIR)utils3.c \
+	   $(SRCDIR)utils4.c \
 	   $(SRCDIR)errors.c \
 	   $(SRCDIR)open_file.c \
 	   $(SRCDIR)parse_cub.c \

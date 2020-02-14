@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 12:21:20 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 13:47:06 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 16:47:57 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int			delete_info(int err, t_info info)
 {
 	delete_map(info.map);
 	delete_tex(info.texs);
+	if (info.sprts)
+		free(info.sprts);
 	return (err);
 }
 

@@ -5,20 +5,8 @@
 /*                                                     +:+                    */
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/02/14 15:43:26 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/14 15:43:31 by rlucas        ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   cub3d.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: rlucas <marvin@codam.nl>                     +#+                     */
-/*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/14 15:37:36 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 16:50:23 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,8 +231,8 @@ int					open_file(int argc, char **argv, t_cub *cub);
 */
 
 t_parsef			route_parsing(char c);
-void				parse_map(int fd, char *line, int linenum, t_info *info);
-int					parse_line(int fd, char *line, t_info *info, int linenum);
+void				parse_map(int fd, char *line, int *linenum, t_info *info);
+int					parse_line(int fd, char *line, t_info *info, int *linenum);
 t_info				cub_parser(int fd);
 
 /*
@@ -451,6 +439,14 @@ int					close_file(int fd, int errno);
 int					travel_to_char(char *line, char *stopatchars);
 int					travel_through_char(char *line, char *movethroughchars);
 void				free_exit(int fd, char *line, t_info *info, int linenum);
+
+/*
+** Utility functions in utils4.c.
+*/
+
+int					create_map(int fd, char **line, int *linenum, t_info *info);
+int					check_after_map(int fd, char *line, t_info *info,
+		int *linenum);
 
 /*
 ** Small math functions, not super necessary, in math1.c.
