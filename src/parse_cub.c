@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 18:03:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 15:51:07 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,16 @@ void		parse_map(int fd, char *line, int linenum, t_info *info)
 		if (gnlret == 1 && !validate_map1(line))
 			exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
 	}
+	if (ft_strlen(line) == 0)
+	{
+		free(line);
+		return ;
+	}
+	if (!validate_map1(line))
+		exit(ft_error(delete_info(BAD_FORMAT, *info), linenum));
+	info->map = row_ptrs(make_row(line), *info);
+	if (!info->map)
+		exit(ft_error(delete_info(MEM_FAIL, *info), 0));
 	free(line);
 }
 

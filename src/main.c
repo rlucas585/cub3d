@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 13:44:56 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/14 15:23:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,26 @@ static void	init_info(t_info *info)
 	info->f_or_c.y = 0;
 }
 
+void		print_map(char **map)
+{
+	int			x;
+	int			y;
+
+	x = 0;
+	y = 0;
+	while (map[y])
+	{
+		while (map[y][x])
+		{
+			ft_printf("%c", map[y][x]);
+			x++;
+		}
+		ft_printf("\n");
+		x = 0;
+		y++;
+	}
+}
+
 int			main(int argc, char **argv)
 {
 	t_cub		cub;
@@ -46,6 +66,7 @@ int			main(int argc, char **argv)
 	cub.xsrv.w = NULL;
 	init_info(&cub.info);
 	cub.info = cub_parser(open_file(argc, argv, &cub));
+	print_map(cub.info.map);
 	find_player(&cub.info);
 	validate(cub.info);
 	if (cub.info.pos.x == 0)
