@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:59:27 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 17:26:37 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <cub3d.h>
 #include <math.h>
 
-static void		ray_setup1(t_info info, t_ray *ray, int x)
+void			ray_setup1(t_info info, t_ray *ray, int x)
 {
 	ray->camx = 2 * (double)x / (double)info.res.x - 1;
 	ray->beam.x = sin(to_radians(info.dir)) + ray->plane.x * ray->camx;
@@ -25,7 +25,7 @@ static void		ray_setup1(t_info info, t_ray *ray, int x)
 	ray->delt.y = ft_abs_d(1 / ray->beam.y);
 }
 
-static void		ray_setup2(t_info info, t_ray *ray)
+void			ray_setup2(t_info info, t_ray *ray)
 {
 	if (ray->beam.x < 0)
 	{
@@ -49,7 +49,7 @@ static void		ray_setup2(t_info info, t_ray *ray)
 	}
 }
 
-static void		dda(t_info info, t_ray *ray)
+void			dda(t_info info, t_ray *ray)
 {
 	ray->hit = 0;
 	while (ray->hit == 0)
@@ -77,7 +77,7 @@ static void		dda(t_info info, t_ray *ray)
 			ray->beam.y;
 }
 
-static void		draw_setup(t_info info, t_ray *ray)
+void			draw_setup(t_info info, t_ray *ray)
 {
 	ray->height = (int)(info.res.y / ray->pdist);
 	ray->draw_start = -ray->height / 2 + info.res.y / 2;

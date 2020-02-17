@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/14 16:50:23 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 18:18:46 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define CUB3D_H
 
 # define VALID_MAP_CHARS "012NESW "
-# define FORWARDSPEED 0.3
-# define BACKWARDSPEED 0.25
-# define STRAFESPEED 0.2
-# define TURNANGLE 5
+# define FORWARDSPEED 0.15
+# define BACKWARDSPEED 0.125
+# define STRAFESPEED 0.1
+# define TURNANGLE 4
 
 # include <stdlib.h>
 
@@ -158,6 +158,13 @@ typedef struct		s_ray
 	double			txstep;
 	double			tex_pos;
 }					t_ray;
+
+typedef struct		s_s_thread
+{
+	t_cub			*cub;
+	double			*z_buffer;
+	t_sray			sray;
+}					t_s_thread;
 
 typedef int			(*t_parsef)(char *line, t_info *info);
 
@@ -318,7 +325,17 @@ void				img_put_pixel(t_cub cub, int x, int y, unsigned int color);
 ** in raycasting.c.
 */
 
+void				ray_setup1(t_info info, t_ray *ray, int x);
+void				ray_setup2(t_info info, t_ray *ray);
+void				dda(t_info info, t_ray *ray);
+void				draw_setup(t_info info, t_ray *ray);
 void				ray(t_cub *cub);
+
+/*
+**	Raycasting function if threads are enabled, in thread_ray.c.
+*/
+
+void				thread_ray(t_cub *cub);
 
 /*
 ** Casting functions to fill in an image. In cast.c.
@@ -338,6 +355,23 @@ void				tex_c_and_f(t_cub *cub, t_ray *ray, int x);
 void				tex_c(t_cub *cub, t_ray *ray, int x);
 void				tex_f(t_cub *cub, t_ray *ray, int x);
 void				no_tex(t_cub *cub, t_ray *ray, int x);
+
+/*
+** Functions to setup the spritecasting. In sprite_setup.c
+*/
+
+void				sprite_setup1(t_cub cub, t_sray *sray);
+void				sprite_setup2(t_info info, t_sray *sray, int i, t_2d plane);
+int					init_scast(t_cub *cub, t_sray *sray, int stripe);
+
+/*
+** Thread functions for sprites, in sprite_threads_bonus.c.
+*/
+
+void				*s_thread0(void *value);
+void				*s_thread1(void *value);
+void				*s_thread2(void *value);
+void				*s_thread3(void *value);
 
 /*
 ** Casting sprites, int sprite_cast.c

@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/14 16:41:47 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/17 18:22:44 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,15 @@ MLXLIB = libmlx.dylib
 SRCDIR = src/
 
 OBJDIR = obj/
+
+NOBONUS = $(SRCDIR)loop.c \
+		  $(SRCDIR)sprite_cast.c
+
+BONUS = $(filter-out $(NOBONUS),$(SRCS)) \
+		$(SRCDIR)threads_bonus.c \
+		$(SRCDIR)loop_bonus.c \
+		$(SRCDIR)sprite_threads_bonus.c \
+		$(SRCDIR)sprite_cast_bonus.c
 
 SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)get_info.c \
@@ -46,12 +55,20 @@ SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)hooks1.c \
 	   $(SRCDIR)hooks2.c \
 	   $(SRCDIR)loop.c \
-	   $(SRCDIR)sprite_cast.c \
 	   $(SRCDIR)flood_fill.c \
 	   $(SRCDIR)bmpsave.c \
-	   $(SRCDIR)f_c_tex.c
+	   $(SRCDIR)f_c_tex.c \
+	   $(SRCDIR)sprite_setup.c \
+	   $(SRCDIR)sprite_cast.c
 
-OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRCS))
+ALLSRC = $(SRCS)$(BONUS)
+
+ifdef WITH_BONUS
+	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS))
+else
+	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRCS))
+endif
+
 
 INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
 
@@ -61,10 +78,11 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo  "Compiling Program..."
-	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
+	@gcc -O3 $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-lmlx -L$(LIBFTDIR) -lft $(OBJ)
 
-bonus: all
+bonus:
+	$(MAKE) WITH_BONUS=1 all
 
 $(MLXDIR)$(MLXLIB):
 	@echo "Compiling libft.a..."
@@ -73,14 +91,14 @@ $(MLXDIR)$(MLXLIB):
 	@$(MAKE) -C $(MLXDIR)
 	@cp $(MLXDIR)libmlx.dylib .
 
-$(OBJDIR)%.o: $(SRCDIR)/%.c $(MLXDIR)$(MLXLIB)
+$(OBJDIR)%.o: $(SRCDIR)%.c $(MLXDIR)$(MLXLIB)
 	@echo "Compiling $@"
-	@gcc -c $(FLAGS) $(INCLUDES) -o $@ $<
+	@gcc -O3 -c $(FLAGS) $(INCLUDES) -o $@ $<
 
 clean:
 	@echo "Removing objects in all directories..."
 	@$(MAKE) -C $(LIBFTDIR) clean
-	@rm -f $(OBJ)
+	@rm -f $(ALLOBJ)
 
 fclean: clean
 	@echo "Removing program and libraries in all directories..."
