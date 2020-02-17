@@ -9,9 +9,9 @@ SO    ./textures/hitler.png
 
 
     WE ./textures/hitler.png
-EA ./textures/hitler.png
+EA ./textures/rickandmorty.png
 F ./textures/hitler.png
-      C  127,40,150
+      C  ./textures/awesomeface.png
 
 11111111111111111111111111111
 110011111000000000111111110111

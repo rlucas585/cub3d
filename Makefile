@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/17 18:22:44 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/17 18:57:49 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ NOBONUS = $(SRCDIR)loop.c \
 		  $(SRCDIR)sprite_cast.c
 
 BONUS = $(filter-out $(NOBONUS),$(SRCS)) \
-		$(SRCDIR)threads_bonus.c \
+		$(SRCDIR)thread_ray_bonus.c \
 		$(SRCDIR)loop_bonus.c \
 		$(SRCDIR)sprite_threads_bonus.c \
 		$(SRCDIR)sprite_cast_bonus.c
@@ -61,7 +61,9 @@ SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)sprite_setup.c \
 	   $(SRCDIR)sprite_cast.c
 
-ALLSRC = $(SRCS)$(BONUS)
+ALLSRC = $(SRCS) $(BONUS)
+
+ALLOBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(ALLSRC))
 
 ifdef WITH_BONUS
 	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS))
