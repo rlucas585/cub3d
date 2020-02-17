@@ -6,13 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:33:48 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/03 10:15:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:56:30 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <cub3d.h>
-#include <mlx.h>
 
 void		toggle(int key, t_cub *cub, int on_off)
 {

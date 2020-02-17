@@ -6,13 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:29:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 20:10:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 09:00:04 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <mlx.h>
 #include <cub3d.h>
-#include <libft.h>
 
 static void		one_tex(t_cub *cub, int side, void **img)
 {

@@ -6,14 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:48:37 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/10 13:43:34 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:49:36 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <cub3d.h>
-#include <math.h>
-#include <mlx.h>
 
 void		turn_left(t_cub *cub)
 {

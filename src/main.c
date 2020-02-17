@@ -6,11 +6,10 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 17:16:18 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/14 17:02:08 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:58:13 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <cub3d.h>
 #include <mlx.h>
 
@@ -46,7 +45,6 @@ int			main(int argc, char **argv)
 	cub.xsrv.w = NULL;
 	init_info(&cub.info);
 	cub.info = cub_parser(open_file(argc, argv, &cub));
-	print_map(cub.info.map);
 	find_player(&cub.info);
 	validate(cub.info);
 	if (cub.info.pos.x == 0)

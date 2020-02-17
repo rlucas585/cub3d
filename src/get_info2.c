@@ -6,13 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:43:48 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 20:21:14 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:56:09 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
-#include <mlx.h>
 
 /*
 ** Get color information for floor and ceiling from .cub file, store as single

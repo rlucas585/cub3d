@@ -6,14 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:15:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 13:56:35 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:51:38 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <libft.h>
 #include <cub3d.h>
-#include <math.h>
 
 /*
 ** Put relevant pixels from textures onto the walls.

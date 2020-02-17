@@ -6,12 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:52:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/07 15:17:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:50:09 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-#include <mlx.h>
 #include <libft.h>
 #include <fcntl.h>
 

@@ -6,14 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/16 16:29:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 18:06:21 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:55:47 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
-#include <mlx.h>
-#include <fcntl.h>
 
 /*
 ** Get resolution from .cub file and place in 2-length integer array for x and y

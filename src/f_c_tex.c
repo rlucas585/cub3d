@@ -6,14 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 15:11:14 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 20:28:40 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:54:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <libft.h>
 #include <cub3d.h>
-#include <math.h>
 
 /*
 ** Get the position of a texture coordinate for the ceiling/floor pixel

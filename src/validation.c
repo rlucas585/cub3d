@@ -6,13 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 16:46:41 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/14 16:10:35 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 09:01:00 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
-#include <math.h>
 
 int				only_chars_in_set(char *str, char *validchars)
 {

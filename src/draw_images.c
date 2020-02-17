@@ -6,14 +6,11 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:17:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 18:07:39 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 08:52:25 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <libft.h>
 #include <cub3d.h>
-#include <math.h>
 
 /*
 ** Put the correct sprite pixel in place. Used in sprite_cast().

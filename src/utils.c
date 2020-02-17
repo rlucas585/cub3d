@@ -6,13 +6,12 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/12 15:39:00 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 09:00:21 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <cub3d.h>
-#include <math.h>
 
 /*
 ** Utility functions for the cub3d project
