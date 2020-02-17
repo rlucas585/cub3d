@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 20:17:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:52:25 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 10:35:10 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ void		put_sprite_pixel(t_cub *cub, int y, int stripe, t_sray *sray)
 	d = (y) * 256 - cub->info.res.y * 128 + sray->sprt.height * 128;
 	sray->tx.y = ((d * cub->info.texinf[SPRITE]->size.y) /
 			sray->sprt.height) / 256;
+	if (sray->tx.y >= cub->info.texinf[SPRITE]->size.y ||
+			sray->tx.x >= cub->info.texinf[SPRITE]->size.x ||
+			sray->tx.y < 0 || sray->tx.x < 0)
+		return ;
 	sray->color = *(unsigned int *)(cub->info.texstrs[SPRITE] + 4 *
 			sray->tx.x + cub->info.texinf[SPRITE]->size_line * sray->tx.y);
 	if ((sray->color & 0x00FFFFFF) != 0)
