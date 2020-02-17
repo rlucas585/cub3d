@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:04:22 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:55:12 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/17 11:58:32 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int		check_pos(char ***map, int pos_y, int pos_x, int *x)
 		(*map)[pos_y][pos_x] = 'X';
 	}
 	(*x)++;
-	if (*x == 90000)
+	if (*x == 80000)
 	{
 		*x = -1;
 		return (0);
@@ -100,6 +100,7 @@ static int		flood_fill(char ***map, int pos_y, int pos_x, int *x)
 		return (0);
 	if (!(flood_fill(map, pos_y - 1, pos_x - 1, x) == 1))
 		return (0);
+	*x = *x - 1;
 	return (1);
 }
 
