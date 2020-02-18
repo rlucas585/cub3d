@@ -1,4 +1,4 @@
-          R     5000 5000
+          R     1920 1080
 
 
 S ./textures/barack2.png
@@ -11,7 +11,7 @@ SO    ./textures/test.png
     WE ./textures/hitler.png
 EA ./textures/rickandmorty.png
 F ./textures/tinyface.png
-      C  -0,-    0,-    255
+      C  ./textures/awesomeface.png
 
 11111111111111111111111111111
 110011111000000000111111110111

@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:59:05 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 12:49:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int			parse_line(int fd, char *line, t_info *info, int *linenum)
 
 	i = 0;
 	i += travel_through_char(line + i, " ");
-	if (line[i] == '\0')
+	if (line[i] == '\0' && ft_strlen(line) == 0)
 		return (0);
 	if (ft_strncmp(line + i, "SO", 2) == 0)
 		line[i] = 'X';
