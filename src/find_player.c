@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:39:42 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:54:54 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 09:30:41 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void			find_player(t_info *info)
 	info->pos.x = 0;
 	if (!info->map)
 		exit(ft_error(delete_info(NO_MAP, *info), 0));
-	while (y < (int)ft_arrlen(info->map) - 1)
+	while (y < (int)ft_arrlen(info->map))
 	{
-		while (x < (int)ft_strlen(info->map[y]) - 1)
+		while (x < (int)ft_strlen(info->map[y]))
 		{
 			if (ft_strchr("NESW", info->map[y][x]))
 			{

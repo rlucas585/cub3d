@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/17 17:36:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 18:18:21 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 09:21:15 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 	sray_copy(data[0].sray, &(data[1].sray));
 	sray_copy(data[0].sray, &(data[2].sray));
 	sray_copy(data[0].sray, &(data[3].sray));
-	pthread_create(&thread[0], NULL, &s_thread0, &data[0]);
-	pthread_create(&thread[1], NULL, &s_thread1, &data[1]);
-	pthread_create(&thread[2], NULL, &s_thread2, &data[2]);
-	pthread_create(&thread[3], NULL, &s_thread3, &data[3]);
+	if (pthread_create(&thread[0], NULL, &s_thread0, &data[0]) ||
+		pthread_create(&thread[1], NULL, &s_thread1, &data[1]) ||
+		pthread_create(&thread[2], NULL, &s_thread2, &data[2]) ||
+		pthread_create(&thread[3], NULL, &s_thread3, &data[3]))
+		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
 	pthread_join(thread[0], NULL);
 	pthread_join(thread[1], NULL);
 	pthread_join(thread[2], NULL);

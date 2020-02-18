@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/17 18:57:49 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/18 09:42:11 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,11 +25,13 @@ OBJDIR = obj/
 NOBONUS = $(SRCDIR)loop.c \
 		  $(SRCDIR)sprite_cast.c
 
-BONUS = $(filter-out $(NOBONUS),$(SRCS)) \
-		$(SRCDIR)thread_ray_bonus.c \
+BONUS = $(SRCDIR)thread_ray_bonus.c \
 		$(SRCDIR)loop_bonus.c \
 		$(SRCDIR)sprite_threads_bonus.c \
 		$(SRCDIR)sprite_cast_bonus.c
+
+BONUS_AND_SRC = $(filter-out $(NOBONUS),$(SRCS)) \
+		   $(BONUS)
 
 SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)get_info.c \
@@ -61,7 +63,7 @@ SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)sprite_setup.c \
 	   $(SRCDIR)sprite_cast.c
 
-ALLSRC = $(SRCS) $(BONUS)
+ALLSRC = $(SRCS) $(BONUS_AND_SRC)
 
 ALLOBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(ALLSRC))
 
@@ -71,7 +73,6 @@ else
 	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRCS))
 endif
 
-
 INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
 
 FLAGS = -Wall -Wextra -Werror
@@ -79,6 +80,12 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJ)
+	@if [ $(WITH_BONUS) ]; then\
+		rm -f $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(NOBONUS)); \
+		fi
+	@if [ !$(WITH_BONUS) ]; then\
+		rm -f $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS)); \
+		fi
 	@echo  "Compiling Program..."
 	@gcc -O3 $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-lmlx -L$(LIBFTDIR) -lft $(OBJ)

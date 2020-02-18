@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/17 17:25:56 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 18:36:30 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 09:19:45 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,14 @@ void		thread_ray(t_cub *cub)
 		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
 	ray.plane.x = 0.66 * cos(to_radians(cub->info.dir));
 	ray.plane.y = 0.66 * sin(to_radians(cub->info.dir));
-	pthread_create(&thread[0], NULL, &thread0, cub);
-	pthread_create(&thread[1], NULL, &thread1, cub);
-	pthread_create(&thread[2], NULL, &thread2, cub);
-	pthread_create(&thread[3], NULL, &thread3, cub);
+	if (pthread_create(&thread[0], NULL, &thread0, cub))
+		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
+	if (pthread_create(&thread[1], NULL, &thread1, cub))
+		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
+	if (pthread_create(&thread[2], NULL, &thread2, cub))
+		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
+	if (pthread_create(&thread[3], NULL, &thread3, cub))
+		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
 	pthread_join(thread[0], NULL);
 	pthread_join(thread[1], NULL);
 	pthread_join(thread[2], NULL);
