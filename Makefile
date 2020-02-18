@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/18 11:29:21 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/18 17:01:49 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,13 +80,13 @@ endif
 
 INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -O3
 
 all: bonus_convert $(NAME)
 
 $(NAME): $(OBJ)
 	@echo  "Compiling Program..."
-	@gcc -g $(FLAGS) -o $(NAME) $(INCLUDES) \
+	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-lmlx -L$(LIBFTDIR) -lft $(OBJ)
 
 bonus_convert:
@@ -109,7 +109,7 @@ $(MLXDIR)$(MLXLIB):
 
 $(OBJDIR)%.o: $(SRCDIR)%.c $(MLXDIR)$(MLXLIB)
 	@echo "Compiling $@"
-	@gcc -g -c $(FLAGS) $(INCLUDES) -o $@ $<
+	@gcc -c $(FLAGS) $(INCLUDES) -o $@ $<
 
 clean:
 	@echo "Removing objects in all directories..."

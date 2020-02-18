@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/18 14:43:47 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 17:03:14 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_parsef	route_parsing(char c)
 		['S'] = &get_texture,
 		['F'] = &get_floor_ceiling,
 		['C'] = &get_floor_ceiling,
+		['2'] = &get_color,
 		['1'] = &get_color,
 		['0'] = &get_color,
 	};
@@ -87,7 +88,7 @@ int			parse_line(int fd, char *line, t_info *info, int *linenum)
 	funct = route_parsing(line[i]);
 	if (!funct)
 		free_exit(fd, line, info, *linenum);
-	if (line[i] == '1' || line[i] == '0')
+	if (line[i] == '1' || line[i] == '0' || line[i] == '2')
 	{
 		parse_map(fd, line, linenum, info);
 		return (check_after_map(fd, line, info, linenum));
