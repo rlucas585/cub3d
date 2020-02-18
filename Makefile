@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/18 10:31:54 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/18 11:29:21 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,9 @@ ALLSRC = $(NOBONUS) $(BONUS_AND_SRC)
 
 ALLOBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(ALLSRC))
 
-ifdef WITH_BONUS
+WITH_BONUS = 0
+
+ifeq ($(WITH_BONUS), 1)
 	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS_AND_SRC))
 else
 	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRCS))
@@ -80,11 +82,11 @@ INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
 
 FLAGS = -Wall -Wextra -Werror
 
-all: $(NAME)
+all: bonus_convert $(NAME)
 
-$(NAME): bonus_convert $(OBJ)
+$(NAME): $(OBJ)
 	@echo  "Compiling Program..."
-	@gcc -O3 $(FLAGS) -o $(NAME) $(INCLUDES) \
+	@gcc -g $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-lmlx -L$(LIBFTDIR) -lft $(OBJ)
 
 bonus_convert:
@@ -96,7 +98,7 @@ bonus_convert:
 		fi
 
 bonus:
-	$(MAKE) WITH_BONUS=1 all
+	@$(MAKE) WITH_BONUS=1 all
 
 $(MLXDIR)$(MLXLIB):
 	@echo "Compiling libft.a..."
@@ -107,7 +109,7 @@ $(MLXDIR)$(MLXLIB):
 
 $(OBJDIR)%.o: $(SRCDIR)%.c $(MLXDIR)$(MLXLIB)
 	@echo "Compiling $@"
-	@gcc -O3 -c $(FLAGS) $(INCLUDES) -o $@ $<
+	@gcc -g -c $(FLAGS) $(INCLUDES) -o $@ $<
 
 clean:
 	@echo "Removing objects in all directories..."

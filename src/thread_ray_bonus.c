@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/17 17:25:56 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/18 09:19:45 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 12:29:50 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void	*thread0(void *value)
 		ray_setup2(cub->info, &ray);
 		dda(cub->info, &ray);
 		draw_setup(cub->info, &ray);
-		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
+		wallcast(cub, &ray, x);
 		cub->info.z_buffer[x] = ray.pdist;
 		x++;
 	}
@@ -55,8 +55,8 @@ static void	*thread1(void *value)
 		ray_setup2(cub->info, &ray);
 		dda(cub->info, &ray);
 		draw_setup(cub->info, &ray);
-		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
+		wallcast(cub, &ray, x);
 		cub->info.z_buffer[x] = ray.pdist;
 		x++;
 	}
@@ -79,8 +79,8 @@ static void	*thread2(void *value)
 		ray_setup2(cub->info, &ray);
 		dda(cub->info, &ray);
 		draw_setup(cub->info, &ray);
-		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
+		wallcast(cub, &ray, x);
 		cub->info.z_buffer[x] = ray.pdist;
 		x++;
 	}
@@ -103,8 +103,8 @@ static void	*thread3(void *value)
 		ray_setup2(cub->info, &ray);
 		dda(cub->info, &ray);
 		draw_setup(cub->info, &ray);
-		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
+		wallcast(cub, &ray, x);
 		cub->info.z_buffer[x] = ray.pdist;
 		x++;
 	}

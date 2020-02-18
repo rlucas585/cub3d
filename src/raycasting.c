@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/20 16:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 17:26:37 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 12:02:20 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ void			ray(t_cub *cub)
 		ray_setup2(cub->info, &ray);
 		dda(cub->info, &ray);
 		draw_setup(cub->info, &ray);
-		wallcast(cub, &ray, x);
 		floorcast(cub, &ray, x);
+		wallcast(cub, &ray, x);
 		cub->info.z_buffer[x] = ray.pdist;
 		x++;
 	}
