@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/18 13:05:53 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 14:43:47 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ int			parse_line(int fd, char *line, t_info *info, int *linenum)
 	size_t			i;
 
 	i = 0;
+	if (!check_file_content(line))
+		free_exit(fd, line, info, *linenum);
 	i += travel_through_char(line + i, " ");
 	if (line[i] == '\0' && ft_strlen(line) == 0)
 		return (0);

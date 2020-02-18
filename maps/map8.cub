@@ -9,8 +9,8 @@ EA ./textures/redbrick.png
 S ./textures/barack4.png
 
 
-C 255,80,60
-F 178,178,178
+C ./textures/purplestone.png
+F ./textures/purplestone.png
 
 1111111111111111
 1020200002000001

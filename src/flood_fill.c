@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:04:22 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 11:58:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 14:45:17 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int		is_hole(char **map, int pos_y, int pos_x)
 	return (0);
 }
 
-static int		check_pos(char ***map, int pos_y, int pos_x, int *x)
+static int		check_pos(char ***map, int pos_y, int pos_x, int *count)
 {
 	if ((*map)[pos_y][pos_x] == '1' || (*map)[pos_y][pos_x] == 'X')
 		return (1);
@@ -68,56 +68,57 @@ static int		check_pos(char ***map, int pos_y, int pos_x, int *x)
 			return (0);
 		(*map)[pos_y][pos_x] = 'X';
 	}
-	(*x)++;
-	if (*x == 80000)
+	(*count)++;
+	if (*count == 80000)
 	{
-		*x = -1;
+		*count = -1;
 		return (0);
 	}
 	return (2);
 }
 
-static int		flood_fill(char ***map, int pos_y, int pos_x, int *x)
+static int		flood_fill(char ***map, int pos_y, int pos_x, int *count)
 {
-	int		r;
+	int		ret;
 
-	r = check_pos(map, pos_y, pos_x, x);
-	if (r != 2)
-		return (r);
-	if (!(flood_fill(map, pos_y + 1, pos_x, x) == 1))
+	ret = check_pos(map, pos_y, pos_x, count);
+	if (ret != 2)
+		return (ret);
+	if (!(flood_fill(map, pos_y + 1, pos_x, count) == 1))
 		return (0);
-	if (!(flood_fill(map, pos_y - 1, pos_x, x) == 1))
+	if (!(flood_fill(map, pos_y - 1, pos_x, count) == 1))
 		return (0);
-	if (!(flood_fill(map, pos_y, pos_x + 1, x) == 1))
+	if (!(flood_fill(map, pos_y, pos_x + 1, count) == 1))
 		return (0);
-	if (!(flood_fill(map, pos_y, pos_x - 1, x) == 1))
+	if (!(flood_fill(map, pos_y, pos_x - 1, count) == 1))
 		return (0);
-	if (!(flood_fill(map, pos_y + 1, pos_x + 1, x) == 1))
+	if (!(flood_fill(map, pos_y + 1, pos_x + 1, count) == 1))
 		return (0);
-	if (!(flood_fill(map, pos_y + 1, pos_x - 1, x) == 1))
+	if (!(flood_fill(map, pos_y + 1, pos_x - 1, count) == 1))
 		return (0);
-	if (!(flood_fill(map, pos_y - 1, pos_x + 1, x) == 1))
+	if (!(flood_fill(map, pos_y - 1, pos_x + 1, count) == 1))
 		return (0);
-	if (!(flood_fill(map, pos_y - 1, pos_x - 1, x) == 1))
+	if (!(flood_fill(map, pos_y - 1, pos_x - 1, count) == 1))
 		return (0);
-	*x = *x - 1;
+	*count = *count - 1;
 	return (1);
 }
 
 int				validate_map2(t_info info)
 {
 	char		**map;
-	int			x;
-	int			r;
+	int			count;
+	int			ret;
 
-	x = 0;
+	count = 0;
 	if (!copy_map(info.map, &map))
 		exit(ft_error(delete_info(MEM_FAIL, info), 0));
-	r = flood_fill(&map, (int)floor(info.pos.y), (int)floor(info.pos.x), &x);
+	ret = flood_fill(&map, (int)floor(info.pos.y), (int)floor(info.pos.x),
+			&count);
 	delete_map(map);
-	if (x == -1)
+	if (count == -1)
 		exit(ft_error(delete_info(BIG_MAP, info), 0));
-	if (r == 0)
+	if (ret == 0)
 		return (0);
 	return (1);
 }

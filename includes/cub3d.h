@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/18 13:01:40 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 14:42:32 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,6 +482,7 @@ void				free_exit(int fd, char *line, t_info *info, int linenum);
 int					create_map(int fd, char **line, int *linenum, t_info *info);
 int					check_after_map(int fd, char *line, t_info *info,
 		int *linenum);
+int					check_file_content(char *line);
 
 /*
 ** Small math functions, not super necessary, in math1.c.

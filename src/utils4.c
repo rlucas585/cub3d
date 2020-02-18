@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 16:34:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/18 13:03:55 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 14:42:16 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,19 @@ int			check_after_map(int fd, char *line, t_info *info, int *linenum)
 	if (ft_strlen(line) != 0)
 		free_exit(fd, line, info, *linenum);
 	free(line);
+	return (1);
+}
+
+int			check_file_content(char *line)
+{
+	size_t			i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!ft_isascii(line[i]))
+			return (0);
+		i++;
+	}
 	return (1);
 }
