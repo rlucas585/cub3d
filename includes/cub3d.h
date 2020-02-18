@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 18:18:46 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 13:01:40 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,6 +450,7 @@ void				player_actions(t_cub *cub);
 ** Utility functions in utils.c.
 */
 
+int					get_row_width(char *line);
 char				*make_row(char *line);
 char				**row_ptrs(char *newrow, t_info info);
 size_t				ft_arrlen(char **array);

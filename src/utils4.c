@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 16:34:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 09:00:48 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 13:03:55 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int			create_map(int fd, char **line, int *linenum, t_info *info)
 	*line = NULL;
 	ret = get_next_line(fd, line);
 	(*linenum)++;
+	if (get_row_width(*line) == 0)
+		return (0);
 	if (!(*line))
 		exit(ft_error(delete_info(close_file(fd, MEM_FAIL), *info), 0));
 	if (ret == 1 && !validate_map1(*line))

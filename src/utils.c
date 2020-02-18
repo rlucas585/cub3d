@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 12:48:38 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 09:00:21 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/18 13:01:26 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** Utility functions for the cub3d project
 */
 
-static int	get_row_width(char *line)
+int			get_row_width(char *line)
 {
 	int		i;
 	int		j;
