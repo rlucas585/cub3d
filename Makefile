@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/18 09:42:11 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/18 10:31:54 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,10 @@ BONUS = $(SRCDIR)thread_ray_bonus.c \
 		$(SRCDIR)sprite_cast_bonus.c
 
 BONUS_AND_SRC = $(filter-out $(NOBONUS),$(SRCS)) \
-		   $(BONUS)
+				$(SRCDIR)thread_ray_bonus.c \
+				$(SRCDIR)loop_bonus.c \
+				$(SRCDIR)sprite_threads_bonus.c \
+				$(SRCDIR)sprite_cast_bonus.c
 
 SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)get_info.c \
@@ -63,12 +66,12 @@ SRCS = $(SRCDIR)main.c \
 	   $(SRCDIR)sprite_setup.c \
 	   $(SRCDIR)sprite_cast.c
 
-ALLSRC = $(SRCS) $(BONUS_AND_SRC)
+ALLSRC = $(NOBONUS) $(BONUS_AND_SRC)
 
 ALLOBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(ALLSRC))
 
 ifdef WITH_BONUS
-	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS))
+	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS_AND_SRC))
 else
 	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRCS))
 endif
@@ -79,16 +82,18 @@ FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@if [ $(WITH_BONUS) ]; then\
-		rm -f $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(NOBONUS)); \
-		fi
-	@if [ !$(WITH_BONUS) ]; then\
-		rm -f $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS)); \
-		fi
+$(NAME): bonus_convert $(OBJ)
 	@echo  "Compiling Program..."
 	@gcc -O3 $(FLAGS) -o $(NAME) $(INCLUDES) \
 		-lmlx -L$(LIBFTDIR) -lft $(OBJ)
+
+bonus_convert:
+	@if [[ "$(WITH_BONUS)" == 1 ]]; then\
+		rm -f $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(NOBONUS)); \
+		fi
+	@if [[ "$(WITH_BONUS)" == 0 ]]; then\
+		rm -f $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS)); \
+		fi
 
 bonus:
 	$(MAKE) WITH_BONUS=1 all
@@ -119,4 +124,4 @@ fclean: clean
 re: fclean all
 
 
-.PHONY: clean fclean all re bonus
+.PHONY: clean fclean all re bonus bonus_convert
