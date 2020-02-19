@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:52:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:50:09 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/19 08:48:03 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,32 @@
 #include <libft.h>
 #include <fcntl.h>
 
-static void	write_bmp_header(int fd, t_cub cub)
+static unsigned int	count_padding(t_cub cub)
+{
+	unsigned int	count;
+	int				x;
+	int				y;
+
+	x = 0;
+	y = cub.info.res.y - 1;
+	count = 0;
+	while (y >= 0)
+	{
+		while (x < cub.info.res.x)
+			x++;
+		if ((x * 3) % 4 != 0) 
+			count += 4 - ((x * 3) % 4);
+		x = 0;
+		y--;
+	}
+	return (count);
+}
+
+static void			write_bmp_header(int fd, t_cub cub)
 {
 	unsigned int	size;
 
-	size = cub.info.res.y * cub.info.res.x * 3 + 54;
+	size = cub.info.res.y * cub.info.res.x * 3 + count_padding(cub) + 54;
 	write(fd, "BM", 2);
 	write(fd, &size, 4);
 	write(fd, "\x00\x00\x00\x00", 4);
@@ -36,7 +57,7 @@ static void	write_bmp_header(int fd, t_cub cub)
 	write(fd, "\x00\x00\x00\x00", 4);
 }
 
-void		save_init_img(t_cub cub)
+void				save_init_img(t_cub cub)
 {
 	int		fd;
 	int		x;
