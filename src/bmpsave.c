@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:52:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/19 08:48:03 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/19 09:09:22 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static unsigned int	count_padding(t_cub cub)
 	{
 		while (x < cub.info.res.x)
 			x++;
-		if ((x * 3) % 4 != 0) 
+		if ((x * 3) % 4 != 0)
 			count += 4 - ((x * 3) % 4);
 		x = 0;
 		y--;
