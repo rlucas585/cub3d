@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:43:48 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:56:09 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/21 10:23:39 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,10 @@ static int	only_three_colors(char *line)
 
 static int	validate_color(char *line)
 {
-	char		*last;
-	size_t		i;
-
-	i = 0;
 	if (numstrchr(line, ',') != 2)
 		return (0);
 	if (only_three_colors(line) == ERROR)
 		return (0);
-	last = ft_strrchr(line, ',') + 1;
 	if (ft_atoi(line + 1) > 255 || ft_atoi(line + 1) < 0)
 		return (0);
 	if (ft_atoi(ft_strchr(line, ',') + 1) > 255 ||

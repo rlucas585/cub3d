@@ -6,13 +6,15 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/18 17:01:49 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/21 11:20:58 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 
 LIBFTDIR = libft/
+
+SHELL := /bin/bash		# Allows bash syntax
 
 MLXDIR = minilibx_mms_20191207_beta/
 
@@ -22,18 +24,22 @@ SRCDIR = src/
 
 OBJDIR = obj/
 
+MLX_C_DIR = minilibx/
+
 NOBONUS = $(SRCDIR)loop.c \
 		  $(SRCDIR)sprite_cast.c
 
 BONUS = $(SRCDIR)thread_ray_bonus.c \
 		$(SRCDIR)loop_bonus.c \
 		$(SRCDIR)sprite_threads_bonus.c \
-		$(SRCDIR)sprite_cast_bonus.c
+		$(SRCDIR)sprite_threads_2_bonus.c \
+		$(SRCDIR)sprite_cast_bonus.c \
 
 BONUS_AND_SRC = $(filter-out $(NOBONUS),$(SRCS)) \
 				$(SRCDIR)thread_ray_bonus.c \
 				$(SRCDIR)loop_bonus.c \
 				$(SRCDIR)sprite_threads_bonus.c \
+				$(SRCDIR)sprite_threads_2_bonus.c \
 				$(SRCDIR)sprite_cast_bonus.c
 
 SRCS = $(SRCDIR)main.c \
@@ -72,22 +78,31 @@ ALLOBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(ALLSRC))
 
 WITH_BONUS = 0
 
+NO_SWIFT = 0
+
 ifeq ($(WITH_BONUS), 1)
 	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(BONUS_AND_SRC))
 else
 	OBJ = $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRCS))
 endif
 
-INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
 
-FLAGS = -Wall -Wextra -Werror -O3
+ifeq ($(NO_SWIFT), 1)
+	INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLX_C_DIR)
+	DEFINES += -D LINUX=1
+else
+	INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
+endif
+
+FLAGS = -Wall -Wextra -Werror -O3 -g
 
 all: bonus_convert $(NAME)
 
 $(NAME): $(OBJ)
 	@echo  "Compiling Program..."
-	@gcc $(FLAGS) -o $(NAME) $(INCLUDES) \
-		-lmlx -L$(LIBFTDIR) -lft $(OBJ)
+	@echo $(INCLUDES)
+	@gcc $(FLAGS) $(OBJ) -o $(NAME) $(DEFINES) $(INCLUDES) \
+		-L$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft
 
 bonus_convert:
 	@if [[ "$(WITH_BONUS)" == 1 ]]; then\
@@ -100,16 +115,34 @@ bonus_convert:
 bonus:
 	@$(MAKE) WITH_BONUS=1 all
 
-$(MLXDIR)$(MLXLIB):
+noswift:
+	@$(MAKE) WITH_BONUS=1 NO_SWIFT=1 noswift2
+
+noswift2: bonus_convert $(OBJ)
+	@echo "Compiling Program with C MiniLibX..."
+	@echo $(DEFINES)
+	@gcc $(FLAGS) -o $(NAME) $(OBJ) $(DEFINES) $(INCLUDES) \
+		-L$(MLX_C_DIR) -lmlx_x86_64 -L$(LIBFTDIR) -lft -lm -pthread -lX11 \
+		-lz -lXext
+
+make_libraries:
+ifeq ($(NO_SWIFT),0)
 	@echo "Compiling libft.a..."
 	@$(MAKE) -C $(LIBFTDIR)
 	@echo "Compiling libmlx.dylib..."
 	@$(MAKE) -C $(MLXDIR)
 	@cp $(MLXDIR)libmlx.dylib .
+else
+	@echo "Compiling libft.a..."
+	@$(MAKE) -C $(LIBFTDIR)
+	@echo "Compiling libmlx.a"
+	@$(MAKE) -C $(MLX_C_DIR)
+endif
 
-$(OBJDIR)%.o: $(SRCDIR)%.c $(MLXDIR)$(MLXLIB)
+$(OBJDIR)%.o: $(SRCDIR)%.c make_libraries
 	@echo "Compiling $@"
-	@gcc -c $(FLAGS) $(INCLUDES) -o $@ $<
+	@gcc -c $(FLAGS) -o $@ $<  $(INCLUDES) $(DEFINES) -L$(MLX_C_DIR) -lmlx \
+		-L$(LIBFTDIR) -lft
 
 clean:
 	@echo "Removing objects in all directories..."
@@ -120,10 +153,11 @@ fclean: clean
 	@echo "Removing program and libraries in all directories..."
 	@$(MAKE) -C $(LIBFTDIR) fclean
 	@$(MAKE) -C $(MLXDIR) clean
+	@$(MAKE) -C $(MLX_C_DIR) clean
 	@rm -f libmlx.dylib
 	@rm -f $(NAME)
 
 re: fclean all
 
 
-.PHONY: clean fclean all re bonus bonus_convert
+.PHONY: clean fclean all re bonus bonus_convert make_libraries

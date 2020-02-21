@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   sprite_threads_bonus.c                             :+:    :+:            */
+/*   sprite_threads_2_bonus.c                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rlucas <marvin@codam.nl>                     +#+                     */
+/*   By: rlucas <ryanl585codam@gmail.com>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/02/17 17:54:36 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/21 11:15:10 by rlucas        ########   odam.nl         */
+/*   Created: 2020/02/21 11:08:40 by rlucas        #+#    #+#                 */
+/*   Updated: 2020/02/21 11:16:37 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 #include <cub3d.h>
 #include <math.h>
 
-void	*s_thread0(void *value)
+void	*s_thread4(void *value)
 {
 	t_s_thread	*data;
 	int			x;
 	int			y;
 
 	data = (t_s_thread *)value;
-	x = data->sray.draw_start.x;
-	while (x <= data->sray.draw_start.x + (data->sray.draw_end.x -
+	x = data->sray.draw_start.x / 2;
+	while (x <= data->sray.draw_start.x + 5 * (data->sray.draw_end.x -
 				data->sray.draw_start.x) / 8 && x < data->cub->info.res.x)
 	{
 		y = init_scast(data->cub, &data->sray, x);
@@ -41,16 +41,16 @@ void	*s_thread0(void *value)
 	return (NULL);
 }
 
-void	*s_thread1(void *value)
+void	*s_thread5(void *value)
 {
 	t_s_thread	*data;
 	int			x;
 	int			y;
 
 	data = (t_s_thread *)value;
-	x = data->sray.draw_start.x + (data->sray.draw_end.x -
+	x = data->sray.draw_start.x + 5 * (data->sray.draw_end.x -
 			data->sray.draw_start.x) / 8;
-	while (x < data->sray.draw_start.x + (data->sray.draw_end.x -
+	while (x < data->sray.draw_start.x + 3 * (data->sray.draw_end.x -
 				data->sray.draw_start.x) / 4 && x < data->cub->info.res.x)
 	{
 		y = init_scast(data->cub, &data->sray, x);
@@ -69,16 +69,16 @@ void	*s_thread1(void *value)
 	return (NULL);
 }
 
-void	*s_thread2(void *value)
+void	*s_thread6(void *value)
 {
 	t_s_thread	*data;
 	int			x;
 	int			y;
 
 	data = (t_s_thread *)value;
-	x = data->sray.draw_start.x + (data->sray.draw_end.x -
+	x = data->sray.draw_start.x + 3 * (data->sray.draw_end.x -
 			data->sray.draw_start.x) / 4;
-	while (x < data->sray.draw_start.x + 3 * (data->sray.draw_end.x -
+	while (x < data->sray.draw_start.x + 7 * (data->sray.draw_end.x -
 				data->sray.draw_start.x) / 8 && x < data->cub->info.res.x)
 	{
 		y = init_scast(data->cub, &data->sray, x);
@@ -97,17 +97,16 @@ void	*s_thread2(void *value)
 	return (NULL);
 }
 
-void	*s_thread3(void *value)
+void	*s_thread7(void *value)
 {
 	t_s_thread	*data;
 	int			x;
 	int			y;
 
 	data = (t_s_thread *)value;
-	x = data->sray.draw_start.x + 3 * (data->sray.draw_end.x -
+	x = data->sray.draw_start.x + 7 * (data->sray.draw_end.x -
 			data->sray.draw_start.x) / 8;
-	while (x <= data->sray.draw_end.x + (data->sray.draw_end.x -
-			data->sray.draw_start.x) / 2 && x < data->cub->info.res.x)
+	while (x <= data->sray.draw_end.x && x < data->cub->info.res.x)
 	{
 		y = init_scast(data->cub, &data->sray, x);
 		if (data->sray.transform.y > 0 && x >= 0 && x <

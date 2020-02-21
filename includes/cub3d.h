@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/15 15:08:58 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/18 14:42:32 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/21 11:17:39 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,20 @@ typedef enum		e_errors
 	CONNECTION_FAIL = 111
 }					t_errors;
 
+# ifdef LINUX
+typedef enum		e_keydefs
+{
+	KEY_A = 97,
+	KEY_S = 115,
+	KEY_D = 100,
+	KEY_W = 119,
+	KEY_ESC = 65307,
+	KEY_LEFT = 65361,
+	KEY_RIGHT = 65363,
+}					t_keydefs;
+# endif
+
+# ifndef LINUX
 typedef enum		e_keydefs
 {
 	KEY_A = 0,
@@ -217,6 +231,7 @@ typedef enum		e_keydefs
 	KEY_LEFT = 123,
 	KEY_RIGHT,
 }					t_keydefs;
+# endif
 
 /*
 *******************************Opening File************************************
@@ -240,7 +255,7 @@ int					open_file(int argc, char **argv, t_cub *cub);
 t_parsef			route_parsing(char c);
 void				parse_map(int fd, char *line, int *linenum, t_info *info);
 int					parse_line(int fd, char *line, t_info *info, int *linenum);
-t_info				cub_parser(int fd);
+t_info				cub_parser(int fd, t_info *mapinfo);
 
 /*
 ** Functions to read info from a line into relevant info structure, in
@@ -365,13 +380,18 @@ void				sprite_setup2(t_info info, t_sray *sray, int i, t_2d plane);
 int					init_scast(t_cub *cub, t_sray *sray, int stripe);
 
 /*
-** Thread functions for sprites, in sprite_threads_bonus.c.
+** Thread functions for sprites, in sprite_threads_bonus.c and
+** sprite_threads_2_bonus.c
 */
 
 void				*s_thread0(void *value);
 void				*s_thread1(void *value);
 void				*s_thread2(void *value);
 void				*s_thread3(void *value);
+void				*s_thread4(void *value);
+void				*s_thread5(void *value);
+void				*s_thread6(void *value);
+void				*s_thread7(void *value);
 
 /*
 ** Casting sprites, int sprite_cast.c

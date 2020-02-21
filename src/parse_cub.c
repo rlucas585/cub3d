@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/17 14:54:27 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/18 17:03:14 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/21 10:21:36 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,11 @@ int			parse_line(int fd, char *line, t_info *info, int *linenum)
 ** through linenum to give linenumber in error messages.
 */
 
-t_info		cub_parser(int fd)
+t_info		cub_parser(int fd, t_info *mapinfo)
 {
 	char		*line;
 	int			exitno;
 	int			linenum;
-	t_info		mapinfo;
 
 	linenum = 1;
 	exitno = get_next_line(fd, &line);
@@ -118,7 +117,7 @@ t_info		cub_parser(int fd)
 	{
 		if (!line)
 			break ;
-		if (!parse_line(fd, line, &mapinfo, &linenum))
+		if (!parse_line(fd, line, mapinfo, &linenum))
 			free(line);
 		line = NULL;
 		linenum++;
@@ -129,5 +128,5 @@ t_info		cub_parser(int fd)
 	if (exitno < 0)
 		exit(ft_error(close_file(fd, MEM_FAIL), 0));
 	close(fd);
-	return (mapinfo);
+	return (*mapinfo);
 }
