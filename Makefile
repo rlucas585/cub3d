@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/21 11:20:58 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/21 14:18:30 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,13 +94,12 @@ else
 	INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
 endif
 
-FLAGS = -Wall -Wextra -Werror -O3 -g
+FLAGS = -Wall -Wextra -Werror -O3
 
 all: bonus_convert $(NAME)
 
 $(NAME): $(OBJ)
 	@echo  "Compiling Program..."
-	@echo $(INCLUDES)
 	@gcc $(FLAGS) $(OBJ) -o $(NAME) $(DEFINES) $(INCLUDES) \
 		-L$(MLXDIR) -lmlx -L$(LIBFTDIR) -lft
 
@@ -120,7 +119,6 @@ noswift:
 
 noswift2: bonus_convert $(OBJ)
 	@echo "Compiling Program with C MiniLibX..."
-	@echo $(DEFINES)
 	@gcc $(FLAGS) -o $(NAME) $(OBJ) $(DEFINES) $(INCLUDES) \
 		-L$(MLX_C_DIR) -lmlx_x86_64 -L$(LIBFTDIR) -lft -lm -pthread -lX11 \
 		-lz -lXext
