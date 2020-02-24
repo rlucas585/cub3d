@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/21 14:18:30 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/24 10:31:11 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -139,8 +139,7 @@ endif
 
 $(OBJDIR)%.o: $(SRCDIR)%.c make_libraries
 	@echo "Compiling $@"
-	@gcc -c $(FLAGS) -o $@ $<  $(INCLUDES) $(DEFINES) -L$(MLX_C_DIR) -lmlx \
-		-L$(LIBFTDIR) -lft
+	@gcc -c $(FLAGS) -o $@ $<  $(INCLUDES) $(DEFINES)
 
 clean:
 	@echo "Removing objects in all directories..."
