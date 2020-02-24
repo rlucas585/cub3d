@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:48:46 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/17 08:52:01 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/24 10:58:33 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,17 @@ void		establish_connection(t_cub *cub)
 	cub->xsrv.dpy = mlx_init();
 	if (cub->xsrv.dpy == NULL)
 		exit(ft_error(delete_info(CONNECTION_FAIL, cub->info), 0));
-	cub->xsrv.w = mlx_new_window(cub->xsrv.dpy,
-			cub->info.res.x, cub->info.res.y, "Ryan's cub3d");
-	if (cub->xsrv.w == NULL)
-		exit(ft_error(delete_info(CONNECTION_FAIL, cub->info), 0));
+	if (cub->save != 1)
+	{
+		cub->xsrv.w = mlx_new_window(cub->xsrv.dpy,
+				cub->info.res.x, cub->info.res.y, "Ryan's cub3d");
+		if (cub->xsrv.w == NULL)
+			exit(ft_error(delete_info(CONNECTION_FAIL, cub->info), 0));
+	}
 	cub->xsrv.imginf = (t_imginf *)malloc(sizeof(t_imginf));
 	if (cub->xsrv.imginf == NULL)
 		exit(ft_error(delete_info(MEM_FAIL, cub->info), 0));
-	mlx_clear_window(cub->xsrv.dpy, cub->xsrv.w);
+	if (cub->save != 1)
+		mlx_clear_window(cub->xsrv.dpy, cub->xsrv.w);
 	init_images(cub);
 }

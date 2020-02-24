@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/07 14:52:19 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/20 22:34:42 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/24 10:56:56 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,21 @@ static void			write_bmp_header(int fd, t_cub cub)
 	unsigned int	size;
 
 	size = cub.info.res.y * cub.info.res.x * 3 + count_padding(cub) + 54;
-	if (write(fd, "BM", 2) ||
-			write(fd, &size, 4) ||
-			write(fd, "\x00\x00\x00\x00", 4) ||
-			write(fd, "\x36\x00\x00\x00", 4) ||
-			write(fd, "\x28\x00\x00\x00", 4) ||
-			write(fd, &cub.info.res.x, 4) ||
-			write(fd, &cub.info.res.y, 4) ||
-			write(fd, "\x01\x00", 2) ||
-			write(fd, "\x18\x00\x00\x00", 2) ||
-			write(fd, "\x00\x00\x00\x00", 4) ||
-			write(fd, "\x00\x00\x00\x00", 4) ||
-			write(fd, "\x00\x00\x00\x00", 4) ||
-			write(fd, "\x00\x00\x00\x00", 4) ||
-			write(fd, "\x00\x00\x00\x00", 4) ||
-			write(fd, "\x00\x00\x00\x00", 4) < 0)
-		exit(ft_error(delete_all(BMP_FAIL, cub), 0));
+	write(fd, "BM", 2);
+	write(fd, &size, 4);
+	write(fd, "\x00\x00\x00\x00", 4);
+	write(fd, "\x36\x00\x00\x00", 4);
+	write(fd, "\x28\x00\x00\x00", 4);
+	write(fd, &cub.info.res.x, 4);
+	write(fd, &cub.info.res.y, 4);
+	write(fd, "\x01\x00", 2);
+	write(fd, "\x18\x00\x00\x00", 2);
+	write(fd, "\x00\x00\x00\x00", 4);
+	write(fd, "\x00\x00\x00\x00", 4);
+	write(fd, "\x00\x00\x00\x00", 4);
+	write(fd, "\x00\x00\x00\x00", 4);
+	write(fd, "\x00\x00\x00\x00", 4);
+	write(fd, "\x00\x00\x00\x00", 4);
 }
 
 void				save_init_img(t_cub cub)
@@ -80,8 +79,7 @@ void				save_init_img(t_cub cub)
 			x++;
 		}
 		if ((x * 3) % 4 != 0)
-			if (write(fd, "\x00\x00\x00", 4 - ((x * 3) % 4)) < 0)
-				exit(ft_error(delete_all(BMP_FAIL, cub), 0));
+			write(fd, "\x00\x00\x00", 4 - ((x * 3) % 4));
 		x = 0;
 		y--;
 	}

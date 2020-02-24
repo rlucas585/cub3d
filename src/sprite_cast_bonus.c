@@ -6,7 +6,7 @@
 /*   By: rlucas <marvin@codam.nl>                     +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/17 17:36:45 by rlucas        #+#    #+#                 */
-/*   Updated: 2020/02/21 11:18:50 by rlucas        ########   odam.nl         */
+/*   Updated: 2020/02/24 10:40:54 by rlucas        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,40 +30,32 @@ static void	sray_copy(t_sray orig, t_sray *new)
 	new->color = orig.color;
 }
 
-static void	s_thread_loop(t_s_thread data[8], t_cub *cub)
+static void	s_thread_loop(t_s_thread data[4], t_cub *cub)
 {
-	pthread_t	thread[8];
+	pthread_t	thread[4];
 
 	if (pthread_create(&thread[0], NULL, &s_thread0, &data[0]) ||
 			pthread_create(&thread[1], NULL, &s_thread1, &data[1]) ||
 			pthread_create(&thread[2], NULL, &s_thread2, &data[2]) ||
-			pthread_create(&thread[3], NULL, &s_thread3, &data[3]) ||
-			pthread_create(&thread[4], NULL, &s_thread4, &data[4]) ||
-			pthread_create(&thread[5], NULL, &s_thread5, &data[5]) ||
-			pthread_create(&thread[6], NULL, &s_thread6, &data[6]) ||
-			pthread_create(&thread[7], NULL, &s_thread7, &data[7]))
+			pthread_create(&thread[3], NULL, &s_thread3, &data[3]))
 		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
 	if (pthread_join(thread[0], NULL) ||
 			pthread_join(thread[1], NULL) ||
 			pthread_join(thread[2], NULL) ||
-			pthread_join(thread[3], NULL) ||
-			pthread_join(thread[4], NULL) ||
-			pthread_join(thread[5], NULL) ||
-			pthread_join(thread[6], NULL) ||
-			pthread_join(thread[7], NULL))
+			pthread_join(thread[3], NULL))
 		exit(ft_error(delete_all(MEM_FAIL, *cub), 0));
 }
 
 void		sprite_cast(t_cub *cub, double *z_buffer, t_sray *sray)
 {
-	t_s_thread	data[8];
+	t_s_thread	data[4];
 	int			x;
 
 	x = 1;
 	data[0].cub = cub;
 	data[0].z_buffer = z_buffer;
 	data[0].sray = *sray;
-	while (x < 8)
+	while (x < 4)
 	{
 		data[x].cub = data[0].cub;
 		data[x].z_buffer = data[0].z_buffer;

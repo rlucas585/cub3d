@@ -6,7 +6,7 @@
 #    By: rlucas <marvin@codam.nl>                     +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/10 18:37:39 by rlucas        #+#    #+#                  #
-#    Updated: 2020/02/24 10:31:11 by rlucas        ########   odam.nl          #
+#    Updated: 2020/02/24 11:01:21 by rlucas        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,6 @@ BONUS_AND_SRC = $(filter-out $(NOBONUS),$(SRCS)) \
 				$(SRCDIR)thread_ray_bonus.c \
 				$(SRCDIR)loop_bonus.c \
 				$(SRCDIR)sprite_threads_bonus.c \
-				$(SRCDIR)sprite_threads_2_bonus.c \
 				$(SRCDIR)sprite_cast_bonus.c
 
 SRCS = $(SRCDIR)main.c \
@@ -94,7 +93,7 @@ else
 	INCLUDES = -Iincludes/ -I$(LIBFTDIR)includes/ -I$(MLXDIR)
 endif
 
-FLAGS = -Wall -Wextra -Werror -O3
+FLAGS = -Wall -Wextra -Werror -g -O3
 
 all: bonus_convert $(NAME)
 
